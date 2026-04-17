@@ -69,7 +69,8 @@ export default {
       handler(data) {
         this.fetchArticleIds(data);
       },
-      deep: true
+      deep: true,
+      immediate: true
     }
   },
 
