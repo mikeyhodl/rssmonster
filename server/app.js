@@ -101,7 +101,7 @@ app.use("/api/cleanup", cleanupRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/mcp", mcpRoutes);
-app.use("/agent", agentRoutes);
+app.use("/api/agent", agentRoutes);
 app.use("/api/opml", opmlRoutes);
 app.use("/api/actions", actionRoutes);
 app.use("/api/tags", tagRoutes);
