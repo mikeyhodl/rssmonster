@@ -27,8 +27,8 @@ api.interceptors.response.use(
     const status = error?.response?.status;
     const url = error?.config?.url ?? '';
 
-    // Network / backend offline
-    if (!error.response) {
+    // Network / backend offline (skip for agent endpoint — handled locally)
+    if (!error.response && !url.includes('/agent')) {
       window.dispatchEvent(new CustomEvent('app:error', {
         detail: {
           type: 'offline',

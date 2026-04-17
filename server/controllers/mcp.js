@@ -305,7 +305,7 @@ const postMcp = async (req, res) => {
               ...(feedId ? { feedId: feedId } : {}),
               [Op.or]: [
                 { title: { [Op.like]: `%${search}%` } },
-                { content: { [Op.like]: `%${search}%` } },
+                { contentStripped: { [Op.like]: `%${search}%` } },
               ],
             },
             order: [["createdAt", "DESC"]],
