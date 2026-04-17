@@ -57,7 +57,7 @@
     </div>
     <div v-bind:class="{ 'selected': $store.data.currentSelection.status === 'unread' && $store.data.currentSelection.smartFolderId === null }" v-on:click="loadType('unread')" id="unread" class="category-top">
       <span class="glyphicon">
-        <BootstrapIcon icon="record-circle-fill" style="color: #fff" />
+        <BootstrapIcon icon="record-circle-fill" class="icon-unread" />
       </span>
       <span class="title">Unread</span>
       <span class="badge-unread">
@@ -66,7 +66,7 @@
     </div>
     <div v-bind:class="{ 'selected': $store.data.currentSelection.status === 'star' && $store.data.currentSelection.smartFolderId === null  }" v-on:click="loadType('star')" id="star" class="category-top">
       <span class="glyphicon">
-        <BootstrapIcon icon="heart-fill" style="color: #e74c3c" />
+        <BootstrapIcon icon="heart-fill" class="icon-star" />
       </span>
       <span class="title">Favorites</span>
       <span class="badge-unread">
@@ -75,7 +75,7 @@
     </div>
     <div v-bind:class="{ 'selected': $store.data.currentSelection.status === 'hot' && $store.data.currentSelection.smartFolderId === null  }" v-on:click="loadType('hot')" id="hot" class="category-top">
       <span class="glyphicon">
-        <BootstrapIcon icon="fire" style="color: #ff8c00" />
+        <BootstrapIcon icon="fire" class="icon-hot" />
       </span>
       <span class="title">Hot</span>
       <span class="badge-unread">
@@ -84,7 +84,7 @@
     </div>
     <div v-bind:class="{ 'selected': $store.data.currentSelection.status === 'clicked' && $store.data.currentSelection.smartFolderId === null  }" v-on:click="loadType('clicked')" id="clicked" class="category-top">
       <span class="glyphicon">
-        <BootstrapIcon icon="bookmark-fill" style="color: #f0ad4e" />
+        <BootstrapIcon icon="bookmark-fill" class="icon-clicked" />
       </span>
       <span class="title">Clicked</span>
       <span class="badge-unread">
@@ -93,7 +93,7 @@
     </div>
     <div v-bind:class="{ 'selected': $store.data.currentSelection.status === 'read' && $store.data.currentSelection.smartFolderId === null  }" v-on:click="loadType('read')" id="read" class="category-top">
       <span class="glyphicon">
-        <BootstrapIcon icon="check-circle-fill" style="color: #5cb85c" />
+        <BootstrapIcon icon="check-circle-fill" class="icon-read" />
       </span>
       <span class="title">Read</span>
       <span class="badge-unread">
@@ -314,8 +314,28 @@ div.category-feed span.glyphicon img {
 .category-top.selected,
 .category-main.selected,
 .category-feed.selected {
-  background-color: #2b79c2;
-  box-shadow: 0 2px 8px rgba(43, 121, 194, 0.35);
+  background-color: #3b4651;
+  box-shadow: 0 2px 8px rgba(59, 70, 81, 0.35);
+}
+
+.category-top.selected .glyphicon,
+.category-main.selected .glyphicon {
+  color: #fff;
+}
+
+/* Status icon colors */
+.icon-unread { color: #fff; }
+.icon-star { color: #e74c3c; }
+.icon-hot { color: #ff8c00; }
+.icon-clicked { color: #f0ad4e; }
+.icon-read { color: #5cb85c; }
+
+.selected .icon-unread,
+.selected .icon-star,
+.selected .icon-hot,
+.selected .icon-clicked,
+.selected .icon-read {
+  color: #fff;
 }
 
 .tag-item {
