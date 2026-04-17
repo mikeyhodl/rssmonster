@@ -1,5 +1,5 @@
 <template>
-  <ArticleListView :articles="articles" :container="container" :pool="pool" :currentSelection="$store.data.currentSelection.status" :remainingItems="remainingItems" :fetchCount="fetchCount" :hasLoadedContent="hasLoadedContent" :isFlushed="isFlushed" :distance="distance" @forceReload="forceReload" @update-star="updateStarInd" @update-clicked="updateClickedInd" @cluster-articles-loaded="insertClusterArticles" @article-not-interested="removeArticle">
+  <ArticleListView :articles="articles" :container="container" :pool="pool" :currentSelection="$store.data.currentSelection.status" :remainingItems="remainingItems" :fetchCount="fetchCount" :hasLoadedContent="hasLoadedContent" :isFlushed="isFlushed" :distance="distance" @forceReload="forceReload" @update-star="updateStarInd" @update-clicked="updateClickedInd" @cluster-articles-loaded="insertClusterArticles" @cluster-articles-collapsed="removeClusterArticles" @article-not-interested="removeArticle">
   </ArticleListView>
 </template>
 
@@ -341,6 +341,9 @@ export default {
     insertClusterArticles({ articleId, articles }) {
       console.log(`Inserting ${articles.length} cluster articles after article ${articleId}`);
       
+      // Remove any previously inserted cluster articles for this parent first
+      this.removeClusterArticles({ articleId });
+
       // Find the index of the clicked article
       const clickedIndex = this.articles.findIndex(a => a.id === articleId);
       
@@ -359,16 +362,26 @@ export default {
         return;
       }
 
-      // Mark new articles as cluster articles
+      // Mark new articles as cluster articles with a reference to the parent
       const markedArticles = newArticles.map(article => ({
         ...article,
-        isClusterArticle: true
+        isClusterArticle: true,
+        clusterParentId: articleId
       }));
 
       // Insert cluster articles right after the clicked article
       this.articles.splice(clickedIndex + 1, 0, ...markedArticles);
       
       console.log(`Successfully inserted ${markedArticles.length} cluster articles`);
+    },
+
+    removeClusterArticles({ articleId }) {
+      const before = this.articles.length;
+      this.articles = this.articles.filter(a => a.clusterParentId !== articleId);
+      const removed = before - this.articles.length;
+      if (removed > 0) {
+        console.log(`Removed ${removed} cluster articles for parent ${articleId}`);
+      }
     },
 
     removeArticle({ id }) {

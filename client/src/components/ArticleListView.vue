@@ -8,6 +8,7 @@
         @update-star="forwardUpdateStar"
         @update-clicked="forwardUpdateClicked"
         @cluster-articles-loaded="forwardClusterArticles"
+        @cluster-articles-collapsed="forwardClusterCollapsed"
         @article-not-interested="forwardArticleNotInterested"
       />
     </div>
@@ -90,6 +91,9 @@ export default {
     },
     forwardClusterArticles(payload) {
       this.$emit('cluster-articles-loaded', payload);
+    },
+    forwardClusterCollapsed(payload) {
+      this.$emit('cluster-articles-collapsed', payload);
     },
     forwardArticleNotInterested(payload) {
       this.$emit('article-not-interested', payload);

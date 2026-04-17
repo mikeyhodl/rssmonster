@@ -228,7 +228,7 @@ function timeDifference(current, previous) {
 }
 
 export default {
-  emits: ['update-star', 'update-clicked', 'cluster-articles-loaded', 'article-not-interested'],
+  emits: ['update-star', 'update-clicked', 'cluster-articles-loaded', 'cluster-articles-collapsed', 'article-not-interested'],
   props: [
     'id', 'url', 'title', 'published', 'feed', 'contentOriginal', 'author',
     'hotInd', 'status', 'starInd', 'clickedAmount', 'imageUrl', 'media',
@@ -240,6 +240,7 @@ export default {
   data() {
     return {
       showMinimalContent: false,
+      clusterExpanded: false,
       NEUTRAL_SCORE,
       isMobilePortrait: false,
       mediaQuery: null
@@ -476,6 +477,11 @@ export default {
       }
     },
     viewClusterArticles(clusterId) {
+      if (this.clusterExpanded) {
+        this.clusterExpanded = false;
+        this.$emit('cluster-articles-collapsed', { articleId: this.id });
+        return;
+      }
       console.log('Fetching articles for cluster:', clusterId);
       fetchClusterArticles(
         clusterId,
@@ -484,6 +490,7 @@ export default {
         this.id
       )
       .then(response => {
+        this.clusterExpanded = true;
         this.$emit('cluster-articles-loaded', {
           articleId: this.id,
           clusterId,
