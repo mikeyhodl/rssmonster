@@ -127,18 +127,6 @@
     </div>
 
     <div class="sidebar-section sidebar-categories">
-      <SidebarSectionTitle title="All" />
-
-      <SidebarNavItem
-        icon="collection-fill"
-        title="Load all categories"
-        :count="getStatusCount(selectionStore.currentSelection.status)"
-        :selected="selectionStore.currentSelection.categoryId === '%'"
-        badge-class="sidebar-count-white"
-        row-class="sidebar-all-categories-item"
-        @select="loadAll"
-      />
-
       <div class="sidebar-category-heading">
         <SidebarSectionTitle title="Categories" />
         <button
@@ -153,6 +141,16 @@
           {{ categoryReorderLoading ? 'Loading...' : categoryReordering ? 'Done' : 'Reorder' }}
         </button>
       </div>
+
+      <SidebarNavItem
+        icon="collection-fill"
+        title="All categories"
+        :count="getStatusCount(selectionStore.currentSelection.status)"
+        :selected="selectionStore.currentSelection.categoryId === '%'"
+        badge-class="sidebar-count-white"
+        row-class="sidebar-all-categories-item"
+        @select="loadAll"
+      />
 
       <div v-if="!categoryReordering" class="sidebar-category-list">
         <SidebarCategoryGroup

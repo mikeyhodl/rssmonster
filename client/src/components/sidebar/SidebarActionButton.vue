@@ -55,7 +55,7 @@ export default {
   margin-left: var(--space-3);
   padding: var(--space-1-5);
   color: var(--text-primary);
-  background-color: var(--surface-chrome);
+  background-color: var(--color-transparent);
   border: 0;
   border-radius: var(--radius-control);
   text-indent: var(--space-1);
@@ -109,39 +109,24 @@ export default {
 .sidebar-button-mark-read {
   width: calc(100% - (2 * var(--space-3)));
   color: var(--action-color);
-  background-color: var(--action-background);
-  border-color: var(--action-border);
+  background-color: var(--color-transparent);
+  border-color: var(--color-transparent);
   font-weight: 600;
   transition: background-color var(--motion-duration-fast) var(--motion-easing-standard), border-color var(--motion-duration-fast) var(--motion-easing-standard), color var(--motion-duration-fast) var(--motion-easing-standard);
 }
 
 .sidebar-button-refresh {
-  --action-background: var(--sidebar-action-refresh-background);
   --action-color: var(--sidebar-action-refresh-text);
-  --action-border: var(--sidebar-action-refresh-border);
-  --action-hover-background: var(--sidebar-action-refresh-hover-background);
-  --action-hover-border: var(--sidebar-action-refresh-hover-border);
-  --action-active-background: var(--sidebar-action-refresh-active-background);
   --action-focus: var(--sidebar-action-refresh-focus);
 }
 
 .sidebar-button-add-feed {
-  --action-background: var(--sidebar-action-add-background);
   --action-color: var(--sidebar-action-add-text);
-  --action-border: var(--sidebar-action-add-border);
-  --action-hover-background: var(--sidebar-action-add-hover-background);
-  --action-hover-border: var(--sidebar-action-add-hover-border);
-  --action-active-background: var(--sidebar-action-add-active-background);
   --action-focus: var(--sidebar-action-add-focus);
 }
 
 .sidebar-button-mark-read {
-  --action-background: var(--sidebar-action-read-background);
   --action-color: var(--sidebar-action-read-text);
-  --action-border: var(--sidebar-action-read-border);
-  --action-hover-background: var(--sidebar-action-read-hover-background);
-  --action-hover-border: var(--sidebar-action-read-hover-border);
-  --action-active-background: var(--sidebar-action-read-active-background);
   --action-focus: var(--sidebar-action-read-focus);
 }
 
@@ -149,15 +134,15 @@ export default {
 .sidebar-button-add-feed:hover:not(:disabled),
 .sidebar-button-mark-read:hover:not(:disabled) {
   color: var(--action-color);
-  background-color: var(--action-hover-background);
-  border-color: var(--action-hover-border);
+  background-color: var(--sidebar-row-hover-background);
+  border-color: var(--color-transparent);
 }
 
 .sidebar-button-refresh:active:not(:disabled),
 .sidebar-button-add-feed:active:not(:disabled),
 .sidebar-button-mark-read:active:not(:disabled) {
-  background-color: var(--action-active-background);
-  border-color: var(--action-hover-border);
+  background-color: var(--sidebar-row-hover-background);
+  border-color: var(--color-transparent);
 }
 
 .sidebar-button-refresh:focus-visible,
@@ -185,20 +170,20 @@ export default {
 
 .sidebar-bottom-action-button {
   color: var(--sidebar-secondary-action-text);
-  background-color: var(--sidebar-secondary-action-background);
-  border-color: var(--sidebar-secondary-action-border);
+  background-color: var(--color-transparent);
+  border-color: var(--color-transparent);
   transition: background-color var(--motion-duration-fast) var(--motion-easing-standard), border-color var(--motion-duration-fast) var(--motion-easing-standard), color var(--motion-duration-fast) var(--motion-easing-standard);
 }
 
 .sidebar-bottom-action-button:hover:not(:disabled) {
   color: var(--sidebar-secondary-action-text);
-  background-color: var(--sidebar-secondary-action-hover-background);
-  border-color: var(--sidebar-secondary-action-hover-border);
+  background-color: var(--sidebar-row-hover-background);
+  border-color: var(--color-transparent);
 }
 
 .sidebar-bottom-action-button:active:not(:disabled) {
-  background-color: var(--sidebar-secondary-action-active-background);
-  border-color: var(--sidebar-secondary-action-hover-border);
+  background-color: var(--sidebar-row-hover-background);
+  border-color: var(--color-transparent);
 }
 
 .sidebar-bottom-action-button:focus-visible {

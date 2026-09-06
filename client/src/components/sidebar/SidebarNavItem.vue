@@ -82,7 +82,7 @@ export default {
   display: flex;
   align-items: center;
   color: var(--sidebar-row-text);
-  background-color: var(--sidebar-row-background);
+  background-color: var(--color-transparent);
   border: 0;
   font: inherit;
   text-align: left;
@@ -138,12 +138,15 @@ export default {
 }
 
 .sidebar-count {
-  color: inherit;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
+.sidebar-item.selected .sidebar-count {
+  color: var(--sidebar-row-selected-text);
+}
+
 .sidebar-count.sidebar-count-white {
-  color: inherit;
   background-color: var(--color-transparent);
 }
 

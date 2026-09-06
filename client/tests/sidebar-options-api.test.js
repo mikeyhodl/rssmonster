@@ -214,9 +214,24 @@ describe('Options API sidebar contracts', () => {
     expect(wrapper.emitted('logout')).toHaveLength(1);
   });
 
-  it('loads drag-and-drop support only after entering category reorder mode', async () => {
+  it('keeps All categories fixed above the categories in normal and reorder modes', async () => {
     const stores = initializeStores();
     const wrapper = mountSidebar(stores.pinia);
+
+    stores.overviewStore.unreadCount = 450;
+    stores.selectionStore.currentSelection.categoryId = '%';
+    await wrapper.vm.$nextTick();
+
+    const section = wrapper.get('.sidebar-categories');
+    const allCategories = section.get('.sidebar-all-categories-item');
+    expect(section.findAll('.sidebar-section-title').map(heading => heading.text())).toEqual(['Categories']);
+    expect(section.get('.sidebar-category-heading').element.nextElementSibling).toBe(allCategories.element);
+    expect(allCategories.get('.sidebar-item-title').text()).toBe('All categories');
+    expect(allCategories.get('.sidebar-count').text()).toBe('450');
+    expect(allCategories.classes()).toContain('selected');
+    expect(allCategories.attributes('aria-current')).toBe('page');
+    await allCategories.trigger('click');
+    expect(stores.selectionStore.selectCategory).toHaveBeenCalledWith('%');
 
     expect(wrapper.find('.draggable-stub').exists()).toBe(false);
     expect(wrapper.findAll('.sidebar-category-list > [id]')).toHaveLength(2);
@@ -226,6 +241,18 @@ describe('Options API sidebar contracts', () => {
 
     expect(wrapper.get('.sidebar-category-reorder-button').text()).toContain('Done');
     expect(wrapper.find('.draggable-stub').exists()).toBe(true);
+    const draggable = wrapper.get('.draggable-stub');
+    expect(allCategories.element.nextElementSibling).toBe(draggable.element);
+    expect(draggable.find('.sidebar-all-categories-item').exists()).toBe(false);
+    expect(draggable.findAll('.sidebar-category').map(category => category.attributes('id'))).toEqual(['10', '20']);
+
+    wrapper.getComponent('.draggable-stub').vm.$emit('update:modelValue', [...stores.overviewStore.categories].reverse());
+    await wrapper.vm.$nextTick();
+    expect(updateCategoryOrder).toHaveBeenCalledWith([20, 10]);
+    expect(draggable.findAll('.sidebar-category').map(category => category.attributes('id'))).toEqual(['20', '10']);
+    expect(section.findAll('.sidebar-all-categories-item')).toHaveLength(1);
+    expect(allCategories.element.nextElementSibling).toBe(draggable.element);
+
 
     await wrapper.get('.sidebar-category-reorder-button').trigger('click');
 

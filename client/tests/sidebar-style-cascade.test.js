@@ -50,7 +50,7 @@ describe('sidebar style cascade', () => {
     expect(readClientSource('src/AppShell.vue')).toContain('background-color: var(--sidebar-background);');
   });
 
-  it('restores light sidebar row tiles against a quieter backdrop', () => {
+  it('retains the existing light and dark sidebar surface tokens', () => {
     expect(themeSource).toMatch(
       /:root \{[\s\S]*?--sidebar-background: var\(--surface-page\);[\s\S]*?--sidebar-row-background: var\(--surface-chrome\);/
     );
@@ -108,14 +108,12 @@ describe('sidebar style cascade', () => {
     );
   });
 
-  it('renders expanded categories as one rounded group with square internal feed states', () => {
+  it('keeps expanded categories transparent with existing internal feed geometry', () => {
     expect(sidebarCategorySource).toContain("{ expanded: isExpanded, selected: isSelectedCategory }");
     expect(sidebarCategorySource).toMatch(
-      /\.sidebar-category\.expanded \{[\s\S]*?background-color: var\(--sidebar-group-background\);[\s\S]*?overflow: hidden;/
+      /\.sidebar-category\.expanded \{\s*overflow: hidden;/
     );
-    expect(sidebarCategorySource).toMatch(
-      /\.sidebar-feed-list \{[\s\S]*?--sidebar-row-background: var\(--sidebar-group-background\);/
-    );
+    expect(sidebarCategorySource).not.toContain('var(--sidebar-group-background)');
     expect(sidebarCategorySource).toMatch(
       /\.sidebar-category-header \{[\s\S]*?border-radius: var\(--radius-compact\);/
     );
@@ -179,15 +177,21 @@ describe('sidebar style cascade', () => {
     );
   });
 
-  it('keeps one complete sidebar action palette', () => {
+  it('keeps flat actions with neutral hover surfaces and semantic text and focus colors', () => {
+    expect(sidebarActionSource).toMatch(
+      /\.sidebar-button-mark-read \{[^}]*background-color: var\(--color-transparent\);[^}]*border-color: var\(--color-transparent\);/
+    );
+    for (const state of ['hover', 'active']) {
+      expect(sidebarActionSource).toContain(`.sidebar-button-refresh:${state}:not(:disabled),`);
+      expect(sidebarActionSource).toContain(`.sidebar-button-add-feed:${state}:not(:disabled),`);
+      expect(sidebarActionSource).toMatch(new RegExp(
+        `\\.sidebar-button-mark-read:${state}:not\\(:disabled\\) \\{[^}]*background-color: var\\(--sidebar-row-hover-background\\);`
+      ));
+    }
+
     for (const action of ['refresh', 'add', 'read']) {
       for (const state of [
-        'background',
         'text',
-        'border',
-        'hover-background',
-        'hover-border',
-        'active-background',
         'focus'
       ]) {
         const token = `--sidebar-action-${action}-${state}`;
@@ -207,13 +211,14 @@ describe('sidebar style cascade', () => {
     );
   });
 
-  it('gives neutral management actions a complete translucent state palette', () => {
+  it('keeps flat management actions with existing text and focus colors', () => {
+    expect(sidebarActionSource).toMatch(
+      /\.sidebar-bottom-action-button \{[^}]*background-color: var\(--color-transparent\);[^}]*border-color: var\(--color-transparent\);/
+    );
+    expect(sidebarActionSource).toMatch(
+      /\.sidebar-bottom-action-button:hover:not\(:disabled\) \{[^}]*background-color: var\(--sidebar-row-hover-background\);/
+    );
     for (const state of [
-      'background',
-      'hover-background',
-      'active-background',
-      'border',
-      'hover-border',
       'text',
       'focus'
     ]) {
@@ -237,7 +242,7 @@ describe('sidebar style cascade', () => {
       expect(source).toContain('type="button"');
       expect(source).not.toContain('role="button"');
       expect(source).not.toContain('tabindex="0"');
-      expect(source).toContain('var(--sidebar-row-background)');
+      expect(source).toContain('background-color: var(--color-transparent)');
       expect(source).toContain('var(--sidebar-row-selected-background)');
       expect(source).toContain(':focus-visible');
       expect(source).toContain('var(--focus-ring-color)');

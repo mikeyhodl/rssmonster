@@ -69,7 +69,7 @@ export default {
   align-items: center;
   cursor: pointer;
   color: var(--sidebar-row-text);
-  background-color: var(--sidebar-row-background);
+  background-color: var(--color-transparent);
   border: 0;
   font: inherit;
   text-align: left;
@@ -93,7 +93,6 @@ export default {
 
 .sidebar-feed.error {
   color: var(--sidebar-row-error-text);
-  background-color: var(--sidebar-row-error-background);
 }
 
 .sidebar-feed.selected.error {
@@ -103,7 +102,6 @@ export default {
 
 .sidebar-feed.disabled {
   color: var(--sidebar-row-disabled-text);
-  background-color: var(--sidebar-row-disabled-background);
 }
 
 .sidebar-feed.selected.disabled {
@@ -149,12 +147,15 @@ export default {
 }
 
 .sidebar-count {
-  color: inherit;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
+.sidebar-feed.selected .sidebar-count {
+  color: var(--sidebar-row-selected-text);
+}
+
 .sidebar-count.sidebar-count-white {
-  color: inherit;
   background-color: var(--color-transparent);
 }
 

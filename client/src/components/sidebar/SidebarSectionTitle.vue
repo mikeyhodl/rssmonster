@@ -21,7 +21,7 @@ p.sidebar-section-title {
   font-size: 0.8125rem;
   font-weight: 500;
   margin-left: var(--space-3);
-  margin-top: var(--space-5);
+  margin-top: var(--space-3);
   margin-bottom: var(--space-1);
 }
 

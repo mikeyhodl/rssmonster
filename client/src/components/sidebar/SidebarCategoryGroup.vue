@@ -130,11 +130,10 @@ export default {
   border-radius: var(--radius-compact);
   cursor: pointer;
   color: var(--sidebar-row-text);
-  background-color: var(--sidebar-row-background);
+  background-color: var(--color-transparent);
 }
 
 .sidebar-category.expanded {
-  background-color: var(--sidebar-group-background);
   overflow: hidden;
 }
 
@@ -159,7 +158,7 @@ export default {
 
 .sidebar-category-header {
   appearance: none;
-  background: var(--sidebar-row-background);
+  background: var(--color-transparent);
   border: 0;
   border-radius: var(--radius-compact);
   box-sizing: border-box;
@@ -187,12 +186,15 @@ export default {
 }
 
 .sidebar-count {
-  color: inherit;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
+.sidebar-category.selected > .sidebar-category-header .sidebar-count {
+  color: var(--sidebar-row-selected-text);
+}
+
 .sidebar-count.sidebar-count-white {
-  color: inherit;
   background-color: var(--color-transparent);
 }
 
@@ -211,7 +213,6 @@ export default {
 }
 
 .sidebar-feed-list {
-  --sidebar-row-background: var(--sidebar-group-background);
   margin-bottom: 0;
 }
 
