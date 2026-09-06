@@ -95,7 +95,7 @@ const callOpenAI = ({ prompt, maxCompletionTokens, rateLimitDelayMs, operation, 
       });
       return parseJsonObject(response.choices?.[0]?.message?.content || '');
     } catch (error) {
-      if (error.message?.includes('429') || error.message?.toLowerCase().includes('rate limit')) {
+      if (error?.message?.includes('429') || error?.message?.toLowerCase().includes('rate limit')) {
         rateLimitDelay = rateLimitDelayMs;
         console.warn(
           `[OpenAI LLM] ${operation} rate limit hit, enabling request delay` +
@@ -106,7 +106,8 @@ const callOpenAI = ({ prompt, maxCompletionTokens, rateLimitDelayMs, operation, 
         `Error during article ${operation}${getRequestLogContext()}:`,
         getSafeErrorDetails(error)
       );
-      return {};
+      // Let the enrichment worker retry instead of persisting default scores as complete.
+      throw error instanceof Error ? error : new Error('Article inference provider failed', { cause: error });
     }
   });
   openAIQueue = result.catch(() => {});
@@ -132,7 +133,7 @@ const callGenerationProvider = ({
         `Error during article ${operation}${getRequestLogContext()}:`,
         getSafeErrorDetails(error)
       );
-      return {};
+      throw error instanceof Error ? error : new Error('Article inference provider failed', { cause: error });
     });
   }
 

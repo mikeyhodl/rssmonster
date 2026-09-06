@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import request from 'supertest';
 
 const completionsCreate = vi.fn();
 const { modernBertScore, qwenGenerate } = vi.hoisted(() => ({
@@ -506,7 +507,7 @@ describe('analyzeArticleContent response validation', () => {
     expect(prompts.every(prompt => prompt.includes('TAIL'))).toBe(true);
   });
 
-  it('recovers the OpenAI queue when error handling itself receives a non-error', async () => {
+  it('recovers the OpenAI queue after a non-error rejection', async () => {
     const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     completionsCreate
       .mockRejectedValueOnce(null)
@@ -516,12 +517,56 @@ describe('analyzeArticleContent response validation', () => {
     );
     const input = { text: 'Long article content '.repeat(40), categories: [] };
 
-    await expect(analyzeArticleContent(input)).rejects.toThrow(TypeError);
+    await expect(analyzeArticleContent(input)).rejects.toThrow('Article inference provider failed');
     await expect(analyzeArticleContent(input)).resolves.toMatchObject({ qualityScore: 70 });
     errorSpy.mockRestore();
   });
 
-  it('handles Qwen generation failures without losing local scoring', async () => {
+  it.each([
+    ['summary', 0],
+    ['tags', 1],
+    ['scoring', 2]
+  ])('returns HTTP failure for an OpenAI %s outage and permits a later retry', async (_stage, successfulCalls) => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const analysis = {
+      contentSummaryBullets: ['A useful fact'],
+      tags: ['research'],
+      advertisementScore: 90,
+      sentimentScore: 80,
+      qualityScore: 90
+    };
+    const completion = { choices: [{ message: { content: JSON.stringify(analysis) } }] };
+    for (let index = 0; index < successfulCalls; index += 1) {
+      completionsCreate.mockResolvedValueOnce(completion);
+    }
+    const privateMarker = 'private provider response';
+    completionsCreate
+      .mockRejectedValueOnce(Object.assign(new Error(privateMarker), { status: 503 }))
+      .mockResolvedValue(completion);
+    const { default: analyzeArticleContent } = await import(
+      '../src/classifications/articleClassificationService.js'
+    );
+    const { createApp } = await import('../src/app.js');
+    const logger = { error: vi.fn() };
+    const app = createApp({ classificationService: analyzeArticleContent, logger });
+    const input = { text: 'Long article content '.repeat(40), categories: [] };
+
+    const failed = await request(app).post('/api/classifications/article').send(input);
+
+    expect(failed.status).toBe(500);
+    expect(failed.body).toEqual({ error: 'Internal server error' });
+    expect(completionsCreate).toHaveBeenCalledTimes(successfulCalls + 1);
+    expect(JSON.stringify(logger.error.mock.calls)).not.toContain(privateMarker);
+    expect(JSON.stringify(errorSpy.mock.calls)).not.toContain(privateMarker);
+
+    const retried = await request(app).post('/api/classifications/article').send(input);
+
+    expect(retried.status).toBe(200);
+    expect(retried.body).toEqual(analysis);
+    errorSpy.mockRestore();
+  });
+
+  it('rejects Qwen generation failures instead of completing partial analysis', async () => {
     const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.stubEnv('GENERATION_PROVIDER', 'qwen');
     vi.stubEnv('ARTICLE_SCORING_PROVIDER', 'modernbert');
@@ -538,12 +583,9 @@ describe('analyzeArticleContent response validation', () => {
     await expect(analyzeArticleContent({
       text: 'Long article content '.repeat(40),
       categories: []
-    })).resolves.toMatchObject({
-      contentSummaryBullets: [],
-      tags: [],
-      qualityScore: 80
-    });
-    expect(errorSpy).toHaveBeenCalledTimes(2);
+    })).rejects.toThrow('generation failed');
+    expect(modernBertScore).not.toHaveBeenCalled();
+    expect(errorSpy).toHaveBeenCalledOnce();
     errorSpy.mockRestore();
   });
 
@@ -597,7 +639,7 @@ describe('analyzeArticleContent response validation', () => {
   it.each([
     new Error('rate limit'),
     {}
-  ])('handles provider errors without assuming an error message: %j', async error => {
+  ])('propagates provider errors without assuming an error message: %j', async error => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     completionsCreate.mockRejectedValue(error);
@@ -608,13 +650,13 @@ describe('analyzeArticleContent response validation', () => {
     await expect(analyzeArticleContent({
       text: 'Long article content '.repeat(40),
       categories: []
-    })).resolves.toMatchObject({ qualityScore: 70 });
+    })).rejects.toThrow(error instanceof Error ? error.message : 'Article inference provider failed');
 
     errorSpy.mockRestore();
     warnSpy.mockRestore();
   });
 
-  // Enables a subsequent delay after a rate-limit error while preserving default analysis.
+  // Preserve queue recovery and backoff while letting the worker retry failed analysis.
   it('handles rate limits and delays the next queued request', async () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -631,11 +673,11 @@ describe('analyzeArticleContent response validation', () => {
       rateLimitDelayMs: 1
     };
 
-    await expect(analyzeArticleContent(input)).resolves.toMatchObject({ qualityScore: 70 });
+    await expect(analyzeArticleContent(input)).rejects.toThrow('429 rate limit');
     await expect(analyzeArticleContent(input)).resolves.toMatchObject({ qualityScore: 70 });
     expect(warnSpy).toHaveBeenCalledOnce();
     expect(errorSpy).toHaveBeenCalledOnce();
-    expect(completionsCreate).toHaveBeenCalledTimes(6);
+    expect(completionsCreate).toHaveBeenCalledTimes(4);
 
     warnSpy.mockRestore();
     errorSpy.mockRestore();
