@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Op } from 'sequelize';
+import jwt from 'jsonwebtoken';
+import { getJwtSecret } from '../../config/auth.js';
 
 const mocked = vi.hoisted(() => {
   // Builds the persistence methods needed by user deletion orchestration.
@@ -72,6 +74,7 @@ vi.mock('../../models/index.js', async () => {
 });
 
 const userController = (await import('../../controllers/user.js')).default;
+const userMiddleware = (await import('../../middleware/users.js')).default;
 
 // Builds an authenticated request with overridable params and body fields.
 const createRequest = (overrides = {}) => ({
@@ -291,11 +294,53 @@ describe('user controller administration', () => {
       username: 'updated-reader',
       role: 'admin',
       password: 'password-hash',
-      feverCredentialHash: 'fever-credential-hash'
+      feverCredentialHash: 'fever-credential-hash',
+      passwordChangedAt: expect.any(Date)
     }, { transaction: 'transaction' });
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ user });
   });
+
+  it.each([null, new Date('2026-09-02T12:00:00Z')])(
+    'revokes existing sessions after an admin password change from version %s',
+    async passwordChangedAt => {
+      const user = createUserRecord({ passwordChangedAt });
+      user.update.mockImplementation(async values => Object.assign(user, values));
+      mocked.userFindOne.mockResolvedValue({ id: 1, role: 'admin' });
+      mocked.userFindByPk.mockResolvedValue(user);
+      const sessionToken = () => jwt.sign({
+        userId: user.id,
+        purpose: 'session',
+        passwordChangedAt: user.passwordChangedAt?.getTime() || null
+      }, getJwtSecret(), { expiresIn: 60 });
+      const oldToken = sessionToken();
+      const beforeNext = vi.fn();
+      await userMiddleware.isLoggedIn({
+        headers: { authorization: `Bearer ${oldToken}` }
+      }, createResponse(), beforeNext);
+      expect(beforeNext).toHaveBeenCalledOnce();
+
+      const updateRes = createResponse();
+      await userController.postUsers(createRequest({
+        body: { username: user.username, role: user.role, password: 'new-password' }
+      }), updateRes);
+      expect(updateRes.status).toHaveBeenCalledWith(200);
+
+      const oldSessionRes = createResponse();
+      const oldSessionNext = vi.fn();
+      await userMiddleware.isLoggedIn({
+        headers: { authorization: `Bearer ${oldToken}` }
+      }, oldSessionRes, oldSessionNext);
+      expect(oldSessionRes.status).toHaveBeenCalledWith(400);
+      expect(oldSessionNext).not.toHaveBeenCalled();
+
+      const newSessionNext = vi.fn();
+      await userMiddleware.isLoggedIn({
+        headers: { authorization: `Bearer ${sessionToken()}` }
+      }, createResponse(), newSessionNext);
+      expect(newSessionNext).toHaveBeenCalledOnce();
+    }
+  );
 
   it('updates profile fields without changing credentials', async () => {
     const user = createUserRecord();

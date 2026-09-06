@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => ({
   articleCount: vi.fn(),
@@ -30,6 +30,10 @@ import {
 } from '../../services/push/pushNotifications.js';
 
 describe('push notification delivery', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
     process.env.VAPID_PUBLIC_KEY = 'public';
@@ -96,5 +100,59 @@ describe('push notification delivery', () => {
 
     await expect(sendNewArticlePush(7, 1)).resolves.toEqual({ sent: 0, removed: 1 });
     expect(destroy).toHaveBeenCalledOnce();
+  });
+
+  it('cancels stalled delivery at its deadline while preserving healthy delivery and subscriptions', async () => {
+    vi.useFakeTimers();
+    const destroy = vi.fn();
+    const socket = { destroy: vi.fn() };
+    const logger = { error: vi.fn() };
+    mocks.findAll.mockResolvedValue(['stalled', 'healthy'].map(name => ({
+      endpoint: `https://push.example/${name}`,
+      p256dh: 'key',
+      auth: 'auth',
+      destroy
+    })));
+    mocks.sendNotification.mockImplementation((subscription, _payload, options) => {
+      if (subscription.endpoint.endsWith('/healthy')) {
+        return Promise.resolve({ statusCode: 201 });
+      }
+      options.agent.sockets['push.example:443'] = [socket];
+      return new Promise(() => {});
+    });
+
+    const delivery = sendNewArticlePush(7, 1, { logger });
+    await vi.advanceTimersByTimeAsync(9_999);
+    expect(socket.destroy).not.toHaveBeenCalled();
+    expect(logger.error).not.toHaveBeenCalled();
+    await vi.advanceTimersByTimeAsync(1);
+
+    await expect(delivery).resolves.toEqual({ sent: 1, removed: 0 });
+    expect(socket.destroy).toHaveBeenCalledOnce();
+    expect(destroy).not.toHaveBeenCalled();
+    expect(logger.error).toHaveBeenCalledWith(
+      '[Push] Notification delivery failed:',
+      'Push notification delivery timed out'
+    );
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it.each([201, 410])('clears the deadline after a completed HTTP %s response', async statusCode => {
+    vi.useFakeTimers();
+    mocks.findAll.mockResolvedValue([{
+      endpoint: 'https://push.example/one',
+      p256dh: 'key',
+      auth: 'auth',
+      destroy: vi.fn().mockResolvedValue(undefined)
+    }]);
+    mocks.sendNotification.mockImplementation(() => statusCode === 201
+      ? Promise.resolve({ statusCode })
+      : Promise.reject({ statusCode }));
+
+    await expect(sendNewArticlePush(7, 1)).resolves.toEqual({
+      sent: statusCode === 201 ? 1 : 0,
+      removed: statusCode === 410 ? 1 : 0
+    });
+    expect(vi.getTimerCount()).toBe(0);
   });
 });

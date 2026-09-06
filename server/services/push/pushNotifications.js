@@ -1,10 +1,38 @@
 import { createHash } from 'node:crypto';
+import { Agent } from 'node:https';
 import webpush from 'web-push';
 import db from '../../models/index.js';
 import { buildVisibleArticleWhere } from '../articles/visibleArticleScope.js';
 
 const { Article, PushSubscription } = db;
 const INVALID_SUBSCRIPTION_STATUSES = new Set([404, 410]);
+const PUSH_DELIVERY_TIMEOUT_MS = 10_000;
+
+// A socket inactivity timeout alone cannot bound a response that keeps trickling data.
+const sendNotificationWithDeadline = async (subscription, payload) => {
+  const agent = new Agent();
+  let timeoutId;
+  const deadline = new Promise((_, reject) => {
+    timeoutId = setTimeout(() => {
+      reject(new Error('Push notification delivery timed out'));
+    }, PUSH_DELIVERY_TIMEOUT_MS);
+  });
+
+  try {
+    return await Promise.race([
+      webpush.sendNotification(subscription, payload, {
+        TTL: 60 * 60,
+        timeout: PUSH_DELIVERY_TIMEOUT_MS,
+        agent
+      }),
+      deadline
+    ]);
+  } finally {
+    clearTimeout(timeoutId);
+    // Cancel this delivery's sockets without interrupting other subscriptions.
+    agent.destroy();
+  }
+};
 
 export const pushEndpointHash = endpoint =>
   createHash('sha256').update(endpoint).digest('hex');
@@ -76,11 +104,11 @@ export const sendNewArticlePush = async (userId, count, { logger = console } = {
 
   await Promise.all(subscriptions.map(async subscription => {
     try {
-      await webpush.sendNotification({
+      await sendNotificationWithDeadline({
         endpoint: subscription.endpoint,
         expirationTime: subscription.expirationTime?.getTime() || null,
         keys: { p256dh: subscription.p256dh, auth: subscription.auth }
-      }, payload, { TTL: 60 * 60 });
+      }, payload);
       sent++;
     } catch (error) {
       if (INVALID_SUBSCRIPTION_STATUSES.has(error?.statusCode)) {

@@ -194,7 +194,8 @@ const postUsers = async (req, res, _next) => {
       );
       Object.assign(updateValues, {
         password: hash,
-        feverCredentialHash: createFeverCredentialHash(feverApiKey)
+        feverCredentialHash: createFeverCredentialHash(feverApiKey),
+        passwordChangedAt: new Date()
       });
     }
 
