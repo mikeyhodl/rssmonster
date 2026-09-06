@@ -267,11 +267,45 @@ describe('ArticleFeed loading races', () => {
     );
     expect(context.newerArticlesAvailable).toBe(false);
     expect(context.newerArticleCount).toBe(0);
+    expect(context.overviewStore.currentSelectionNewArticleCount).toBe(0);
 
     await ArticleFeed.methods.checkForNewerArticles.call(context);
 
     expect(context.newerArticlesAvailable).toBe(true);
     expect(context.newerArticleCount).toBe(2);
+    expect(context.overviewStore.currentSelectionNewArticleCount).toBe(2);
+  });
+
+  it('uses the ranked collection snapshot for query-scoped arrival checks and clears it on refresh', async () => {
+    const context = createLoadingContext({ currentSelection: {
+      status: 'unread', sort: 'recommended', grouping: 'event', search: 'science'
+    } });
+    fetchArticleIds.mockResolvedValue({ data: {
+      itemIds: [], firstPage: [], snapshot: { snapshotMaxArticleId: 100 }
+    } });
+    await ArticleFeed.methods.fetchArticleIds.call(context, context.selectionStore.currentSelection);
+    fetchNewerArticleCount.mockResolvedValue({ data: { newerArticleCount: 2 } });
+
+    await ArticleFeed.methods.checkForNewerArticles.call(context);
+
+    expect(fetchNewerArticleCount).toHaveBeenCalledWith(context.selectionStore.currentSelection, 100);
+    expect(context.overviewStore.currentSelectionNewArticleCount).toBe(2);
+    await context.refreshArticleIds(context.selectionStore.currentSelection);
+    expect(context.overviewStore.currentSelectionNewArticleCount).toBe(0);
+  });
+
+  it('ignores an old arrival check after switching queries with the same snapshot boundary', async () => {
+    const context = createLoadingContext();
+    context.snapshotMaxArticleId = 100;
+    const pending = deferred();
+    fetchNewerArticleCount.mockReturnValue(pending.promise);
+    const check = ArticleFeed.methods.checkForNewerArticles.call(context);
+    context.selectionStore.currentSelection = { status: 'favorite' };
+    pending.resolve({ data: { newerArticleCount: 3 } });
+    await check;
+
+    expect(context.newerArticleCount).toBe(0);
+    expect(context.overviewStore.currentSelectionNewArticleCount).toBe(0);
   });
 
   it('preserves rendered articles until a database refresh can replace them atomically', async () => {

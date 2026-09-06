@@ -120,6 +120,8 @@ export const searchArticles = async ({
     resolvedFeedIds = null, // Reuse a caller-resolved source scope for repeated internal searches
     limitCount = null, // Maximum number of results (used by smart folders)
     countOnly = false, // Return only the matching count without materializing ids when possible
+    unreadOnly = false, // Enforce unread arrival checks regardless of query state tokens
+    includeSnapshot = false, // Return an arrival boundary for non-cursor article lists
     minArticleIdExclusive = null, // Restrict an internal count to articles admitted after a snapshot
     pagination = null, // Opt-in keyset pagination descriptor for database-native sorts
     executionBounds = null, // Optional trusted ceilings for bounded internal consumers
@@ -309,8 +311,8 @@ export const searchArticles = async ({
       taggedArticleIds = await fetchTaggedArticleIds({ userId, tagName: workingTag });
       debugLog(`\x1b[31mFound ${taggedArticleIds.length} articles with tag "${workingTag}" for user ${userId}\x1b[0m`);
 
-      // If tag was provided but no articles found, return empty result
-      if (taggedArticleIds.length === 0) {
+      // Snapshot consumers need the normal response even before a tag has its first match.
+      if (taggedArticleIds.length === 0 && !includeSnapshot && !pagination) {
         // Builds the empty result assembled while performing search articles.
         const emptyResult = {
           query: {
@@ -370,7 +372,7 @@ export const searchArticles = async ({
     }
 
     // Apply tag filter if present (restricts to specific article IDs)
-    if (taggedArticleIds !== null && taggedArticleIds.length > 0) {
+    if (taggedArticleIds !== null) {
       baseWhere.id = taggedArticleIds;
     }
 
@@ -387,8 +389,8 @@ export const searchArticles = async ({
       qualityFilter,
       freshnessFilter,
       starFilter,
-      unreadFilter,
-      readFilter,
+      unreadFilter: unreadOnly ? true : unreadFilter,
+      readFilter: unreadOnly ? null : readFilter,
       clickedFilter,
       seenFilter,
       hotFilter,
@@ -408,11 +410,6 @@ export const searchArticles = async ({
       authorFilter,
       languageFilter
     });
-    if (minArticleIdExclusive !== null) {
-      appendCursorCondition(articleQuery.where, {
-        id: { [Op.gt]: minArticleIdExclusive }
-      });
-    }
 
     debugLog(`\x1b[36mQuery attributes: ${articleQuery.attributes.join(", ")} (smartFolder: ${smartFolderSearch})\x1b[0m`);
     // Handles the case where first seen age filter is available.
@@ -441,8 +438,18 @@ export const searchArticles = async ({
         )
       : requestedResultLimit;
 
+    // Limited queries must rank and limit the full collection before checking which results arrived.
+    const filterArrivalsAfterLimit = minArticleIdExclusive !== null && Boolean(
+      resultLimit || (!smartFolderSearch && hasSearchIntent && rawSearch !== '%')
+    );
+    if (minArticleIdExclusive !== null && !filterArrivalsAfterLimit) {
+      appendCursorCondition(articleQuery.where, {
+        id: { [Op.gt]: minArticleIdExclusive }
+      });
+    }
+
     // Handles the case where count only is available and runtime filters required is unavailable.
-    if (countOnly && !runtimeFiltersRequired) {
+    if (countOnly && !runtimeFiltersRequired && !filterArrivalsAfterLimit) {
       const articleCount = resultLimit
         ? await executeSearchBoundedCount({ ...articleQuery, limit: resultLimit })
         : await executeSearchCount(articleQuery);
@@ -580,6 +587,16 @@ export const searchArticles = async ({
       };
     }
 
+    // Capture the user's arrival boundary before loading ranked results, including empty collections.
+    const snapshotMaxArticleId = includeSnapshot && !countOnly
+      ? Number(await Article.max('id', { where: { userId } }) || 0)
+      : null;
+    if (snapshotMaxArticleId !== null) {
+      appendCursorCondition(articleQuery.where, {
+        id: { [Op.lte]: snapshotMaxArticleId }
+      });
+    }
+
     const runtimeOrderingRequired = sortRecommended
       || sortTopStories
       || sortQuality
@@ -597,7 +614,9 @@ export const searchArticles = async ({
       ? boundedCandidateExecution
         ? normalizedExecutionBounds.maxCandidates
         : resultLimit
-      : null;
+      : filterArrivalsAfterLimit && !runtimeOrderingRequired && !runtimeFiltersRequired
+        ? resultLimit || 500
+        : null;
 
     // Fetch articles based on the prepared query and optional internal execution ceiling.
     let articles = await executeSearch({
@@ -657,7 +676,9 @@ export const searchArticles = async ({
     if (countOnly) {
       return {
         query: queryMetadata,
-        articleCount: itemIds.length
+        articleCount: filterArrivalsAfterLimit
+          ? itemIds.filter(id => Number(id) > minArticleIdExclusive).length
+          : itemIds.length
       };
     }
 
@@ -701,6 +722,7 @@ export const searchArticles = async ({
     return {
         query: queryMetadata,
         itemIds,
-        sourceCount
+        sourceCount,
+        ...(snapshotMaxArticleId !== null ? { snapshot: { snapshotMaxArticleId } } : {})
     };
 };

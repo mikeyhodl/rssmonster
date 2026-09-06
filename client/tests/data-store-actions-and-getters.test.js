@@ -137,7 +137,11 @@ describe('data store remaining actions and getters', () => {
   });
 
   // Verifies filter resets use the store-owned defaults without resetting user preferences.
-  it('resets article filters while preserving selection preferences', () => {
+  it.each([
+    ['recommended', 'event'],
+    ['quality', 'topic'],
+    ['asc', 'none']
+  ])('resets article filters while preserving %s sorting and %s grouping', (sort, grouping) => {
     const { selectionStore: store } = createStores();
     store.setCurrentSelection({
       status: 'favorite',
@@ -149,8 +153,8 @@ describe('data store remaining actions and getters', () => {
       minAdvertisementScore: 0.8,
       minSentimentScore: 0.6,
       minQualityScore: 0.7,
-      sort: 'quality',
-      grouping: 'event',
+      sort,
+      grouping,
       viewMode: 'reader',
       AIEnabled: true,
       AssistantEnabled: true,
@@ -170,8 +174,8 @@ describe('data store remaining actions and getters', () => {
       minAdvertisementScore: 0,
       minSentimentScore: 0,
       minQualityScore: 0,
-      sort: 'desc',
-      grouping: 'none',
+      sort,
+      grouping,
       viewMode: 'reader',
       AIEnabled: true,
       AssistantEnabled: true,

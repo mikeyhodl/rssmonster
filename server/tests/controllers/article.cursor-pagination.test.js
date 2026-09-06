@@ -6,7 +6,7 @@ import { getJwtSecret } from '../../config/auth.js';
 import { createArticleSearchCursor } from '../../services/articleSearch/articleSearchCursor.service.js';
 import { MAX_ARTICLE_SEARCH_LENGTH } from '../../services/articleSearch/articleQueryParser.service.js';
 
-const { Article, Category, Feed, User, sequelize } = db;
+const { Article, Category, Event, Feed, Setting, Tag, User, sequelize } = db;
 let app;
 
 const uniqueName = prefix => `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -304,5 +304,101 @@ describe('article cursor pagination', () => {
 
     expect(matching.status).toBe(200);
     expect(matching.body).toEqual({ newerArticleCount: 1 });
+  });
+
+  it('checks ranked query arrivals with event grouping and ownership without saving settings', async () => {
+    const { user, feed } = await createUserFeed('ranked-arrivals');
+    const other = await createUserFeed('ranked-arrivals-other');
+    const initial = await createArticle(user, feed, 'Science initial', new Date());
+    const event = await Event.create({ userId: user.id, representativeArticleId: initial.id });
+    await initial.update({ eventId: event.id });
+    const query = { status: 'unread', search: 'title:Science unread:true', sort: 'recommended', grouping: 'event', feedId: feed.id };
+    const first = await request(app).get('/api/articles').query(query).set('Authorization', authHeaderFor(user));
+    expect(first.status).toBe(200);
+    const boundary = first.body.snapshot.snapshotMaxArticleId;
+    expect(boundary).toBe(initial.id);
+    await Setting.update({ sort: 'quality', grouping: 'topic' }, { where: { userId: user.id } });
+
+    await createArticle(user, feed, 'Science grouped member', new Date(), { eventId: event.id });
+    await createArticle(user, feed, 'Science read', new Date(), { status: 'read' });
+    await createArticle(user, feed, 'Unrelated title', new Date());
+    await createArticle(other.user, other.feed, 'Science other user', new Date());
+    const count = () => request(app).get('/api/articles')
+      .query({ ...query, newerThanArticleId: boundary }).set('Authorization', authHeaderFor(user));
+    expect((await count()).body).toEqual({ newerArticleCount: 0 });
+
+    await createArticle(user, feed, 'Science matching arrival', new Date());
+    expect((await count()).body).toEqual({ newerArticleCount: 1 });
+    expect(await Setting.findOne({ where: { userId: user.id }, raw: true }))
+      .toMatchObject({ sort: 'quality', grouping: 'topic' });
+  });
+
+  it('returns a snapshot for an empty ranked query and detects its first matching arrival', async () => {
+    const { user, feed } = await createUserFeed('empty-ranked-arrivals');
+    const query = { sort: 'recommended', grouping: 'event', feedId: feed.id };
+    const first = await request(app).get('/api/articles').query(query).set('Authorization', authHeaderFor(user));
+    expect(first.status).toBe(200);
+    expect(first.body.itemIds).toEqual([]);
+    expect(first.body.snapshot).toEqual({ snapshotMaxArticleId: 0 });
+    await createArticle(user, feed, 'First arrival', new Date());
+    const count = await request(app).get('/api/articles')
+      .query({ ...query, newerThanArticleId: 0 }).set('Authorization', authHeaderFor(user));
+    expect(count.body).toEqual({ newerArticleCount: 1 });
+  });
+
+  it.each(['read', 'favorite', 'hot', 'clicked', '%'])('enforces unread arrivals even when the request status is %s', async status => {
+    const { user, category, feed } = await createUserFeed('unread-only-arrivals');
+    const initial = await createArticle(user, feed, 'Science initial', new Date());
+    const readArticle = await createArticle(user, feed, 'Science read arrival', new Date(), {
+      status: 'read', favoriteInd: 1, hotInd: 1, clickedAmount: 2
+    });
+    const query = { status, categoryId: category.id, feedId: feed.id, sort: 'recommended', newerThanArticleId: initial.id };
+    const count = search => request(app).get('/api/articles')
+      .query({ ...query, search }).set('Authorization', authHeaderFor(user));
+    expect((await count('title:Science')).body).toEqual({ newerArticleCount: 0 });
+
+    await createArticle(user, feed, 'Science unread arrival', new Date());
+    await createArticle(user, feed, 'Different topic', new Date());
+    for (const search of ['title:Science', 'title:Science read:true', 'title:Science unread:false']) {
+      const response = await count(search);
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ newerArticleCount: 1 });
+    }
+
+    const normalReadList = await request(app).get('/api/articles')
+      .query({ feedId: feed.id, search: 'title:Science read:true' }).set('Authorization', authHeaderFor(user));
+    expect(normalReadList.body.itemIds).toEqual([readArticle.id]);
+  });
+
+  it.each(['recommended', 'desc'])('detects the first arrival for an initially empty tag with %s sorting', async sort => {
+    const { user, feed } = await createUserFeed('empty-tag-arrivals');
+    const initial = await createArticle(user, feed, 'Untagged existing article', new Date());
+    const tag = uniqueName('new-tag');
+    const query = { sort, tag, feedId: feed.id, grouping: 'event' };
+    const first = await request(app).get('/api/articles')
+      .query({ ...query, ...(sort === 'desc' ? { pagination: 'cursor' } : {}) })
+      .set('Authorization', authHeaderFor(user));
+    expect(first.status).toBe(200);
+    expect(first.body.snapshot.snapshotMaxArticleId).toBe(initial.id);
+    expect(sort === 'desc' ? first.body.page.itemIds : first.body.itemIds).toEqual([]);
+
+    const arrival = await createArticle(user, feed, 'First tagged arrival', new Date());
+    await Tag.create({ userId: user.id, articleId: arrival.id, name: tag });
+    const count = await request(app).get('/api/articles')
+      .query({ ...query, newerThanArticleId: first.body.snapshot.snapshotMaxArticleId })
+      .set('Authorization', authHeaderFor(user));
+    expect(count.status).toBe(200);
+    expect(count.body).toEqual({ newerArticleCount: 1 });
+  });
+
+  it('counts arrivals only inside the current query limit', async () => {
+    const { user, feed } = await createUserFeed('limited-arrivals');
+    const initial = await createArticle(user, feed, 'First', new Date('2026-08-10T12:00:00Z'));
+    await createArticle(user, feed, 'Backdated arrival', new Date('2026-08-09T12:00:00Z'));
+    const query = { feedId: feed.id, search: 'sort:desc limit:1', newerThanArticleId: initial.id };
+    const count = () => request(app).get('/api/articles').query(query).set('Authorization', authHeaderFor(user));
+    expect((await count()).body).toEqual({ newerArticleCount: 0 });
+    await createArticle(user, feed, 'Newest arrival', new Date('2026-08-11T12:00:00Z'));
+    expect((await count()).body).toEqual({ newerArticleCount: 1 });
   });
 });

@@ -33,10 +33,10 @@ export const fetchArticlePage = (params, { pageSize, cursor = null } = {}) =>
     }
   });
 
-// Counts articles matching the active selection that arrived after one snapshot boundary.
+// Counts unread arrivals using the active selection's other filters.
 export const fetchNewerArticleCount = (params, snapshotMaxArticleId) =>
   api.get('/articles', {
-    params: { ...normalizeArticleParams(params), newerThanArticleId: snapshotMaxArticleId }
+    params: { ...normalizeArticleParams(params), status: 'unread', newerThanArticleId: snapshotMaxArticleId }
   });
 
 // This function fetches the structured Daily Briefing for the selected period and status.

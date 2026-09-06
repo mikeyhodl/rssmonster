@@ -35,16 +35,18 @@ describe('articles API', () => {
     });
   });
 
-  it('requests a newer-article count with the active selection and snapshot boundary', () => {
-    fetchNewerArticleCount({ categoryId: 3, status: 'unread' }, 100);
+  it.each(['unread', 'read', 'favorite', 'hot', 'clicked'])('forces unread arrivals from the %s view while retaining dynamic filters', status => {
+    const selection = { categoryId: 3, feedId: 4, tag: 'science', search: 'title:Science', sort: 'recommended', grouping: 'event', status };
+    fetchNewerArticleCount(selection, 100);
 
     expect(get).toHaveBeenCalledWith('/articles', {
       params: {
-        categoryId: 3,
+        ...selection,
         status: 'unread',
         newerThanArticleId: 100
       }
     });
+    expect(selection.status).toBe(status);
   });
 
   it('passes event grouping for selected article mark-read requests', () => {

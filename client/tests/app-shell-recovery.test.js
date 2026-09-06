@@ -62,6 +62,43 @@ afterEach(() => {
 });
 
 describe('AppShell connectivity recovery', () => {
+  it.each([false, true])('refreshes the active query only when matching arrivals exist: %s', async hasNewArticles => {
+    const context = connectRecoveryMethods(createRecoveryContext());
+    const selection = {
+      status: 'favorite', sort: 'recommended', grouping: 'event', search: 'science', smartFolderId: 20
+    };
+    context.selectionStore.currentSelection = { ...selection };
+    const refreshArticleIds = vi.fn().mockResolvedValue(true);
+    const checkForNewerArticles = vi.fn().mockResolvedValue(hasNewArticles);
+    context.$refs.articleFeed = { refreshArticleIds, checkForNewerArticles };
+
+    await AppShell.methods.refreshNewArticles.call(context);
+
+    expect(checkForNewerArticles).toHaveBeenCalledOnce();
+    expect(context.overviewStore.fetchOverviewSplit).not.toHaveBeenCalled();
+    expect(context.overviewStore.fetchOverview).not.toHaveBeenCalled();
+    if (hasNewArticles) expect(refreshArticleIds).toHaveBeenCalledWith(selection);
+    else expect(refreshArticleIds).not.toHaveBeenCalled();
+    expect(context.selectionStore.currentSelection).toEqual(selection);
+    expect(context.databaseRefreshActive).toBe(false);
+  });
+
+  it('does not refresh a previous query when selection changes during the arrival check', async () => {
+    const context = connectRecoveryMethods(createRecoveryContext());
+    const refreshArticleIds = vi.fn();
+    context.$refs.articleFeed = {
+      refreshArticleIds,
+      checkForNewerArticles: vi.fn().mockImplementation(async () => {
+        context.selectionStore.currentSelection = { status: 'favorite' };
+        return true;
+      })
+    };
+
+    await AppShell.methods.refreshNewArticles.call(context);
+
+    expect(refreshArticleIds).not.toHaveBeenCalled();
+  });
+
   it('keeps the current connectivity classification after a polling timeout', async () => {
     const context = connectRecoveryMethods(createRecoveryContext());
     const timeout = new Error('timeout of 15000ms exceeded');

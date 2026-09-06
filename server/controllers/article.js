@@ -346,7 +346,7 @@ export const getArticles = async (req, res) => {
       search,
       categoryId: req.query.categoryId,
       feedId: req.query.feedId,
-      status: req.query.status,
+      status: newerThanArticleId === null ? req.query.status : 'unread',
       minAdvertisementScore: req.query.minAdvertisementScore,
       minSentimentScore: req.query.minSentimentScore,
       minQualityScore: req.query.minQualityScore,
@@ -357,6 +357,8 @@ export const getArticles = async (req, res) => {
       includeDevelopingEvents: req.query.includeDevelopingEvents === 'true',
       persistSettings: newerThanArticleId === null,
       countOnly: newerThanArticleId !== null,
+      unreadOnly: newerThanArticleId !== null,
+      includeSnapshot: newerThanArticleId === null,
       minArticleIdExclusive: newerThanArticleId,
       pagination
     });

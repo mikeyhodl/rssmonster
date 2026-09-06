@@ -22,6 +22,13 @@ const finiteCount = (value, fallback = 0) => {
   return Number.isFinite(count) && count >= 0 ? count : fallback;
 };
 
+// Shares query-scoped arrivals with the sidebar while retaining article-list presentation state.
+const setNewerArticleCount = (context, count) => {
+  context.newerArticleCount = count;
+  context.newerArticlesAvailable = count > 0;
+  context.overviewStore.setCurrentSelectionNewArticleCount(count);
+};
+
 const uniquePage = (itemIds = [], articles = [], existingIds = []) => {
   const existing = new Set(existingIds.map(id => String(id)));
   const articleMap = new Map(articles.map(article => [String(article.id), article]));
@@ -120,7 +127,9 @@ const installLegacyCollection = async (context, response, data, requestId) => {
   context.hasMore = context.distance < ids.length;
   context.legacyItemIds = ids;
   context.nextCursor = null;
-  context.snapshotMaxArticleId = null;
+  context.snapshotMaxArticleId = response.data.snapshot?.snapshotMaxArticleId == null
+    ? null
+    : finiteCount(response.data.snapshot.snapshotMaxArticleId, null);
   context.usesCursorPagination = false;
   return true;
 };
@@ -281,29 +290,31 @@ export const articleFeedPaginationMethods = {
 
   async checkForNewerArticles() {
     const requestId = ++this.activeNewerArticlesRequestId;
+    const collectionRequestId = this.activeRequestId;
+    const selection = { ...this.selectionStore.currentSelection };
+    const selectionKey = JSON.stringify(selection);
     const snapshotMaxArticleId = this.snapshotMaxArticleId;
     if (snapshotMaxArticleId === null) {
-      this.newerArticlesAvailable = false;
-      this.newerArticleCount = 0;
+      setNewerArticleCount(this, 0);
       return false;
     }
 
     try {
       const response = await fetchNewerArticleCount(
-        this.selectionStore.currentSelection,
+        selection,
         snapshotMaxArticleId
       );
       if (
         requestId !== this.activeNewerArticlesRequestId
+        || collectionRequestId !== this.activeRequestId
+        || selectionKey !== JSON.stringify(this.selectionStore.currentSelection)
         || snapshotMaxArticleId !== this.snapshotMaxArticleId
       ) return false;
-      this.newerArticleCount = finiteCount(response.data.newerArticleCount);
-      this.newerArticlesAvailable = this.newerArticleCount > 0;
+      setNewerArticleCount(this, finiteCount(response.data.newerArticleCount));
       return this.newerArticlesAvailable;
     } catch {
-      if (requestId === this.activeNewerArticlesRequestId) {
-        this.newerArticlesAvailable = false;
-        this.newerArticleCount = 0;
+      if (requestId === this.activeNewerArticlesRequestId && collectionRequestId === this.activeRequestId) {
+        setNewerArticleCount(this, 0);
       }
       return false;
     }
@@ -333,8 +344,7 @@ export const articleFeedPaginationMethods = {
     this.hasMore = false;
     this.nextCursor = null;
     this.paginationError = null;
-    this.newerArticlesAvailable = false;
-    this.newerArticleCount = 0;
+    setNewerArticleCount(this, 0);
     this.snapshotMaxArticleId = null;
     this.usesCursorPagination = false;
     this.legacyItemIds = [];

@@ -92,13 +92,58 @@ afterEach(() => {
 });
 
 describe('Sidebar navigation and action coverage', () => {
+  it('shows the refresh alert only for arrivals matching the current query', async () => {
+    const stores = createStores();
+    stores.overviewStore.unreadsSinceLastUpdate = 12;
+    const wrapper = mountSidebar(stores.pinia);
+    expect(wrapper.text()).not.toContain('Click to refresh!');
+
+    stores.overviewStore.currentSelectionNewArticleCount = 2;
+    await wrapper.vm.$nextTick();
+    const alert = wrapper.findAllComponents({ name: 'SidebarNavItem' })
+      .find(item => item.props('title') === 'Click to refresh!');
+    expect(alert.props('count')).toBe(2);
+
+    stores.overviewStore.currentSelectionNewArticleCount = 0;
+    await wrapper.vm.$nextTick();
+    expect(wrapper.text()).not.toContain('Click to refresh!');
+    wrapper.unmount();
+  });
+
+  it.each([null, 20])('refreshes without changing selection with Smart Folder %s', async smartFolderId => {
+    const stores = createStores();
+    stores.overviewStore.currentSelectionNewArticleCount = 3;
+    stores.selectionStore.$patch({ currentSelection: {
+      status: 'favorite',
+      categoryId: '10',
+      feedId: '11',
+      smartFolderId,
+      search: 'science',
+      tag: 'research',
+      sort: 'recommended',
+      grouping: 'event',
+      viewMode: 'reader',
+      includeDevelopingEvents: true
+    } });
+    const selection = { ...stores.selectionStore.currentSelection };
+    const wrapper = mountSidebar(stores.pinia);
+
+    const alert = wrapper.findAll('button').find(button => button.text().includes('Click to refresh!'));
+    await alert.trigger('click');
+
+    expect(stores.selectionStore.currentSelection).toEqual(selection);
+    expect(wrapper.emitted('refresh-articles')).toEqual([[]]);
+    expect(wrapper.emitted('forceReload')).toBeUndefined();
+    wrapper.unmount();
+  });
+
   it('routes rendered navigation, retry, and management controls through store contracts', async () => {
     const stores = createStores();
     stores.overviewStore.$patch({
       overviewCountsStatus: 'error',
       smartFoldersStatus: 'error',
       topTagsStatus: 'error',
-      unreadsSinceLastUpdate: 3
+      currentSelectionNewArticleCount: 3
     });
     const refreshOverviewCounts = vi.spyOn(stores.overviewStore, 'refreshOverviewCounts').mockResolvedValue({});
     const fetchSmartFolderCounts = vi.spyOn(stores.overviewStore, 'fetchSmartFolderCounts').mockResolvedValue({});
@@ -171,8 +216,8 @@ describe('Sidebar navigation and action coverage', () => {
     expect(wrapper.vm.getItemStatusCount({ unreadCount: 4 })).toBe(4);
 
     wrapper.vm.loadType('refresh');
-    expect(setSmartFolder).toHaveBeenCalledWith(null);
-    expect(wrapper.emitted('forceReload')).toHaveLength(1);
+    expect(setSmartFolder).not.toHaveBeenCalled();
+    expect(wrapper.emitted('refresh-articles')).toHaveLength(1);
 
     wrapper.vm.loadType('read');
     expect(setStatus).toHaveBeenCalledWith('read');
@@ -202,7 +247,7 @@ describe('Sidebar navigation and action coverage', () => {
     wrapper.vm.selectSmartFolder({ id: 20 });
     stores.selectionStore.currentSelection.smartFolderId = 20;
     wrapper.vm.selectSmartFolder({ id: 20 });
-    expect(setSmartFolder).toHaveBeenCalledTimes(2);
+    expect(setSmartFolder).toHaveBeenCalledTimes(1);
   });
 
   it('reloads after marking as read and reports a recoverable failure', async () => {

@@ -138,6 +138,7 @@ const initialOverviewState = () => ({
   hotCount: 0,
   clickedCount: 0,
   unreadsSinceLastUpdate: 0,
+  currentSelectionNewArticleCount: 0,
   articleAvailabilityRevision: 0,
   overviewStructureStatus: 'idle',
   overviewStructureError: null,
@@ -188,6 +189,11 @@ export const useOverviewStore = defineStore('overview', {
   },
 
   actions: {
+    // Publishes arrivals for the active article snapshot independently of global unread totals.
+    setCurrentSelectionNewArticleCount(count) {
+      this.currentSelectionNewArticleCount = count;
+    },
+
     // This action makes every overview resource request from the previous session obsolete.
     invalidateSessionRequests() {
       this.cancelScheduledSmartFolderCountsRefresh();

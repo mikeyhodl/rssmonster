@@ -15,9 +15,7 @@ const DEFAULT_ARTICLE_FILTERS = Object.freeze({
   smartFolderId: null,
   minAdvertisementScore: 0,
   minSentimentScore: 0,
-  minQualityScore: 0,
-  sort: 'desc',
-  grouping: 'none'
+  minQualityScore: 0
 });
 const SUPPORTED_SELECTION_FIELDS = [
   'AIEnabled',
@@ -60,6 +58,8 @@ const defaultSelection = () => ({
   AIEnabled: false,
   AssistantEnabled: false,
   ...DEFAULT_ARTICLE_FILTERS,
+  sort: 'desc',
+  grouping: 'none',
   viewMode: 'full',
   includeDevelopingEvents: false,
   markAsReadOnScroll: true,

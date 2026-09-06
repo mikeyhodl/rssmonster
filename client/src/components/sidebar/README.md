@@ -45,7 +45,7 @@ Each count represents the selected status across all feeds. The Daily briefing c
 
 These are live application counts. They can increase or decrease as articles arrive, are read or restored to unread, are favorited or unfavorited, become hot, or are clicked. Article actions reconcile applicable counts immediately, while overview refreshes restore the authoritative server totals. The overview also refreshes periodically and after explicit reload operations.
 
-When new unread articles are detected by background overview refreshes, a temporary refresh row appears above the status filters. Its count is the number of newly detected unread articles since the last accepted refresh. Selecting it reloads the current data.
+After background overview refreshes, the article list checks for unread arrivals since its loaded snapshot. Unread status is mandatory regardless of the selected view or read/unread search tokens. Source, tag, text search, score, grouping, and result-limit rules remain dynamic. Global unread-count changes alone do not show the row. Selecting it rechecks for matching unread arrivals and reloads only the article list if matches remain, preserving the current selection and saved startup settings. Loading a replacement collection clears the alert and establishes a new snapshot.
 
 Selecting a status changes the meaning of the counts shown for All, categories, and feeds. For example, choosing Favorites makes those rows show favorite totals, while choosing Clicked makes them show clicked totals. Selecting the already active status normally preserves the current view; it also exits an active smart folder when necessary.
 

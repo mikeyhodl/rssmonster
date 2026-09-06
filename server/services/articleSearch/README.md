@@ -318,9 +318,20 @@ The search service also receives options from the API/UI:
 - `grouping` is `none`, `event`, or `topic`.
 - minimum advertisement, sentiment, and quality scores establish baseline gates.
 - `countOnly` returns a count instead of article IDs.
+- `includeSnapshot` adds a user-scoped arrival boundary to non-cursor article results.
 - `smartFolderSearch` enables the saved-search execution path.
 
-Recognized expression filters take precedence over the equivalent view state.
+`GET /api/articles` returns `snapshot.snapshotMaxArticleId` for both cursor and
+ranked collections, including empty results. Requests with `newerThanArticleId`
+reuse the active query's dynamic filters and return only `newerArticleCount`,
+without saving settings. Arrival checks always enforce unread status: the
+selected status and `read:`/`unread:` search tokens cannot override it. They count
+unread articles inserted after that boundary which satisfy the same ownership,
+source, tag, text search, score, and grouping rules. For limited
+queries, ranking and the result limit apply before counting arrivals, so an
+article outside the current result window does not trigger the refresh alert.
+
+For ordinary article-list requests, recognized expression filters take precedence over the equivalent view state.
 For example, `unread:false` overrides an unread view. Any non-empty free-text or
 structured search normally relaxes a plain read/unread `status` default to all
 statuses unless an explicit state filter is present. Special status views such as

@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import { createFocusedStores } from './helpers/focusedStores.js';
 
 import ArticleFeed from '../src/components/articles/ArticleFeed.vue';
 import ArticleListView from '../src/components/articles/ArticleListView.vue';
@@ -58,9 +59,10 @@ describe('ArticleFeed collection lifecycle contract', () => {
   });
 
   // Verifies pagination reset no longer reaches into visibility or read-tracking state.
-  it('resets only pagination-owned state', () => {
+  it('resets pagination and its shared arrival count without changing read tracking', () => {
     const context = {
       ...createArticleFeedPaginationState(),
+      ...createFocusedStores({ overview: { currentSelectionNewArticleCount: 3 } }),
       pool: new Set([1]),
       visibleMap: new Map([[1, true]])
     };
@@ -81,6 +83,7 @@ describe('ArticleFeed collection lifecycle contract', () => {
     });
     expect(context.pool).toEqual(new Set([1]));
     expect(context.visibleMap).toEqual(new Map([[1, true]]));
+    expect(context.overviewStore.currentSelectionNewArticleCount).toBe(0);
   });
 
   // Verifies visibility reset owns observer cleanup without changing pagination or read state.

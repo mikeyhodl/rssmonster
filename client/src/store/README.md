@@ -85,6 +85,7 @@ Navigation transitions update all related fields together so watchers never obse
 
 | User intent | Resulting behavior |
 | --- | --- |
+| Clear article filters | Restores Unread, all categories and feeds, empty search/tag/Smart Folder, and zero score thresholds; preserves the current sort, grouping, view, and other preferences |
 | Select a status | Keeps category, feed, tag, sort, grouping, and view; clears Smart Folder; replaces the active query with the briefing query for Daily Briefing or clears it for ordinary statuses |
 | Select a category | Keeps status, sort, grouping, and view; selects all feeds in that category; clears tag, query, and Smart Folder |
 | Select a feed | Keeps status, sort, grouping, and view; selects its parent category; clears tag, query, and Smart Folder |

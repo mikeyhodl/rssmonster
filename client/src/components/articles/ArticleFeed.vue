@@ -271,6 +271,8 @@ export default {
 
   // Removes scroll handling and disconnects observers before unmounting.
   unmounted() {
+    this.activeNewerArticlesRequestId += 1;
+    this.overviewStore.setCurrentSelectionNewArticleCount(0);
     window.removeEventListener("scroll", this.handleScroll);
     window.removeEventListener("keydown", this.handleGlobalShortcut);
     if (this.scrollResetFrameId !== null) {
