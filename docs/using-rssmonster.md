@@ -10,6 +10,7 @@ Learn how to use RSSMonster's core reading, feed management, search, and organiz
 
 - [Usability](usability.md) introduces the reading layouts and responsive interface.
 - [OPML Import and Export](opml.md) moves feed subscriptions between RSS readers.
+- [HTML + XPath Feeds](html-xpath-feeds.md) follows websites that do not provide a usable RSS or Atom feed.
 - [Filtering Feed Items](feed-item-filters.md) limits which future entries a feed stores.
 - [Search](search.md) finds articles already stored in RSSMonster.
 - [Tags](tag.md) explains publisher, feed, generated, and rule-based tags.
