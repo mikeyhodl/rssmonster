@@ -1,0 +1,2347 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	xmlns:georss="http://www.georss.org/georss" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:media="http://search.yahoo.com/mrss/"
+	>
+
+<channel>
+	<title>WordPress.com Blog</title>
+	<atom:link href="https://wordpress.com/blog/feed/" rel="self" type="application/rss+xml" />
+	<link>https://wordpress.com/blog</link>
+	<description>News, Tips &#38; Website Tutorials</description>
+	<lastBuildDate>Fri, 28 Aug 2026 20:32:33 +0000</lastBuildDate>
+	<language>en</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>http://wordpress.com/</generator>
+
+<image>
+	<url>https://en-blog.files.wordpress.com/2026/01/wp_favicon_512x512px.png?w=32</url>
+	<title>WordPress.com Blog</title>
+	<link>https://wordpress.com/blog</link>
+	<width>32</width>
+	<height>32</height>
+</image> 
+<site xmlns="com-wordpress:feed-additions:1">3584907</site><cloud domain='wordpress.com' port='80' path='/blog/?rsscloud=notify' registerProcedure='' protocol='http-post' />
+<source:cloud xmlns:source='https://source.scripting.com/'>https://wordpress.com/blog/?rsscloud=notify</source:cloud>
+<atom:link rel="search" type="application/opensearchdescription+xml" href="https://wordpress.com/blog/osd.xml" title="WordPress.com Blog" />
+	<atom:link rel='hub' href='https://wordpress.com/blog/?pushpress=hub'/>
+	<item>
+		<title>WordPress.com Changelog: A New Hosting Dashboard, a ChatGPT Plugin, and WordPress 7.1</title>
+		<link>https://wordpress.com/blog/2026/08/28/changelog-hosting-dashboard-chatgpt/</link>
+					<comments>https://wordpress.com/blog/2026/08/28/changelog-hosting-dashboard-chatgpt/#comments</comments>
+		
+		<dc:creator><![CDATA[WordPress.com Staff]]></dc:creator>
+		<pubDate>Fri, 28 Aug 2026 20:00:00 +0000</pubDate>
+				<category><![CDATA[Changelog]]></category>
+		<category><![CDATA[AI Tools]]></category>
+		<category><![CDATA[MCP]]></category>
+		<category><![CDATA[WordPress Core]]></category>
+		<guid isPermaLink="false">http://en.blog.wordpress.com/?p=86961</guid>
+
+					<description><![CDATA[WordPress.com’s latest updates include a redesigned Hosting Dashboard, a new ChatGPT plugin, WordPress 7.1, and practical improvements for users.]]></description>
+										<content:encoded><![CDATA[
+<p class="wp-block-paragraph"><em>August 14 – 27, 2026</em></p>
+
+
+
+<p class="wp-block-paragraph">Welcome back to the WordPress.com changelog. Today, we’re talking about a new way to manage your sites, working on them with ChatGPT, and a new version of WordPress.</p>
+
+
+
+<h2 class="wp-block-heading">The Hosting Dashboard for your site management needs</h2>
+
+
+
+<p class="wp-block-paragraph">Switching between sites you manage used to mean reopening the same menus, re-finding the same settings, every time. </p>
+
+
+
+<p class="wp-block-paragraph">The Hosting Dashboard now keeps a persistent sidebar and top bar in place as you move between your sites, so domains, hosting details, updates, and performance stats are always easily accessible, no matter how many sites you manage.</p>
+
+
+
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<iframe class="youtube-player" width="640" height="360" src="https://www.youtube.com/embed/LgTfyibtykA?version=3&#038;rel=1&#038;showsearch=0&#038;showinfo=1&#038;iv_load_policy=1&#038;fs=1&#038;hl=en&#038;autohide=2&#038;wmode=transparent" allowfullscreen="true" style="border:0;" sandbox="allow-scripts allow-same-origin allow-popups allow-presentation allow-popups-to-escape-sandbox"></iframe>
+</div></figure>
+
+
+
+<p class="wp-block-paragraph">Learn more <a href="https://wordpress.com/blog/2026/08/19/hosting-dashboard-update/">in our announcement blog post</a>.</p>
+
+
+
+<div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex">
+<div class="wp-block-button btn-primary text-color-white"><a class="wp-block-button__link wp-element-button" href="https://my.wordpress.com/sites">Visit your Hosting Dashboard</a></div>
+</div>
+
+
+
+<h2 class="wp-block-heading">Manage your site from ChatGPT</h2>
+
+
+
+<p class="wp-block-paragraph">You can now connect ChatGPT (alongside <a href="https://wordpress.com/support/mcp/connect-claude/">Claude</a> and <a href="https://wordpress.com/support/mcp/">other MCP-compatible AI agents</a>) directly to your WordPress.com site. </p>
+
+
+
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<iframe class="youtube-player" width="640" height="360" src="https://www.youtube.com/embed/yMhdLkVH4Ik?version=3&#038;rel=1&#038;showsearch=0&#038;showinfo=1&#038;iv_load_policy=1&#038;fs=1&#038;hl=en&#038;autohide=2&#038;wmode=transparent" allowfullscreen="true" style="border:0;" sandbox="allow-scripts allow-same-origin allow-popups allow-presentation allow-popups-to-escape-sandbox"></iframe>
+</div></figure>
+
+
+
+<p class="wp-block-paragraph">Ask your ChatGPT to draft posts, categorize your posts, moderate comments, help with SEO, fix missing alt text, and more, all through a conversation. Nothing is published or changed without your go-ahead. </p>
+
+
+
+<p class="wp-block-paragraph">MCP access is included in paid plans, and free sites can try it for the first 30 days after the site is created.</p>
+
+
+
+<p class="wp-block-paragraph">Learn more <a href="https://wordpress.com/support/mcp/connect-chatgpt/">in our ChatGPT support doc</a>, and try the plugin today:</p>
+
+
+
+<div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex">
+<div class="wp-block-button btn-primary text-color-white"><a class="wp-block-button__link wp-element-button" href="https://chatgpt.com/plugins/plugin_asdk_app_6a2b62fd753c8191bcff02ac79b54c6b?show_chat_button=true&amp;q=WordPress">Try the ChatGPT plugin</a></div>
+</div>
+
+
+
+<h2 class="wp-block-heading">WordPress 7.1 has arrived</h2>
+
+
+
+<p class="wp-block-paragraph"><a href="https://wordpress.org/news/2026/08/mary-lou/">WordPress 7.1</a>, the latest version of the WordPress software, shipped on August 19, and your WordPress.com site is already running on it. That&#8217;s the deal with hosting your site on WordPress.com: you get the newest, most secure version of WordPress without lifting a finger.</p>
+
+
+
+<p class="wp-block-paragraph">Two features worth knowing about:</p>
+
+
+
+<ol class="wp-block-list">
+<li>You can now share a link to a specific revision of a post, so a collaborator or client can review its history without you having to walk them through every change.</li>
+
+
+
+<li>When one post on your site links to another, WordPress 7.1 now approves that notification automatically, so your moderation queue stays focused on comments that need your attention.</li>
+</ol>
+
+
+
+<h2 class="wp-block-heading">Fixes and improvements</h2>
+
+
+
+<p class="wp-block-paragraph">We also shipped a handful of fixes and improvements over these last few weeks:</p>
+
+
+
+<ul class="wp-block-list">
+<li>There’s now extra protection against unauthorized changes to your account email address, and our password reset flow is now even stronger.</li>
+
+
+
+<li>Check out <a href="http://my.wordpress.com/me/agent">your WordPress Agent settings page</a> to see how you can set up site management via Slack. (<a href="https://github.com/Automattic/wp-calypso/pull/113852">GitHub PR</a>)</li>
+
+
+
+<li>Backup restores now warn you up front if restoring could trigger charges for WooCommerce Subscriptions renewals. (<a href="https://github.com/Automattic/wp-calypso/pull/113605">GitHub PR</a>)</li>
+
+
+
+<li>Staging sites are now hidden from your main sites list by default — a new filter lets you show them again. (<a href="https://github.com/Automattic/wp-calypso/pull/113759">GitHub PR</a>)</li>
+
+
+
+<li>Each track in your <a href="https://wordpress.com/support/wordpress-editor/blocks/playlist-block/">Playlist block</a> now has its own toolbar for more control and customization. (<a href="https://github.com/WordPress/gutenberg/pull/80368">GitHub PR</a>)</li>
+
+
+
+<li><a href="https://wordpress.com/reader">The Reader&#8217;s</a> groups are now called Shelves, each with its own color and icon in the sidebar. (<a href="https://github.com/Automattic/wp-calypso/pull/113778">GitHub PR</a>)</li>
+</ul>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://wordpress.com/blog/2026/08/28/changelog-hosting-dashboard-chatgpt/feed/</wfw:commentRss>
+			<slash:comments>6</slash:comments>
+		
+		
+		<post-id xmlns="com-wordpress:feed-additions:1">86961</post-id>
+		<media:thumbnail url="https://en-blog.files.wordpress.com/2026/08/changelog-hosting-dashboard-chatgpt.jpg" />
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/changelog-hosting-dashboard-chatgpt.jpg" medium="image">
+			<media:title type="html">changelog-hosting-dashboard-chatgpt</media:title>
+		</media:content>
+
+		<media:content url="https://1.gravatar.com/avatar/4339429cceca846189b3459ec5a09c3e3e1d04bc754afb9176a9e00102f839f7?s=96&#38;d=retro" medium="image">
+			<media:title type="html">wpcom</media:title>
+		</media:content>
+	</item>
+		<item>
+		<title>WordCamp US 2026 Recap: The Artist and the Algorithm</title>
+		<link>https://wordpress.com/blog/2026/08/26/wordcamp-us-2026-recap/</link>
+					<comments>https://wordpress.com/blog/2026/08/26/wordcamp-us-2026-recap/#respond</comments>
+		
+		<dc:creator><![CDATA[Molly Lane]]></dc:creator>
+		<pubDate>Wed, 26 Aug 2026 00:39:40 +0000</pubDate>
+				<category><![CDATA[Admin Bar]]></category>
+		<category><![CDATA[News]]></category>
+		<category><![CDATA[Community]]></category>
+		<category><![CDATA[Events]]></category>
+		<category><![CDATA[WordCamp US]]></category>
+		<guid isPermaLink="false">http://en.blog.wordpress.com/?p=86892</guid>
+
+					<description><![CDATA[Two months after my first WordCamp, I landed in Phoenix, AZ, for WordCamp US to experience it again, this time in another part of the world but with a similar group of people equally passionate about open source.&#160; At first glance, the Arizona desert seems simple, barren. But look closer, &#8230;]]></description>
+										<content:encoded><![CDATA[
+<p class="wp-block-paragraph">Two months after <a href="https://wordpress.com/blog/2026/06/09/wordcamp-europe-2026-worth-the-wait/">my first WordCamp</a>, I landed in Phoenix, AZ, for <a href="https://us.wordcamp.org/2026/">WordCamp US</a> to experience it again, this time in another part of the world but with a similar group of people equally passionate about open source.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">At first glance, the Arizona desert seems simple, barren. But look closer, and there is an elegance in that simplicity that is art in and of itself.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Like good technology, everything has a purpose, nothing is wasted, and there is beauty in that. At WCUS this year that I saw art and technology converge.</p>
+
+
+
+<figure data-carousel-extra='{&quot;blog_id&quot;:3584907,&quot;permalink&quot;:&quot;https://wordpress.com/blog/2026/08/26/wordcamp-us-2026-recap/&quot;}'  data-wp-context="{&quot;galleryId&quot;:&quot;6a9d56b515dc2&quot;}" data-wp-interactive="core/gallery" class="wp-block-gallery has-nested-images columns-default is-cropped wp-block-gallery-1 is-layout-flex wp-block-gallery-is-layout-flex">
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b5168c5&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b5168c5" class="wp-block-image size-large wp-lightbox-container"><img width="763" height="1024" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" data-id="86913" src="https://en-blog.files.wordpress.com/2026/08/img_2260-1.jpeg?w=763" alt="" class="wp-image-86913" srcset="https://en-blog.files.wordpress.com/2026/08/img_2260-1.jpeg?w=763 763w, https://en-blog.files.wordpress.com/2026/08/img_2260-1.jpeg?w=1526 1526w, https://en-blog.files.wordpress.com/2026/08/img_2260-1.jpeg?w=112 112w, https://en-blog.files.wordpress.com/2026/08/img_2260-1.jpeg?w=224 224w, https://en-blog.files.wordpress.com/2026/08/img_2260-1.jpeg?w=768 768w, https://en-blog.files.wordpress.com/2026/08/img_2260-1.jpeg?w=1440 1440w" sizes="(max-width: 763px) 100vw, 763px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b516f33&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b516f33" class="wp-block-image size-large wp-lightbox-container"><img loading="lazy" width="763" height="1024" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" data-id="86911" src="https://en-blog.files.wordpress.com/2026/08/img_2261-1.jpeg?w=763" alt="" class="wp-image-86911" srcset="https://en-blog.files.wordpress.com/2026/08/img_2261-1.jpeg?w=763 763w, https://en-blog.files.wordpress.com/2026/08/img_2261-1.jpeg?w=1526 1526w, https://en-blog.files.wordpress.com/2026/08/img_2261-1.jpeg?w=112 112w, https://en-blog.files.wordpress.com/2026/08/img_2261-1.jpeg?w=224 224w, https://en-blog.files.wordpress.com/2026/08/img_2261-1.jpeg?w=768 768w, https://en-blog.files.wordpress.com/2026/08/img_2261-1.jpeg?w=1440 1440w" sizes="auto, (max-width: 763px) 100vw, 763px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b51754b&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b51754b" class="wp-block-image size-large wp-lightbox-container"><img loading="lazy" width="763" height="1024" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" data-id="86912" src="https://en-blog.files.wordpress.com/2026/08/img_2321.jpeg?w=763" alt="" class="wp-image-86912" srcset="https://en-blog.files.wordpress.com/2026/08/img_2321.jpeg?w=763 763w, https://en-blog.files.wordpress.com/2026/08/img_2321.jpeg?w=1526 1526w, https://en-blog.files.wordpress.com/2026/08/img_2321.jpeg?w=112 112w, https://en-blog.files.wordpress.com/2026/08/img_2321.jpeg?w=224 224w, https://en-blog.files.wordpress.com/2026/08/img_2321.jpeg?w=768 768w, https://en-blog.files.wordpress.com/2026/08/img_2321.jpeg?w=1440 1440w" sizes="auto, (max-width: 763px) 100vw, 763px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+</figure>
+
+
+
+<h2 class="wp-block-heading">A four-day family reunion&nbsp;</h2>
+
+
+
+<p class="wp-block-paragraph"><a href="https://us.wordcamp.org/2026/">WordCamp US 2026</a> ran August 16–19 at the Phoenix Convention Center. Over 1,100 people registered, with thousands more watching the livestreams. There were over fifty sessions across four tracks. <a href="https://us.wordcamp.org/2026/contributor-day/">Contributor Day</a> drew 425 participants — 29 of them contributing for the first time — who organized into 26 teams around goals they could achieve in a day.</p>
+
+
+
+<p class="wp-block-paragraph">So why make the trip when the talks are livestreamed, recorded, and recapped?</p>
+
+
+
+<p class="wp-block-paragraph">On the walk to the event hall, I asked <a href="https://profiles.wordpress.org/annezazu/">Anne McCarthy</a> the same question (yes, we braved the heat!). She nailed it: it’s a family reunion. In the age of screens, AI, and video-meeting culture, people are not only craving human connection but also their chosen family.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Others who believe in WordPress and what open source represents. Like-minded creators and builders making things that matter now, and hopefully for years to come.</p>
+
+
+
+<h2 class="wp-block-heading">WordPress 101 Workshop: Build a Website </h2>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b5183b7&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b5183b7" class="wp-block-image size-large wp-lightbox-container"><img loading="lazy" width="1024" height="682" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/image-10.jpeg?w=1024" alt="" class="wp-image-86927" style="aspect-ratio:1.5" srcset="https://en-blog.files.wordpress.com/2026/08/image-10.jpeg?w=1024 1024w, https://en-blog.files.wordpress.com/2026/08/image-10.jpeg 2048w, https://en-blog.files.wordpress.com/2026/08/image-10.jpeg?w=150 150w, https://en-blog.files.wordpress.com/2026/08/image-10.jpeg?w=300 300w, https://en-blog.files.wordpress.com/2026/08/image-10.jpeg?w=768 768w, https://en-blog.files.wordpress.com/2026/08/image-10.jpeg?w=1440 1440w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph">I sat in on <a href="https://us.wordcamp.org/2026/speaker/jamie-marsland/">Jamie Marsland&#8217;s</a> beginner session to build side by side with other WordPress users and see the customer experience with fresh eyes.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">We started from a blank page. And there&#8217;s something genuinely exciting about stripping everything away and going back to the basics.<br><br>After we’d built a few pages and posts, Jamie showed us the <a href="https://wordpress.com/support/wordpress-editor/blocks/cover-block/">Cover block</a> (his favorite). Watching him use it felt more like designing than building.</p>
+
+
+
+<p class="wp-block-paragraph">On the topic of teaching and learning, the WordPress 101 session felt complementary to the <a href="https://wordpress.com/blog/2026/08/17/student-plan/">WordPress.com Student Plan</a> we launched at WCUS. Students get to learn on a real WordPress site, not a temporary classroom project, and the work they create can stay with them after the course ends. Learn by making something real, then keep building on it.</p>
+
+
+
+<p class="wp-block-paragraph">Jamie&#8217;s enthusiasm for WordPress is contagious; in fact, halfway through his session, a pigeon flew into the room and settled in. It came for the air conditioning, stayed for the demo.</p>
+
+
+
+<h2 class="wp-block-heading">Sessions geared toward creativity, simplicity, and customer centricity</h2>
+
+
+
+<p class="wp-block-paragraph">In line with the art and technology theme, <a href="https://wordpress.org/news/2026/08/mary-lou/">WordPress 7.1 &#8220;Mary Lou&#8221;</a> shipped during WordCamp – a release named after the pioneering jazz artist, packed with new styling tools, updated media flows, added notes functionality, and more.&nbsp;</p>
+
+
+
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<iframe loading="lazy" class="youtube-player" width="640" height="360" src="https://www.youtube.com/embed/dO751c8jkn0?version=3&#038;rel=1&#038;showsearch=0&#038;showinfo=1&#038;iv_load_policy=1&#038;fs=1&#038;hl=en&#038;autohide=2&#038;wmode=transparent" allowfullscreen="true" style="border:0;" sandbox="allow-scripts allow-same-origin allow-popups allow-presentation allow-popups-to-escape-sandbox"></iframe>
+</div></figure>
+
+
+
+<p class="wp-block-paragraph">The opening keynote, <a href="https://us.wordcamp.org/2026/session/keynote-2/"><em>Dreaming with AI: Innovation Lessons from the Front Lines of Disney &amp; Meta</em></a>, was delivered by <a href="https://us.wordcamp.org/2026/speaker/loyal-pyczynski/">Loyal Pyczynski.</a> His perspective: AI can help teams build products that are more useful <em>and</em> more distinctly human, but only if you bring creators, developers, researchers, and communities in early, let real experimentation drive decisions instead of assumptions, and keep human judgment at the center. </p>
+
+
+
+<p class="wp-block-paragraph">And his test for whether you&#8217;ve done your job? User attention. If the thing you&#8217;ve made is good enough, people won&#8217;t get distracted — they&#8217;ll look up and realize time has gone by and they want to keep going.</p>
+
+
+
+<p class="wp-block-paragraph">Nearly half of the sessions were AI-focused or AI-adjacent, the biggest showing at a flagship WordCamp to date. The program covered agentic development, AI-powered plugin pipelines, vibe coding for non-technical users, block themes and AI in agency workflows, WordPress readiness for the agentic web, and more.&nbsp;&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">The <a href="https://www.youtube.com/live/notaTgEZByo">closing session with Matt Mullenweg and Robert Jacobi</a> brought it back to simplicity. <a href="http://wordpress.org/">WordPress</a> co-founder and CEO of <a href="https://automattic.com/">Automattic</a>, Matt Mullenweg, pulled out his camera and snapped pictures of the audience, saying he&#8217;s bringing back @photomatt – a playful nod to the handle he uses on <a href="https://www.tumblr.com/photomatt">Tumblr</a> and <a href="https://x.com/photomatt">X</a>. During the fireside, he also spoke to the need for technology to get simpler. Over time we have a tendency to make things more complicated, but wisdom brings us back to simplicity. Matt’s stories and tech references are laced with poetic references that tie back to technology. </p>
+
+
+
+<p class="wp-block-paragraph">Which brought me back to the desert. Nothing wasted, everything with a purpose — perhaps the hardest thing to build and the last thing you arrive at.</p>
+
+
+
+<h2 class="wp-block-heading">WordPress Studio shines</h2>
+
+
+
+<p class="wp-block-paragraph">At the WordPress.com booth, our <a href="https://developer.wordpress.com/studio/"></a>agentic local development tool, <a href="https://developer.wordpress.com/studio/">WordPress Studio</a>, drew people into longer-than-planned demos, with attendees gathering around the screens to watch sites being built and changed in real time.</p>
+
+
+
+<p class="wp-block-paragraph">Right alongside it, <a href="https://wordpress.com/blog/2026/03/20/ai-agent-manage-content">WordPress Agent</a> showed another side of the same idea: AI that doesn’t just advise you, but can actually make changes to your site for you. We also demoed <a href="https://wordpress.com/blog/2026/08/18/guidelines-memory">Guidelines</a>, which gives the Agent a shared memory of your site’s voice, goals, and visual direction.</p>
+
+
+
+<p class="wp-block-paragraph">What interested me was how quickly the conversation moved past the demo itself. People were already imagining these tools inside the way they actually build, manage, and update WordPress sites.</p>
+
+
+
+<div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex">
+<div class="wp-block-button btn-primary text-color-white"><a class="wp-block-button__link wp-element-button" href="https://developer.wordpress.com/studio/">Download WordPress Studio</a></div>
+</div>
+
+
+
+<h2 class="wp-block-heading">WCUS played to our humanity</h2>
+
+
+
+<p class="wp-block-paragraph">The tactical experiences, the emphasis on play, the prioritization of creators, and the endless photo opportunities are all part of what made this conference uniquely human.<br><br>It’s a tech conference, after all, but I was absolutely delighted by the way it transcended digital sameness and AI-driven standardization to stand out and speak to our humanity.<br><br><strong>Here are examples in action:</strong></p>
+
+
+
+<ul class="wp-block-list">
+<li><a href="https://codeforthepeople.com/"><em>Code for the People</em></a> private screening with stickers and swag</li>
+
+
+
+<li>Paint your own <a href="https://wapuu.studio/">Wapuu</a> – tactile, emotional, brilliant&nbsp;</li>
+
+
+
+<li>Booth giveaways that were Arizona-centric: water bottles, fans, sunscreen, along with bags and bandanas designed by local artists&nbsp;</li>
+
+
+
+<li><a href="https://mercantile.wordpress.org/">The WordPress Mercantile</a> featured local businesses built on WordPress</li>
+
+
+
+<li>A focus on play, including a seating area with cornhole, an in-booth air hockey table, and multiple photo ops with delightfully creative backgrounds</li>
+
+
+
+<li>A creator studio staged with couches, plants, perfect lighting, and high end recording equipment designed specifically for generating great video. Free SD cards for those who utilized it&nbsp;</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Even the Wi-Fi password was a nod to the convergence of technology and art…IYKYK.</p>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b5196ca&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b5196ca" class="wp-block-image size-large wp-lightbox-container"><img loading="lazy" width="1024" height="683" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/image-11.jpeg?w=1024" alt="" class="wp-image-86928" style="aspect-ratio:1.5" srcset="https://en-blog.files.wordpress.com/2026/08/image-11.jpeg?w=1024 1024w, https://en-blog.files.wordpress.com/2026/08/image-11.jpeg 2048w, https://en-blog.files.wordpress.com/2026/08/image-11.jpeg?w=150 150w, https://en-blog.files.wordpress.com/2026/08/image-11.jpeg?w=300 300w, https://en-blog.files.wordpress.com/2026/08/image-11.jpeg?w=768 768w, https://en-blog.files.wordpress.com/2026/08/image-11.jpeg?w=1440 1440w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph">As I climbed into my <a href="https://us.wordcamp.org/2026/session/keynote-2-2/">Waymo</a> and headed to the airport, I reflected on how art connects people. It inspires people. It can also polarize — and that&#8217;s not a bad thing.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">As businesses and as humans, we don&#8217;t have to be everything to everyone. We just have to find our people (<a href="https://wordpress.com/blog/2026/07/24/find-your-local-wordpress-community/">like our WordPress community</a>). Be uniquely you.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Find your customers, focus on them, and use technology to help you fuel that connection.</p>
+
+
+
+<p class="wp-block-paragraph"></p>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://wordpress.com/blog/2026/08/26/wordcamp-us-2026-recap/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+		<post-id xmlns="com-wordpress:feed-additions:1">86892</post-id>
+		<media:thumbnail url="https://en-blog.files.wordpress.com/2026/08/wordcamp-us-2026-stage-phoenix-1.jpg" />
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/wordcamp-us-2026-stage-phoenix-1.jpg" medium="image">
+			<media:title type="html">Photo by Jaron Quach</media:title>
+		</media:content>
+
+		<media:content url="https://1.gravatar.com/avatar/a9b9a3d8ee374e43985148dfa208b79d0d852747b4f317f6d4bd94e51838e270?s=96&#38;d=retro" medium="image">
+			<media:title type="html">mktgmolly</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/img_2260-1.jpeg?w=763" medium="image" />
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/img_2261-1.jpeg?w=763" medium="image" />
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/img_2321.jpeg?w=763" medium="image" />
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/image-10.jpeg?w=1024" medium="image" />
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/image-11.jpeg?w=1024" medium="image" />
+	</item>
+		<item>
+		<title>Build with Your Expert WordPress Agent: WordPress Studio&#8217;s New Desktop Experience is in Beta</title>
+		<link>https://wordpress.com/blog/2026/08/24/studio-agentic-beta/</link>
+					<comments>https://wordpress.com/blog/2026/08/24/studio-agentic-beta/#comments</comments>
+		
+		<dc:creator><![CDATA[Jonathan Bossenger]]></dc:creator>
+		<pubDate>Mon, 24 Aug 2026 19:32:39 +0000</pubDate>
+				<category><![CDATA[Development]]></category>
+		<category><![CDATA[News]]></category>
+		<category><![CDATA[Product Features]]></category>
+		<category><![CDATA[AI Tools]]></category>
+		<category><![CDATA[Beta]]></category>
+		<category><![CDATA[Developer tools]]></category>
+		<category><![CDATA[Local development]]></category>
+		<category><![CDATA[WordPress developers]]></category>
+		<category><![CDATA[WordPress Studio]]></category>
+		<guid isPermaLink="false">http://en.blog.wordpress.com/?p=86844</guid>
+
+					<description><![CDATA[We rebuilt the WordPress Studio desktop app around Studio Code, our expert WordPress agent. Your sites, the chat, and a live preview now sit side by side in one window, so you describe what you want, watch it build on real local WordPress, and point at anything that's off. It's in beta today on macOS, Windows, and Linux.]]></description>
+										<content:encoded><![CDATA[
+<p class="wp-block-paragraph">At WordCamp US last week, we unveiled a completely reimagined WordPress Studio desktop app, rebuilt from the ground up around Studio Code, our AI WordPress expert.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">With this new Studio desktop experience, you can describe what you want to the expert WordPress agent, watch it come together in a live preview, point at anything that’s off, and ship it to production when it&#8217;s ready, all in one window.<br><br>You’re left with a full WordPress build you own and can maintain, not throwaway code.</p>
+
+
+
+<p class="wp-block-paragraph">Today, it’s available in beta for everyone to try.</p>
+
+
+
+<div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex">
+<div class="wp-block-button btn-primary text-color-white"><a class="wp-block-button__link wp-element-button" href="https://developer.wordpress.com/studio/?utm_source=wpcom_blog&amp;utm_medium=referral&amp;utm_campaign=agentic_ui_beta">Download WordPress Studio</a></div>
+</div>
+
+
+
+<div style="height:24px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<iframe loading="lazy" class="youtube-player" width="640" height="360" src="https://www.youtube.com/embed/4psH3_Xgyj0?version=3&#038;rel=1&#038;showsearch=0&#038;showinfo=1&#038;iv_load_policy=1&#038;fs=1&#038;hl=en&#038;autohide=2&#038;wmode=transparent" allowfullscreen="true" style="border:0;" sandbox="allow-scripts allow-same-origin allow-popups allow-presentation allow-popups-to-escape-sandbox"></iframe>
+</div></figure>
+
+
+
+<h2 class="wp-block-heading">How to access the beta and what to expect</h2>
+
+
+
+<p class="wp-block-paragraph">You can try this new desktop UI in just four steps:</p>
+
+
+
+<ol class="wp-block-list">
+<li><a href="https://developer.wordpress.com/studio/?utm_source=wpcom_blog&amp;utm_medium=referral&amp;utm_campaign=agentic_ui_beta">Download the WordPress Studio desktop app</a> on macOS, Windows, or Linux</li>
+
+
+
+<li>Sign in with your WordPress.com account</li>
+
+
+
+<li>Enable the New Studio Experience option under <strong>Studio → Beta Features</strong></li>
+
+
+
+<li><a href="https://my.wordpress.com/me/billing/payment-methods">Add a payment method on file</a> to verify you’re a real account (you won’t be charged)</li>
+</ol>
+
+
+
+<p class="wp-block-paragraph">And if you’re a brand-new Studio user — welcome! You’ll see the new agentic UI as default, so there’s no need to opt into the beta.</p>
+
+
+
+<p class="wp-block-paragraph">The Studio interface has been reimagined to focus on agentic development, with three panels next to each other in a single window:</p>
+
+
+
+<ul class="wp-block-list">
+<li><strong>Your Sites</strong> on the left</li>
+
+
+
+<li>A <strong>chat with Studio Code</strong> in the middle</li>
+
+
+
+<li>A <strong>live preview</strong> of your site on the right</li>
+</ul>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b51ef2d&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b51ef2d" class="wp-block-image size-full wp-lightbox-container"><img data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/wordpress-studio-agentic-ui-beta.png" alt="A screenshot of the WordPress Studio agentic UI with sites on the left, a chat in the middle, and a site preview on the right" class="wp-image-86866" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<h2 class="wp-block-heading">Switch on the new UI without losing a thing</h2>
+
+
+
+<p class="wp-block-paragraph">If you’re an existing Studio user, you won’t lose your current sites when you switch the new experience on; every local site from the old experience carries over automatically. Nothing to migrate, re-import, or rebuild.</p>
+
+
+
+<p class="wp-block-paragraph">Pick a site to jump back into it, start or stop it, or open its settings. </p>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b51f6db&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b51f6db" class="wp-block-image size-full wp-lightbox-container"><img data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/wordpress-studio-sites-list.png" alt="An arrow pointing to the site list in WordPress Studio desktop app" class="wp-image-86867" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<h2 class="wp-block-heading">Chat with Studio Code to make it happen</h2>
+
+
+
+<p class="wp-block-paragraph">The agent in the middle panel is <a href="https://wordpress.com/blog/2026/04/27/studio-code-beta/">Studio Code</a>, our coding agent built for WordPress that knows blocks, themes, and WP-CLI natively.</p>
+
+
+
+<p class="wp-block-paragraph">In fact, this is what WordPress developer Olivier Gobet said about his experience building with Studio Code:</p>
+
+
+
+<blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
+<p class=wp-block-paragraph><em>I’ve been building WordPress sites for almost 20 years, and Studio Code has genuinely changed the way I work. For the first time in a long while, I feel like I’m no longer limited by the technical barriers of implementation. Instead of asking myself, Is this possible?, I can focus on, What do I want to build?</em></p>
+</blockquote>
+
+
+
+<p class="wp-block-paragraph">You describe what you want in plain language, and Studio Code builds it on a real local WordPress install where you can build, vibe, and experiment. Chat history is stored so you can easily stop and restart a work in progress, and you can always spin up a new chat for each site when you want to start fresh:</p>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b5200aa&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b5200aa" class="wp-block-image size-full wp-lightbox-container"><img data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/wordpress-studio-code-chat.png" alt="A screenshot of the WordPress Studio agentic UI with sites on the left, an arrow pointing to the chat in the middle, and a site preview on the right" class="wp-image-86869" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph">If you want to give Studio Code standing instructions it follows on every task, set them under <strong>Settings → AI</strong>.</p>
+
+
+
+<p class="wp-block-paragraph">That same screen is where you can also toggle agentic features off entirely if you&#8217;d rather build WordPress the classic way.</p>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b5208d7&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b5208d7" class="wp-block-image size-full wp-lightbox-container"><img data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/wordpress-studio-turn-off-agentic-features.png" alt="The 'turn off agentic features' toggle in the WordPress Studio settings" class="wp-image-86870" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<h2 class="wp-block-heading">Watch it build in real time</h2>
+
+
+
+<p class="wp-block-paragraph">Changes render live in the in-app preview as Studio Code works. You see the site take shape with every ask, so there’s no switching between browser and UI to check whether an edit landed.</p>
+
+
+
+<p class="wp-block-paragraph">It&#8217;s a working preview of your local site, too: click any link to move to other pages, just as a visitor would, and watch them update as Studio Code makes changes. You can even access the admin dashboard to manage posts, pages, products, and everything else you’re used to.</p>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b52114a&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b52114a" class="wp-block-image size-full wp-lightbox-container"><img data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/wordpress-studio-live-preview.png" alt="A screenshot of the WordPress Studio agentic UI with sites on the left, the chat in the middle, and an arrow pointing to a site preview on the right" class="wp-image-86872" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph">One of your favorite tools is still available, too, just in a different spot. Use the Annotate button to send specific, targeted requests to Studio Code.</p>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b5218d8&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b5218d8" class="wp-block-image size-full wp-lightbox-container"><img data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/wordpress-studio-agentic-annotate.png" alt="A screenshot of the WordPress Studio agentic UI with sites on the left, the chat in the middle, and an arrow pointing to the annotation button on the site preview on the right" class="wp-image-86874" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph">Click the elements you want changed, stack up your notes, submit them with one click, and Studio Code makes every edit in one pass. It&#8217;s the client-feedback loop, built into the tool, and it&#8217;s a natural fit for your workflow of reviewing, marking up, and revising a site fast.</p>
+
+
+
+<h2 class="wp-block-heading">Build locally, ship when you&#8217;re ready</h2>
+
+
+
+<p class="wp-block-paragraph">The core functionality of Studio remains too: you’re able to spin up a real, local WordPress site in seconds by clicking the + button in the toolbar.</p>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b522035&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b522035" class="wp-block-image size-full wp-lightbox-container"><img data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/wordpress-studio-add-site.png" alt="The Add a site page in WordPress Studio" class="wp-image-86875" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph">Because everything you build happens locally, you can try things, break things, and start over with zero risk to a live site. Nothing goes live until you say so.</p>
+
+
+
+<p class="wp-block-paragraph">When it&#8217;s ready, you ship to fast, managed hosting on a paid WordPress.com or Pressable plan in a few clicks with Studio Sync.</p>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b5227b4&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b5227b4" class="wp-block-image size-full wp-lightbox-container"><img data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/wordpress-studio-sync.png" alt="A screenshot of the WordPress Studio agentic UI with sites on the left, site settings, and the site preview on the right with an arrow pointing to the sync functionality" class="wp-image-86876" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph">What you build in Studio is real WordPress: portable, dependable and yours to maintain.</p>
+
+
+
+<h2 class="wp-block-heading">Meet the new WordPress Studio</h2>
+
+
+
+<p class="wp-block-paragraph">Give the new Studio desktop beta a real workout. Point it at an actual project, a brief, some images, a vibe, and see how far it gets, where it shines, and where it falls short.</p>
+
+
+
+<p class="wp-block-paragraph"><strong>During this beta period, you’ll get a one-time credit gift from us to try it out. Once you hit your limit, top-ups are available for just $10.</strong></p>
+
+
+
+<p class="wp-block-paragraph">And we want to know how it goes. <a href="https://github.com/Automattic/studio/issues">Open a GitHub issue</a> with your feedback, bug reports, and ideas. Your input shapes what comes next.</p>
+
+
+
+<div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex">
+<div class="wp-block-button btn-primary text-color-white"><a class="wp-block-button__link wp-element-button" href="https://developer.wordpress.com/studio/?utm_source=wpcom_blog&amp;utm_medium=referral&amp;utm_campaign=agentic_ui_beta">Download WordPress Studio</a></div>
+</div>
+
+
+
+<div style="height:24px" aria-hidden="true" class="wp-block-spacer"></div>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://wordpress.com/blog/2026/08/24/studio-agentic-beta/feed/</wfw:commentRss>
+			<slash:comments>12</slash:comments>
+		
+		
+		<post-id xmlns="com-wordpress:feed-additions:1">86844</post-id>
+		<media:thumbnail url="https://en-blog.files.wordpress.com/2026/08/studio-agentic-beta.png" />
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/studio-agentic-beta.png" medium="image">
+			<media:title type="html">studio-agentic-beta</media:title>
+		</media:content>
+
+		<media:content url="https://1.gravatar.com/avatar/4a42edb1cb7da86dfd41d898ebd75855760c191379fac6b25175eea6ba8a1608?s=96&#38;d=retro" medium="image">
+			<media:title type="html">jbossenger</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/wordpress-studio-agentic-ui-beta.png" medium="image">
+			<media:title type="html">A screenshot of the WordPress Studio agentic UI with sites on the left, a chat in the middle, and a site preview on the right</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/wordpress-studio-sites-list.png" medium="image">
+			<media:title type="html">An arrow pointing to the site list in WordPress Studio desktop app</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/wordpress-studio-code-chat.png" medium="image">
+			<media:title type="html">A screenshot of the WordPress Studio agentic UI with sites on the left, an arrow pointing to the chat in the middle, and a site preview on the right</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/wordpress-studio-turn-off-agentic-features.png" medium="image">
+			<media:title type="html">The &#039;turn off agentic features&#039; toggle in the WordPress Studio settings</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/wordpress-studio-live-preview.png" medium="image">
+			<media:title type="html">A screenshot of the WordPress Studio agentic UI with sites on the left, the chat in the middle, and an arrow pointing to a site preview on the right</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/wordpress-studio-agentic-annotate.png" medium="image">
+			<media:title type="html">A screenshot of the WordPress Studio agentic UI with sites on the left, the chat in the middle, and an arrow pointing to the annotation button on the site preview on the right</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/wordpress-studio-add-site.png" medium="image">
+			<media:title type="html">The Add a site page in WordPress Studio</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/wordpress-studio-sync.png" medium="image">
+			<media:title type="html">A screenshot of the WordPress Studio agentic UI with sites on the left, site settings, and the site preview on the right with an arrow pointing to the sync functionality</media:title>
+		</media:content>
+	</item>
+		<item>
+		<title>Your WordPress.com Site Now Works from Inside ChatGPT</title>
+		<link>https://wordpress.com/blog/2026/08/24/chatgpt-plugin/</link>
+					<comments>https://wordpress.com/blog/2026/08/24/chatgpt-plugin/#comments</comments>
+		
+		<dc:creator><![CDATA[WordPress.com Staff]]></dc:creator>
+		<pubDate>Mon, 24 Aug 2026 18:19:09 +0000</pubDate>
+				<category><![CDATA[News]]></category>
+		<category><![CDATA[Product Features]]></category>
+		<category><![CDATA[AI Tools]]></category>
+		<category><![CDATA[ChatGPT]]></category>
+		<category><![CDATA[MCP]]></category>
+		<category><![CDATA[Plugins]]></category>
+		<guid isPermaLink="false">http://en.blog.wordpress.com/?p=86606</guid>
+
+					<description><![CDATA[The new WordPress.com ChatGPT plugin enables you to manage your site efficiently and safely, streamlining tasks like publishing, checking stats, and more.]]></description>
+										<content:encoded><![CDATA[
+<p class="wp-block-paragraph">You can now manage your WordPress.com site from ChatGPT using the new <a href="https://chatgpt.com/plugins/plugin_asdk_app_6a2b62fd753c8191bcff02ac79b54c6b?show_chat_button=true&amp;q=WordPress">WordPress.com ChatGPT plugin</a>.</p>
+
+
+
+<p class="wp-block-paragraph">Set it up once, then talk to your site to publish posts, moderate comments, check traffic, update media, and handle the small jobs that start after the writing ends.</p>
+
+
+
+<p class="wp-block-paragraph">After you add the plugin, type <code>@WordPress.com</code> in any chat and hand off those chores to ChatGPT.</p>
+
+
+
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<iframe loading="lazy" class="youtube-player" width="640" height="360" src="https://www.youtube.com/embed/yMhdLkVH4Ik?version=3&#038;rel=1&#038;showsearch=0&#038;showinfo=1&#038;iv_load_policy=1&#038;fs=1&#038;hl=en&#038;autohide=2&#038;wmode=transparent" allowfullscreen="true" style="border:0;" sandbox="allow-scripts allow-same-origin allow-popups allow-presentation allow-popups-to-escape-sandbox"></iframe>
+</div></figure>
+
+
+
+<h2 class="wp-block-heading">Publish your words without the busywork</h2>
+
+
+
+<p class="wp-block-paragraph">You wrote the post, maybe in your notes app, maybe in a doc, maybe in a voice note. Getting it live on your blog can be time-consuming, but with the ChatGPT plugin, you just need to ask.&nbsp;</p>
+
+
+
+<figure class="wp-block-image size-full"><img loading="lazy" width="1600" height="1224" src="https://en-blog.files.wordpress.com/2026/08/recent-draft.png" alt="A mockup of a conversation between a user and ChatGPT about scheduling a draft blog post on WordPress.com" class="wp-image-86656" srcset="https://en-blog.files.wordpress.com/2026/08/recent-draft.png 1600w, https://en-blog.files.wordpress.com/2026/08/recent-draft.png?w=150&amp;h=115 150w, https://en-blog.files.wordpress.com/2026/08/recent-draft.png?w=300&amp;h=230 300w, https://en-blog.files.wordpress.com/2026/08/recent-draft.png?w=768&amp;h=588 768w, https://en-blog.files.wordpress.com/2026/08/recent-draft.png?w=1024&amp;h=783 1024w, https://en-blog.files.wordpress.com/2026/08/recent-draft.png?w=1440&amp;h=1102 1440w" sizes="auto, (max-width: 1600px) 100vw, 1600px" /></figure>
+
+
+
+<p class="wp-block-paragraph"><strong>Try running some of these prompts directly in ChatGPT:</strong></p>
+
+
+
+<ul class="wp-block-list">
+<li><a href="https://chatgpt.com/?prompt=%40WordPress.com%20here%27s%20my%20draft.%20Can%20you%20clean%20up%20the%20formatting%20and%20make%20a%20draft%20for%20me%20on%20my%20site%3F">@WordPress.com here&#8217;s my draft. Can you clean up the formatting and make a draft for me on my site?</a></li>
+
+
+
+<li><a href="https://chatgpt.com/?q=%40WordPress.com%20schedule%20my%20recent%20draft%20to%20go%20out%20on%20Monday.">@WordPress.com schedule my recent draft to go out on Monday.</a></li>
+
+
+
+<li><a href="https://chatgpt.com/?prompt=@WordPress.com%20can%20you%20add%20a%20featured%20image%20of%20a%20hand%20holding%20a%20pencil%20in%20the%20style%20of%20a%20black%20and%20white%20editorial%20vintage%20illustration%20with%20visible%20stipple%20and%20crosshatch%20texture.">@WordPress.com can you add a featured image of a hand holding a pencil in the style of a black and white editorial vintage illustration with visible stipple and crosshatch texture.</a></li>
+
+
+
+<li><a href="https://chatgpt.com/?prompt=@WordPress.com%20review%20my%20draft%20and%20suggest%20links%20to%20related%20posts%20already%20on%20my%20blog.">@WordPress.com review my draft and suggest links to related posts already on my blog.&nbsp;</a></li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Your content stays yours, and ChatGPT helps with the formatting, scheduling, and the clicking around.&nbsp;</p>
+
+
+
+<h2 class="wp-block-heading">Run your site by asking</h2>
+
+
+
+<p class="wp-block-paragraph">Once connected, ChatGPT can read your stats, your comments, your media library, and your site&#8217;s activity log, so questions about your site get answered where you asked them. </p>
+
+
+
+<figure class="wp-block-image size-full"><img loading="lazy" width="1600" height="1248" src="https://en-blog.files.wordpress.com/2026/08/missing-alt-text-3.png" alt="A mockup of a conversation between a user and ChatGPT about identifying images with missing alt text" class="wp-image-86657" srcset="https://en-blog.files.wordpress.com/2026/08/missing-alt-text-3.png 1600w, https://en-blog.files.wordpress.com/2026/08/missing-alt-text-3.png?w=150&amp;h=117 150w, https://en-blog.files.wordpress.com/2026/08/missing-alt-text-3.png?w=300&amp;h=234 300w, https://en-blog.files.wordpress.com/2026/08/missing-alt-text-3.png?w=768&amp;h=599 768w, https://en-blog.files.wordpress.com/2026/08/missing-alt-text-3.png?w=1024&amp;h=799 1024w, https://en-blog.files.wordpress.com/2026/08/missing-alt-text-3.png?w=1440&amp;h=1123 1440w" sizes="auto, (max-width: 1600px) 100vw, 1600px" /></figure>
+
+
+
+<p class="wp-block-paragraph"><strong>Here are a few prompts you can use:</strong></p>
+
+
+
+<ul class="wp-block-list">
+<li><a href="https://chatgpt.com/?prompt=%40WordPress.com%20how%20did%20my%20traffic%20this%20month%20compare%20to%20last%20month%3F">@WordPress.com how did my traffic this month compare to last month?</a></li>
+
+
+
+<li><a href="https://chatgpt.com/?prompt=%40WordPress.com%20show%20me%20the%20comments%20actually%20worth%20replying%20to%2C%20and%20clear%20out%20the%20spam">@WordPress.com show me the comments actually worth replying to, and clear out the spam</a></li>
+
+
+
+<li><a href="https://chatgpt.com/?prompt=%40WordPress.com%20find%20images%20missing%20alt%20text%20and%20help%20me%20update%20them">@WordPress.com find images missing alt text and help me update them</a></li>
+
+
+
+<li><a href="https://chatgpt.com/?prompt=%40WordPress.com%20what%20changed%20on%20my%20site%20in%20the%20last%20two%20weeks%3F">@WordPress.com what changed on my site in the last two weeks?</a></li>
+
+
+
+<li><a href="https://chatgpt.com/?prompt=@WordPress.com%20trash%20any%20post%20that's%20been%20sitting%20in%20draft%20for%20over%20a%20year">@WordPress.com trash any post that&#8217;s been sitting in draft for over a year</a></li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Alt text deserves a special mention here. It&#8217;s the accessibility task everyone means to do and almost nobody does, because doing it means setting the alt text one image at a time. <br><br>Now you can set alt text through a conversation with ChatGPT, and your readers who use screen readers get a better experience for it.</p>
+
+
+
+<h2 class="wp-block-heading">Change your site, conversationally</h2>
+
+
+
+<p class="wp-block-paragraph">The plugin can make changes across your site, from adding pages and updating site settings to working with your existing design.</p>
+
+
+
+<figure class="wp-block-image size-full"><img loading="lazy" width="1600" height="1248" src="https://en-blog.files.wordpress.com/2026/08/add-page-4.png" alt="A mockup of a conversation between a user and ChatGPT about creating a new page on a WordPress.com site" class="wp-image-86658" srcset="https://en-blog.files.wordpress.com/2026/08/add-page-4.png 1600w, https://en-blog.files.wordpress.com/2026/08/add-page-4.png?w=150&amp;h=117 150w, https://en-blog.files.wordpress.com/2026/08/add-page-4.png?w=300&amp;h=234 300w, https://en-blog.files.wordpress.com/2026/08/add-page-4.png?w=768&amp;h=599 768w, https://en-blog.files.wordpress.com/2026/08/add-page-4.png?w=1024&amp;h=799 1024w, https://en-blog.files.wordpress.com/2026/08/add-page-4.png?w=1440&amp;h=1123 1440w" sizes="auto, (max-width: 1600px) 100vw, 1600px" /></figure>
+
+
+
+<p class="wp-block-paragraph"><strong>Try prompts like:</strong></p>
+
+
+
+<ul class="wp-block-list">
+<li><a href="https://chatgpt.com/?prompt=%40WordPress.com%20add%20a%20page%20for%20my%20workshop%20schedule%2C%20I%20attached%20a%20draft%20here.">@WordPress.com add a page for my workshop schedule, I attached a draft here.</a></li>
+
+
+
+<li><a href="https://chatgpt.com/?prompt=%40WordPress.com%20my%20site%20is%20still%20in%20coming%20soon%20mode.%20Can%20you%20make%20it%20public%3F">@WordPress.com my site is still in coming soon mode. Can you make it public?</a></li>
+</ul>
+
+
+
+<h2 class="wp-block-heading">You stay in control</h2>
+
+
+
+<p class="wp-block-paragraph"><strong>The WordPress.com ChatGPT plugin is optional and off by default.</strong> When it&#8217;s enabled, ChatGPT has to ask you before making changes to your site. </p>
+
+
+
+<p class="wp-block-paragraph">If it’s about to publish or edit content, launch your site, change settings, or delete something, you’ll see what it plans to do before anything changes.</p>
+
+
+
+<p class="wp-block-paragraph">New posts and pages start as drafts by default, and for anything that publishes, edits, launches, or trashes something, ChatGPT describes exactly what it&#8217;s about to do and waits for your confirmation.&nbsp;</p>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b52840d&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b52840d" class="wp-block-image size-large wp-lightbox-container"><img loading="lazy" width="1024" height="397" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/external-ai-agent-access-permissions-.png?w=1024" alt="" class="wp-image-86776" srcset="https://en-blog.files.wordpress.com/2026/08/external-ai-agent-access-permissions-.png?w=1024 1024w, https://en-blog.files.wordpress.com/2026/08/external-ai-agent-access-permissions-.png?w=150 150w, https://en-blog.files.wordpress.com/2026/08/external-ai-agent-access-permissions-.png?w=300 300w, https://en-blog.files.wordpress.com/2026/08/external-ai-agent-access-permissions-.png?w=768 768w, https://en-blog.files.wordpress.com/2026/08/external-ai-agent-access-permissions-.png?w=1440 1440w, https://en-blog.files.wordpress.com/2026/08/external-ai-agent-access-permissions-.png 2014w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<h2 class="wp-block-heading">Connect your site to ChatGPT</h2>
+
+
+
+<p class="wp-block-paragraph">Getting started only takes a few steps and after that, WordPress.com is available whenever you type <code>@WordPress.com</code> in ChatGPT.<br><br>First, you’ll need to <a href="https://my.wordpress.com/me/preferences/mcp">enable MCP access on your WordPress.com account</a>. This enables AI agents like ChatGPT to use the WordPress.com tools you choose to enable.</p>
+
+
+
+<p class="wp-block-paragraph">Then, <a href="https://chatgpt.com/plugins/plugin_asdk_app_6a2b62fd753c8191bcff02ac79b54c6b?show_chat_button=true&amp;q=WordPress">open WordPress.com in ChatGPT</a>, select &#8220;<strong>Install plugin</strong>,&#8221; sign in with your WordPress.com account, and approve the connection. Then type <code>@WordPress.com</code> and hand off the first chore. </p>
+
+
+
+<p class="wp-block-paragraph">The full setup guide is in our <a href="https://wordpress.com/support/mcp/connect-chatgpt/">support docs</a>, and if you&#8217;d rather connect Claude or another AI assistant, <a href="https://wordpress.com/support/mcp/connect-claude/">that works too</a>.<br><br>MCP access is included with every <a href="https://wordpress.com/pricing/">paid WordPress.com plan</a>, and Free sites also get this during the first 30 days after creation.</p>
+
+
+
+<p class="wp-block-paragraph">Your writing stays yours, and now you can work with your site without having to go to it. Writing was always the fun part anyway.</p>
+
+
+
+<div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex">
+<div class="wp-block-button btn-primary text-color-white"><a class="wp-block-button__link wp-element-button" href="https://chatgpt.com/plugins/plugin_asdk_app_6a2b62fd753c8191bcff02ac79b54c6b?show_chat_button=true&amp;q=WordPress">Try the plugin</a></div>
+</div>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://wordpress.com/blog/2026/08/24/chatgpt-plugin/feed/</wfw:commentRss>
+			<slash:comments>1</slash:comments>
+		
+		
+		<post-id xmlns="com-wordpress:feed-additions:1">86606</post-id>
+		<media:thumbnail url="https://en-blog.files.wordpress.com/2026/08/your-wordpress.com-site-now-works-from-inside-chatgpt.png" />
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/your-wordpress.com-site-now-works-from-inside-chatgpt.png" medium="image">
+			<media:title type="html">Your WordPress.com site now works from inside ChatGPT</media:title>
+		</media:content>
+
+		<media:content url="https://1.gravatar.com/avatar/4339429cceca846189b3459ec5a09c3e3e1d04bc754afb9176a9e00102f839f7?s=96&#38;d=retro" medium="image">
+			<media:title type="html">wpcom</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/recent-draft.png" medium="image">
+			<media:title type="html">A mockup of a conversation between a user and ChatGPT about scheduling a draft blog post on WordPress.com</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/missing-alt-text-3.png" medium="image">
+			<media:title type="html">A mockup of a conversation between a user and ChatGPT about identifying images with missing alt text</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/add-page-4.png" medium="image">
+			<media:title type="html">A mockup of a conversation between a user and ChatGPT about creating a new page on a WordPress.com site</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/external-ai-agent-access-permissions-.png?w=1024" medium="image" />
+	</item>
+		<item>
+		<title>Every Site, One Click Away in the Hosting Dashboard</title>
+		<link>https://wordpress.com/blog/2026/08/19/hosting-dashboard-update/</link>
+					<comments>https://wordpress.com/blog/2026/08/19/hosting-dashboard-update/#respond</comments>
+		
+		<dc:creator><![CDATA[Peter Schimke]]></dc:creator>
+		<pubDate>Wed, 19 Aug 2026 22:46:24 +0000</pubDate>
+				<category><![CDATA[Admin Bar]]></category>
+		<category><![CDATA[News]]></category>
+		<category><![CDATA[Product Features]]></category>
+		<category><![CDATA[Hosting Dashboard]]></category>
+		<category><![CDATA[Site management]]></category>
+		<guid isPermaLink="false">http://en.blog.wordpress.com/?p=86823</guid>
+
+					<description><![CDATA[Manage all your WordPress.com sites from one consistent interface, with persistent navigation for domains, hosting, updates, and performance.]]></description>
+										<content:encoded><![CDATA[
+<p class="wp-block-paragraph">Managing multiple WordPress.com sites just got easier.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">The <a href="http://wordpress.com/blog/2024/06/10/hosting-dashboard">Hosting Dashboard</a> now has a persistent top bar and left sidebar that move with you between sites. Domain names, hosting, updates, and performance are now just one click away.</p>
+
+
+
+<p class="wp-block-paragraph">So whether you manage one WordPress.com site or 20, you’ll always know where things are.</p>
+
+
+
+<div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex">
+<div class="wp-block-button btn-primary text-color-white"><a class="wp-block-button__link wp-element-button" href="https://my.wordpress.com/">View your Hosting Dashboard</a></div>
+</div>
+
+
+
+<p class="wp-block-paragraph"></p>
+
+
+
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<iframe loading="lazy" class="youtube-player" width="640" height="360" src="https://www.youtube.com/embed/LgTfyibtykA?version=3&#038;rel=1&#038;showsearch=0&#038;showinfo=1&#038;iv_load_policy=1&#038;fs=1&#038;hl=en&#038;autohide=2&#038;start=5&#038;wmode=transparent" allowfullscreen="true" style="border:0;" sandbox="allow-scripts allow-same-origin allow-popups allow-presentation allow-popups-to-escape-sandbox"></iframe>
+</div></figure>
+
+
+
+<h2 class="wp-block-heading">Navigation that stays with you across sites</h2>
+
+
+
+<p class="wp-block-paragraph">Instead of navigating through a separate set of controls for each site, you now work from the same persistent interface as you move between them.</p>
+
+
+
+<p class="wp-block-paragraph">If you&#8217;ve used WordPress Admin, the layout will feel familiar.<br><br>We intentionally aligned the sidebar with WP Admin patterns, so you spend less time figuring out where things are and more time getting work done.</p>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b52c983&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b52c983" class="wp-block-image size-large wp-lightbox-container"><img loading="lazy" width="1024" height="309" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/hosting-dashboard-interface.webp?w=1024" alt="" class="wp-image-86837" srcset="https://en-blog.files.wordpress.com/2026/08/hosting-dashboard-interface.webp 1024w, https://en-blog.files.wordpress.com/2026/08/hosting-dashboard-interface.webp?w=150 150w, https://en-blog.files.wordpress.com/2026/08/hosting-dashboard-interface.webp?w=300 300w, https://en-blog.files.wordpress.com/2026/08/hosting-dashboard-interface.webp?w=768 768w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<h2 class="wp-block-heading">What changes when you manage multiple sites</h2>
+
+
+
+<p class="wp-block-paragraph">These changes become clearest when you’re switching between sites or repeating the same task across several of them.</p>
+
+
+
+<p class="wp-block-paragraph"><strong>Managing client sites: </strong>Routine tasks add up when you&#8217;re managing several sites, including the same plugins that need updating. Previously, that meant navigating out, switching sites, and starting over every time. Now your sites are always visible in the persistent nav. Move between them without losing your place.</p>
+
+
+
+<p class="wp-block-paragraph"><strong>Running multiple blogs or stores</strong>: Checking hosting status, renewing domain names, reviewing updates — tasks that used to require bouncing between dashboards are now accessible from one consistent view. Less hunting, more doing.</p>
+
+
+
+<p class="wp-block-paragraph"><strong>Coming from self-hosted WordPress:</strong> One reason people stay self-hosted is that WP Admin feels like home. The Hosting Dashboard follows the same sidebar logic, so moving between self-hosted WordPress and WordPress.com asks less of you.</p>
+
+
+
+<h2 class="wp-block-heading">One dashboard, whether you manage one site or 200</h2>
+
+
+
+<p class="wp-block-paragraph">Whether you&#8217;re managing a handful of sites or a full client roster, the Hosting Dashboard works the same way.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">The interface doesn&#8217;t change as you grow, and neither does your workflow. The same navigation and workflow stay consistent as your site list grows.</p>
+
+
+
+<p class="wp-block-paragraph"><strong>This is only a navigation update</strong> — your sites, content, and settings stay exactly as they are.</p>
+
+
+
+<h2 class="wp-block-heading">Try your improved Hosting Dashboard</h2>
+
+
+
+<p class="wp-block-paragraph">The updated navigation is now live in your <a href="https://my.wordpress.com/">Hosting Dashboard</a>. Open it and try switching between a couple of sites, and you’ll see everything stays where you left it.</p>
+
+
+
+<p class="wp-block-paragraph">If you have any feedback or questions, our <a href="https://wordpress.com/support/">support team is here to help</a>.</p>
+
+
+
+<div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex">
+<div class="wp-block-button btn-primary text-color-white"><a class="wp-block-button__link wp-element-button" href="https://my.wordpress.com/">View your Hosting Dashboard</a></div>
+</div>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://wordpress.com/blog/2026/08/19/hosting-dashboard-update/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+		<post-id xmlns="com-wordpress:feed-additions:1">86823</post-id>
+		<media:thumbnail url="https://en-blog.files.wordpress.com/2026/08/header-every-site-one-click-away-in-the-hosting-dashboard.png" />
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/header-every-site-one-click-away-in-the-hosting-dashboard.png" medium="image">
+			<media:title type="html">Header Every Site, One Click Away in the Hosting Dashboard</media:title>
+		</media:content>
+
+		<media:content url="https://1.gravatar.com/avatar/aabd08d058a90e86409adb6128672844d9f8a4f805f998483d9187f5e24a569f?s=96&#38;d=retro" medium="image">
+			<media:title type="html">hellopeterschimke</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/hosting-dashboard-interface.webp?w=1024" medium="image" />
+	</item>
+		<item>
+		<title>When WordPress.com Support Knows It’s Time for a Human</title>
+		<link>https://wordpress.com/blog/2026/08/19/support-assistant/</link>
+					<comments>https://wordpress.com/blog/2026/08/19/support-assistant/#comments</comments>
+		
+		<dc:creator><![CDATA[Adeline Yaw]]></dc:creator>
+		<pubDate>Wed, 19 Aug 2026 00:13:54 +0000</pubDate>
+				<category><![CDATA[Admin Bar]]></category>
+		<category><![CDATA[News]]></category>
+		<category><![CDATA[Tips and Tutorials]]></category>
+		<category><![CDATA[AI Assistant]]></category>
+		<category><![CDATA[Support]]></category>
+		<guid isPermaLink="false">http://en.blog.wordpress.com/?p=86802</guid>
+
+					<description><![CDATA[WordPress.com&#8217;s Support Assistant helps thousands of customers every day, from resetting forgotten passwords to connecting a domain name and explaining settings.&#160; It resolves most questions on its own, but we built it to get you the right help, fast. And sometimes the right help is a person. Talking to our &#8230;]]></description>
+										<content:encoded><![CDATA[
+<p class="wp-block-paragraph">WordPress.com&#8217;s Support Assistant helps thousands of customers every day, from resetting forgotten passwords to connecting a domain name and explaining settings.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">It resolves most questions on its own, but we built it to get you the <em>right</em> help, fast. And sometimes the right help is a person.</p>
+
+
+
+<p class="wp-block-paragraph"><a href="https://wordpress.com/support/contact/">Talking to our Support Assistant</a> should never feel like jumping through hoops to get the right help. So when we built it, we focused not just on what it can do, but on knowing when it should step aside.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Here’s how it decides.</p>
+
+
+
+<h2 class="wp-block-heading"><strong>It knows what it&#8217;s talking about</strong></h2>
+
+
+
+<p class="wp-block-paragraph">When you <a href="https://wordpress.com/support/contact/">contact WordPress.com support</a>, you expect to reach someone with real expertise.<br><br>Our assistant is built to meet that same bar. It&#8217;s trained on our <a href="http://wordpress.com/support">full library of support guides</a>, the same documentation our <a href="https://wordpress.com/blog/2023/06/29/happiness-engineers-wordpress-support/">Happiness Engineers</a> lean on.<br><br>It can also see your site and account, so its answers fit your specific situation. When you ask it a question, you&#8217;re getting an informed, accurate answer from a service that knows both the topic and you.</p>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b531305&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b531305" class="wp-block-image size-large wp-lightbox-container"><img loading="lazy" width="1024" height="596" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/support-guides-.png?w=1024" alt="" class="wp-image-86816" srcset="https://en-blog.files.wordpress.com/2026/08/support-guides-.png?w=1024 1024w, https://en-blog.files.wordpress.com/2026/08/support-guides-.png?w=150 150w, https://en-blog.files.wordpress.com/2026/08/support-guides-.png?w=300 300w, https://en-blog.files.wordpress.com/2026/08/support-guides-.png?w=768 768w, https://en-blog.files.wordpress.com/2026/08/support-guides-.png?w=1440 1440w, https://en-blog.files.wordpress.com/2026/08/support-guides-.png 1644w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<h2 class="wp-block-heading"><strong>A check before every answer</strong></h2>
+
+
+
+<div class="wp-block-group is-nowrap is-layout-flex wp-container-core-group-is-layout-7387b849 wp-block-group-is-layout-flex">
+<p class="wp-block-paragraph">Each time you send a message, the assistant pauses before answering and runs through a set of questions about your conversation.<br><br>Have you asked to talk to a person? Have you asked before? Have you already contacted support about this same problem? Is this a topic a bot should never handle alone?<br><br>Only after that check does it write a reply. Some conversations move directly to our Happiness team, no questions asked.</p>
+</div>
+
+
+
+<h2 class="wp-block-heading"><strong>It offers human support before you have to ask</strong></h2>
+
+
+
+<p class="wp-block-paragraph">The assistant&#8217;s default is to solve your problem on its own.<br><br>But it&#8217;s built to recognize the moments when that won&#8217;t work. That includes issues that need a person to investigate, cases where it doesn’t have a reliable answer, or situations where you’ve tried its suggestion and things still aren’t working.</p>
+
+
+
+<p class="wp-block-paragraph"><strong>Roughly one in four conversations ends up with a person, and in about half of those, our assistant is the one who suggests it.</strong></p>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b531d32&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b531d32" class="wp-block-image size-large has-custom-border wp-lightbox-container"><img loading="lazy" width="1024" height="682" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/wordpress.com-support-assistant-2-2.png?w=1024" alt="" class="has-border-color has-white-border-color wp-image-86819" srcset="https://en-blog.files.wordpress.com/2026/08/wordpress.com-support-assistant-2-2.png?w=1024 1024w, https://en-blog.files.wordpress.com/2026/08/wordpress.com-support-assistant-2-2.png?w=150 150w, https://en-blog.files.wordpress.com/2026/08/wordpress.com-support-assistant-2-2.png?w=300 300w, https://en-blog.files.wordpress.com/2026/08/wordpress.com-support-assistant-2-2.png?w=768 768w, https://en-blog.files.wordpress.com/2026/08/wordpress.com-support-assistant-2-2.png?w=1440 1440w, https://en-blog.files.wordpress.com/2026/08/wordpress.com-support-assistant-2-2.png 1536w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<h2 class="wp-block-heading"><strong>When you ask for a human</strong></h2>
+
+
+
+<p class="wp-block-paragraph">Our assistant isn&#8217;t perfect at reading the room, so sometimes you&#8217;ll want to ask for a person yourself.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">When you do, it won&#8217;t refuse or stall. It will ask for one or two details if it can fix the problem on the spot, and it will plainly tell you that a human is still an option afterward.<br><br><strong>And the choice stays yours:</strong> you can always continue the conversation with the AI if you prefer.</p>
+
+
+
+<p class="wp-block-paragraph">We tested this &#8220;try once, then step aside&#8221; approach before rolling it out, and it did what we hoped. Many problems were solved in that one extra exchange, and the people who still wanted a human got one without asking.</p>
+
+
+
+<h2 class="wp-block-heading"><strong>You&#8217;ll never have to explain it twice</strong></h2>
+
+
+
+<p class="wp-block-paragraph">This is our favorite thing about the assistant: it can see your recent support history, including conversations you&#8217;ve had with our human support team.<br><br>If you ask for a human and it can see you already explained this exact problem recently (and it wasn&#8217;t resolved), it skips the questions entirely. It names your issue, acknowledges the time you&#8217;ve already spent, and offers the hand-off in one step.</p>
+
+
+
+<p class="wp-block-paragraph">And when the hand-off happens, the conversation goes with you. Our Happiness team receives the chat transcript and a summary of your issue, so you&#8217;re not starting from zero with the person either.</p>
+
+
+
+<h2 class="wp-block-heading"><strong>Good support knows when to hand off</strong></h2>
+
+
+
+<p class="wp-block-paragraph">All of this is about putting the right help in front of you as soon as possible and quickly determining whether that help is our assistant or a person.<br><br>Most of the time, it can solve your problem itself. When it can&#8217;t, it&#8217;ll get you to a human as fast as possible.</p>
+
+
+
+<p class="wp-block-paragraph">Human or Support Assistant, our goal today is the same as it’s always been — to simply help you succeed.</p>
+
+
+
+<p class="wp-block-paragraph">Need a hand with something right now? Contact <a href="http://wordpress.com">WordPress.com support</a>.</p>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://wordpress.com/blog/2026/08/19/support-assistant/feed/</wfw:commentRss>
+			<slash:comments>26</slash:comments>
+		
+		
+		<post-id xmlns="com-wordpress:feed-additions:1">86802</post-id>
+		<media:thumbnail url="https://en-blog.files.wordpress.com/2026/08/when-wordpress.com-support-knows-its-time-for-a-human-header-image.png" />
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/when-wordpress.com-support-knows-its-time-for-a-human-header-image.png" medium="image">
+			<media:title type="html">When WordPress.com Support Knows It’s Time for a Human header image</media:title>
+		</media:content>
+
+		<media:content url="https://1.gravatar.com/avatar/d876fe6d718af5059e578aee22e79c0a5a5bf66065260ba659257668bfe459b3?s=96&#38;d=retro" medium="image">
+			<media:title type="html">adelineyaw</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/support-guides-.png?w=1024" medium="image" />
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/wordpress.com-support-assistant-2-2.png?w=1024" medium="image" />
+	</item>
+		<item>
+		<title>Give Your WordPress.com Site a Memory with Guidelines</title>
+		<link>https://wordpress.com/blog/2026/08/18/guidelines-memory/</link>
+					<comments>https://wordpress.com/blog/2026/08/18/guidelines-memory/#comments</comments>
+		
+		<dc:creator><![CDATA[Ronnie Burt]]></dc:creator>
+		<pubDate>Tue, 18 Aug 2026 17:17:58 +0000</pubDate>
+				<category><![CDATA[Admin Bar]]></category>
+		<category><![CDATA[News]]></category>
+		<category><![CDATA[Product Features]]></category>
+		<category><![CDATA[AI Tools]]></category>
+		<category><![CDATA[Guidelines]]></category>
+		<category><![CDATA[WordPress Agent]]></category>
+		<guid isPermaLink="false">http://en.blog.wordpress.com/?p=86790</guid>
+
+					<description><![CDATA[Set your brand voice, visual style, and goals once with WordPress.com Guidelines, so WordPress Agent can work from the same context wherever you are.]]></description>
+										<content:encoded><![CDATA[
+<p class="wp-block-paragraph">You know your brand. AI usually needs reminding.</p>
+
+
+
+<p class="wp-block-paragraph">Every time you use AI to build or write on your site, you can end up repeating the same context: your voice, your goals, how your images should look, what colors you use — the little rules that make your site recognizably yours.<br><br>And after all that re-explaining, you often still end up with something generic.</p>
+
+
+
+<p class="wp-block-paragraph">Guidelines on WordPress.com change that. Specify your personal brand—how you write, what your images look like, and what your goals are—and it becomes a persistent memory the <a href="https://wordpress.com/support/ai/wordpress-agent/">WordPress Agent</a> works from.<br><br>It’s a memory that lives on your site, guiding everything you make with the WordPress Agent in the editor, via Telegram, or via email.</p>
+
+
+
+<div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex">
+<div class="wp-block-button btn-primary text-color-white"><a class="wp-block-button__link wp-element-button" href="https://wordpress.com/support/guidelines-settings/?ref=blog">Set up guidelines</a></div>
+</div>
+
+
+
+<p class="wp-block-paragraph"></p>
+
+
+
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<iframe loading="lazy" class="youtube-player" width="640" height="360" src="https://www.youtube.com/embed/XEMjgIjNcYU?version=3&#038;rel=1&#038;showsearch=0&#038;showinfo=1&#038;iv_load_policy=1&#038;fs=1&#038;hl=en&#038;autohide=2&#038;wmode=transparent" allowfullscreen="true" style="border:0;" sandbox="allow-scripts allow-same-origin allow-popups allow-presentation allow-popups-to-escape-sandbox"></iframe>
+</div></figure>
+
+
+
+<h2 class="wp-block-heading">How Guidelines works</h2>
+
+
+
+<p class="wp-block-paragraph">Guidelines lives in your site’s dashboard under <strong>Settings</strong> → <strong>Guidelines</strong> and it&#8217;s where you define your site in a few different sections.</p>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b535c5e&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b535c5e" class="wp-block-image size-large is-resized wp-lightbox-container"><img loading="lazy" width="1024" height="699" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/image-9.png?w=1024" alt="" class="wp-image-86791" style="aspect-ratio:1.4613583138173303;width:794px;height:auto" srcset="https://en-blog.files.wordpress.com/2026/08/image-9.png?w=1024 1024w, https://en-blog.files.wordpress.com/2026/08/image-9.png 2048w, https://en-blog.files.wordpress.com/2026/08/image-9.png?w=150 150w, https://en-blog.files.wordpress.com/2026/08/image-9.png?w=300 300w, https://en-blog.files.wordpress.com/2026/08/image-9.png?w=768 768w, https://en-blog.files.wordpress.com/2026/08/image-9.png?w=1440 1440w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph">You don&#8217;t have to start from scratch. Click <strong>Suggest guidelines</strong>, and the WordPress Agent will read your existing posts and pages and draft every section for you. You can then go through each suggestion and accept, edit, or dismiss it.</p>
+
+
+
+<p class="wp-block-paragraph">Already started a section and want to sharpen it? <strong>Improve with AI</strong> refines what you&#8217;ve written.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Guidelines are the memory, and the WordPress Agent reads from it. Set your brand voice once, and the Agent draws on it automatically without needing to be re-prompted or constantly reminded of who you are and what your business does.</p>
+
+
+
+<h2 class="wp-block-heading">One memory for every kind of site</h2>
+
+
+
+<p class="wp-block-paragraph">Guidelines work for every kind of site. The value just shifts depending on who&#8217;s setting it up.</p>
+
+
+
+<p class="wp-block-paragraph"><strong>If you run a small business or work solo,</strong> you already know your brand inside out – you don&#8217;t have time to re-explain your brand on every task. Set your tone once (<em>&#8220;warm and plain-spoken, no corporate jargon&#8221;</em>), name the things that matter (<em>&#8220;always call them &#8216;sessions,&#8217; never &#8216;appointments'&#8221;</em>), and every collaboration session with your WordPress Agent starts on-brand.</p>
+
+
+
+<p class="wp-block-paragraph"><strong>If you&#8217;re a creator or publisher,</strong> you want help that sounds like <em>you</em>, not a content mill. Tell Guidelines to keep your first-person, conversational voice, and let the Agent handle the polish and reviews while your words and voice stay intact.</p>
+
+
+
+<p class="wp-block-paragraph"><strong>If you sell products,</strong> consistency is everything. Set your product photography style once (<em>&#8220;white background, soft shadow, no props&#8221;</em>) and your copy rules (<em>&#8220;benefit first, spec second; never &#8216;cheap,&#8217; always &#8216;affordable'&#8221;</em>), and every generated image and refined description will match.</p>
+
+
+
+<p class="wp-block-paragraph"><strong>If you build sites for clients,</strong> repeating brand context for every project is a tax on your time. Give each client site its own memory, so you can hand off something that stays on-brand without having to stay in the loop.</p>
+
+
+
+<p class="wp-block-paragraph"><strong>If you&#8217;re a developer,</strong> you want AI that stays within known constraints instead of going rogue. Guidelines gives the WordPress Agent a durable, reviewable spec to work from.</p>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b5366df&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b5366df" class="wp-block-image size-large is-resized wp-lightbox-container"><img loading="lazy" width="1024" height="620" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/image-10.png?w=1024" alt="" class="wp-image-86792" style="aspect-ratio:1.6551724137931034;width:775px;height:auto" srcset="https://en-blog.files.wordpress.com/2026/08/image-10.png?w=1024 1024w, https://en-blog.files.wordpress.com/2026/08/image-10.png 2048w, https://en-blog.files.wordpress.com/2026/08/image-10.png?w=150 150w, https://en-blog.files.wordpress.com/2026/08/image-10.png?w=300 300w, https://en-blog.files.wordpress.com/2026/08/image-10.png?w=768 768w, https://en-blog.files.wordpress.com/2026/08/image-10.png?w=1440 1440w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<h2 class="wp-block-heading">Give your team a shared memory</h2>
+
+
+
+<p class="wp-block-paragraph">Guidelines becomes more useful as more people work with your site.</p>
+
+
+
+<p class="wp-block-paragraph">For a team, it becomes a shared memory — a single source of truth that every contributor <em>and</em> the WordPress Agent works from. Your voice and visual direction stay consistent even when the person behind the keyboard changes. The rules live with the site, not in one person&#8217;s head.</p>
+
+
+
+<h2 class="wp-block-heading">Create your Guidelines</h2>
+
+
+
+<p class="wp-block-paragraph">Guidelines takes a few minutes to set up, and you can start with what your site already knows.</p>
+
+
+
+<p class="wp-block-paragraph">First, <a href="https://wordpress.com/support/ai/wordpress-agent/">enable the WordPress Agent</a> on any paid plan. If you use <a href="https://wordpress.com/support/wordpress-agent-bot/">Telegram</a> and/or <a href="https://wordpress.com/support/ai/wordpress-agent/#email-your-wordpress-agent">email</a>, hook those up too.</p>
+
+
+
+<p class="wp-block-paragraph">Then go to <strong>Settings</strong> <em>→</em> <strong>Guidelines</strong> on your WordPress.com site and click “<strong>Suggest guidelines</strong>.” See what your site already knows about itself, accept what fits, and change what doesn&#8217;t.</p>
+
+
+
+<p class="wp-block-paragraph">Finally, talk with your WordPress Agent in the editor, via Telegram, or via email. Your site’s memory is pulled when it&#8217;s needed to help guide the result.</p>
+
+
+
+<p class="wp-block-paragraph">You know your brand. Now your WordPress Agent does, too.</p>
+
+
+
+<div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex">
+<div class="wp-block-button btn-primary text-color-white"><a class="wp-block-button__link wp-element-button" href="https://wordpress.com/support/guidelines-settings/?ref=blog">Set up guidelines</a></div>
+</div>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://wordpress.com/blog/2026/08/18/guidelines-memory/feed/</wfw:commentRss>
+			<slash:comments>3</slash:comments>
+		
+		
+		<post-id xmlns="com-wordpress:feed-additions:1">86790</post-id>
+		<media:thumbnail url="https://en-blog.files.wordpress.com/2026/08/give-your-wordpress.com-site-a-memory-with-guidelines.png" />
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/give-your-wordpress.com-site-a-memory-with-guidelines.png" medium="image">
+			<media:title type="html">Give Your WordPress.com Site a Memory with Guidelines</media:title>
+		</media:content>
+
+		<media:content url="https://2.gravatar.com/avatar/20e74a1399c883caeeba81b57007bcaa058940dcdffca01babfddbaefa5c3c4a?s=96&#38;d=retro" medium="image">
+			<media:title type="html">burtrw</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/image-9.png?w=1024" medium="image" />
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/image-10.png?w=1024" medium="image" />
+	</item>
+		<item>
+		<title>The WordPress.com Student Plan Is Here: Give Your Students a Website They Can Keep</title>
+		<link>https://wordpress.com/blog/2026/08/17/student-plan/</link>
+					<comments>https://wordpress.com/blog/2026/08/17/student-plan/#comments</comments>
+		
+		<dc:creator><![CDATA[Alvaro Gómez]]></dc:creator>
+		<pubDate>Mon, 17 Aug 2026 13:00:00 +0000</pubDate>
+				<category><![CDATA[Admin Bar]]></category>
+		<category><![CDATA[News]]></category>
+		<category><![CDATA[Educators]]></category>
+		<category><![CDATA[Student Plan]]></category>
+		<category><![CDATA[WordCamp US]]></category>
+		<category><![CDATA[WordPress.com education]]></category>
+		<guid isPermaLink="false">http://en.blog.wordpress.com/?p=86664</guid>
+
+					<description><![CDATA[Today at WordCamp US 2026, we’re officially launching WordPress.com Education. A free dedicated Student Plan, built to give students the tools of a professional WordPress.com environment while they learn.]]></description>
+										<content:encoded><![CDATA[
+<p class="wp-block-paragraph">Today at WordCamp US 2026, we&#8217;re officially launching <a href="https://wordpress.com/education/">WordPress.com Education</a>.<br><br>At its heart is a <strong>free </strong>dedicated <a href="https://wordpress.com/support/plan-features/student-plan/">Student Plan</a>, built to give students the tools of a professional WordPress.com environment while they learn.<br><br>Now, students can build real websites in a professional environment that they can keep using after the course ends.</p>
+
+
+
+<p class="wp-block-paragraph">We&#8217;ve been quietly piloting this for the past year, and it&#8217;s already reached more than 5,000 active students across 27 countries. Now we&#8217;re ready to open the doors.</p>
+
+
+
+<p class="wp-block-paragraph">At WordCamp US 2025, Matt Mullenweg <a href="https://youtu.be/45HRzzc0waU?si=Rkg9icq1tQTL4EVJ&amp;t=1353">closed his keynote with a question</a>:&nbsp;</p>
+
+
+
+<blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
+<p class=wp-block-paragraph><em>How do we give the next generation the best tools, so they don&#8217;t have to write with a borrowed pen?</em></p>
+</blockquote>
+
+
+
+<p class="wp-block-paragraph">That line is the whole reason WordPress.com Education exists.</p>
+
+
+
+<div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex">
+<div class="wp-block-button btn-primary text-color-white"><a class="wp-block-button__link wp-element-button" href="https://wordpress.com/education/?ref=blog">Educators, apply now</a></div>
+</div>
+
+
+
+<h2 class="wp-block-heading">The Student Plan: Free professional WordPress.com tools</h2>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b53a271&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b53a271" class="wp-block-image size-large wp-lightbox-container"><img loading="lazy" width="1024" height="641" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/wp-education_program-announcement_evergreen_blog.png?w=1024" alt="Student working on their laptop with the wp.com/edu logo in the background." class="wp-image-86742" srcset="https://en-blog.files.wordpress.com/2026/08/wp-education_program-announcement_evergreen_blog.png?w=1024 1024w, https://en-blog.files.wordpress.com/2026/08/wp-education_program-announcement_evergreen_blog.png?w=150 150w, https://en-blog.files.wordpress.com/2026/08/wp-education_program-announcement_evergreen_blog.png?w=300 300w, https://en-blog.files.wordpress.com/2026/08/wp-education_program-announcement_evergreen_blog.png?w=768 768w, https://en-blog.files.wordpress.com/2026/08/wp-education_program-announcement_evergreen_blog.png 1176w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph">Any teacher can apply for their class at <a href="http://wp.com/edu">wp.com/edu</a> and get, for every student:</p>
+
+
+
+<ul class="wp-block-list">
+<li><strong>A real WordPress.com plan</strong>: The same platform millions of businesses run on. No watered-down &#8220;student tier,&#8221; no restricted plugin access.</li>
+
+
+
+<li><strong>A free domain name</strong>: Students can register a .blog or .art domain at no cost (our two education-eligible TLDs for this initial phase).&nbsp;</li>
+
+
+
+<li><strong>Plugin support</strong>: Students can install plugins and extend their sites as part of their coursework.</li>
+
+
+
+<li><strong>The first year,</strong> <strong>completely free</strong>: No credit card required.</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">This isn’t a stripped-down classroom version of WordPress.com. The <a href="https://wordpress.com/support/plan-features/student-plan/">Student Plan</a> includes plugin support, 6 GB of storage, backups, staging sites, SFTP/SSH, phpMyAdmin, and Studio Sync. Students learn and build with many of the same tools they’ll encounter working with WordPress professionally.</p>
+
+
+
+<p class="wp-block-paragraph">After year one, renewal is just $2/month ($24/year) — a price that keeps the site online and accessible long after the course ends.</p>
+
+
+
+<p class="wp-block-paragraph">That last point matters more than it might sound. This isn&#8217;t a throwaway class project that disappears when the semester ends. It&#8217;s a real website, on a real domain, that a student owns and can carry into a portfolio, a job application, or their first freelance client — for less than the price of a coffee a month.</p>
+
+
+
+<p class="wp-block-paragraph">And even if a student decides not to renew after the first year, nothing gets deleted. The site simply drops to a free WordPress.com plan on a free subdomain, and every page, post, comment, and media file the student created stays exactly where it is, fully intact and online. </p>
+
+
+
+<p class="wp-block-paragraph">No countdown timer, no &#8220;pay or lose your work&#8221; ultimatum. The portfolio a student spent a semester building is theirs to keep, whether they renew or not.</p>
+
+
+
+<h2 class="wp-block-heading">Why we built the Student Plan for real classrooms</h2>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b53ac7e&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b53ac7e" class="wp-block-image size-large is-resized wp-lightbox-container"><img loading="lazy" width="1024" height="679" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/image-3.png?w=1024" alt="View of the WordPress block editor on a laptop screen." class="wp-image-86670" style="aspect-ratio:1.5036144578313253;width:782px;height:auto" srcset="https://en-blog.files.wordpress.com/2026/08/image-3.png?w=1024 1024w, https://en-blog.files.wordpress.com/2026/08/image-3.png?w=150 150w, https://en-blog.files.wordpress.com/2026/08/image-3.png?w=300 300w, https://en-blog.files.wordpress.com/2026/08/image-3.png?w=768 768w, https://en-blog.files.wordpress.com/2026/08/image-3.png?w=1440 1440w, https://en-blog.files.wordpress.com/2026/08/image-3.png 1982w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph"><br>Teachers tell us the same challenges come up again and again:</p>
+
+
+
+<p class="wp-block-paragraph">Setup takes too long. Creating accounts, configuring sites, troubleshooting access issues — all before the actual coursework even starts. WordPress.com handles the infrastructure so you can focus on teaching.</p>
+
+
+
+<p class="wp-block-paragraph">Students lose their work when the semester ends. Most classroom tools delete everything once the course closes. Motivated students who want to keep building have nowhere to go. With <a href="https://wordpress.com/education/">WordPress.com Education</a>, every student owns their site and can keep it live for $2/month — or take their content with them, anytime.</p>
+
+
+
+<p class="wp-block-paragraph">Not every student starts from the same place. Students in under-resourced schools or countries often face barriers that limit what they can build or access online. </p>
+
+
+
+<p class="wp-block-paragraph">This program gives every student the same professional-grade platform, the same custom domain, and the same opportunity to create a real web presence — no matter where they&#8217;re starting from.</p>
+
+
+
+<h2 class="wp-block-heading">Preparing students for the real web&nbsp;</h2>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b53b628&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b53b628" class="wp-block-image size-large wp-lightbox-container"><img loading="lazy" width="1024" height="518" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/wpcom-edu-announcement-classroom-1.jpg?w=1024" alt="Teacher explaining something to two students in a classroom." class="wp-image-86749" srcset="https://en-blog.files.wordpress.com/2026/08/wpcom-edu-announcement-classroom-1.jpg?w=1024 1024w, https://en-blog.files.wordpress.com/2026/08/wpcom-edu-announcement-classroom-1.jpg?w=150 150w, https://en-blog.files.wordpress.com/2026/08/wpcom-edu-announcement-classroom-1.jpg?w=300 300w, https://en-blog.files.wordpress.com/2026/08/wpcom-edu-announcement-classroom-1.jpg?w=768 768w, https://en-blog.files.wordpress.com/2026/08/wpcom-edu-announcement-classroom-1.jpg 1423w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph">Education systems around the world are rethinking what digital literacy means in the age of AI.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">We think the answer starts with ownership — not another walled-garden tool that disappears the moment a subscription lapses, but the open web itself.</p>
+
+
+
+<p class="wp-block-paragraph">Students leave with a domain they control, content they own, and practical WordPress skills built on the fundamentals that power over 40% of the internet.</p>
+
+
+
+<h2 class="wp-block-heading">It&#8217;s already working: 5,000+ students, 27 countries</h2>
+
+
+
+<p class="wp-block-paragraph"><br><a href="https://wordpress.com/education/">WordPress.com Education</a> has been running successfully as a pilot program for the past year.</p>
+
+
+
+<p class="wp-block-paragraph">At IES Luís Seoane in Spain, marketing teacher Joaquín says giving students access to WordPress.com from day one lets them work in a real environment. More than 20 of the program&#8217;s 30 students went on to internships, and employers were &#8220;surprised by the level our students bring—not just in SEO and SEM strategy, but in working with WordPress.&#8221;</p>
+
+
+
+<blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
+<p class=wp-block-paragraph><em>I love the &#8216;forever&#8217; nature of this. My students can build a real portfolio that they can keep and use after the course ends.</em></p>
+</blockquote>
+
+
+
+<p class="has-text-align-center wp-block-paragraph">— Javier, Media Studies Teacher, San Telmo Arts School, Spain</p>
+
+
+
+<p class="wp-block-paragraph"><br><strong>Survey results from pilot educators confirm this:</strong></p>
+
+
+
+<ul class="wp-block-list">
+<li>88.9% said WordPress knowledge, combined with the program, improves their students&#8217; employability.</li>
+
+
+
+<li>81.5% said it improves their students&#8217; entrepreneurial capacity.</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Real skills, on real infrastructure, translating into real outcomes — internships, jobs, and the confidence to launch something of their own.</p>
+
+
+
+<div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex">
+<div class="wp-block-button btn-primary text-color-white"><a class="wp-block-button__link wp-element-button" href="https://wordpress.com/education/map/">See the full map of participating classrooms</a></div>
+</div>
+
+
+
+<h2 class="wp-block-heading">Building the bridge to the community</h2>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b53c315&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b53c315" class="wp-block-image size-large is-resized wp-lightbox-container"><img loading="lazy" width="1024" height="558" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/image-2.png?w=1024" alt="Group photo from a WordPress community event." class="wp-image-86668" style="aspect-ratio:1.8328611898016998;width:783px;height:auto" srcset="https://en-blog.files.wordpress.com/2026/08/image-2.png?w=1024 1024w, https://en-blog.files.wordpress.com/2026/08/image-2.png?w=150 150w, https://en-blog.files.wordpress.com/2026/08/image-2.png?w=300 300w, https://en-blog.files.wordpress.com/2026/08/image-2.png?w=768 768w, https://en-blog.files.wordpress.com/2026/08/image-2.png 1317w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph"><a href="https://wordpress.com/education/">WordPress.com Education</a> is also a bridge into the wider WordPress community. Beyond our own classroom program, we&#8217;re supporting two WordPress.org initiatives with free WordPress.com hosting:</p>
+
+
+
+<ul class="wp-block-list">
+<li><a href="https://wordpress.org/education/credits/"><strong>WordPress Credits</strong></a> is a <a href="https://wordpressfoundation.org/">WordPress Foundation</a> program that partners with educational institutions to engage students in open source contributions. We provide free hosting to participants, and 150+ students have benefited so far.<br></li>
+
+
+
+<li><a href="https://events.wordpress.org/campusconnect/"><strong>WordPress Campus Connect</strong></a> is a <a href="http://wordpress.org">WordPress.org</a> initiative that brings local WordPress communities into higher education institutions through student-led events. WordPress.com has sponsored dozens of these events with free hosting for organizers and attendees.</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">It&#8217;s about moving students from &#8220;I have a website&#8221; to &#8220;I&#8217;m part of a global open source community&#8221; and doing our part to strengthen the programs the wider WordPress project has already built.</p>
+
+
+
+<h2 class="wp-block-heading">Bring WordPress.com to your classroom&nbsp;</h2>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b53cb96&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b53cb96" class="wp-block-image size-large is-resized wp-lightbox-container"><img loading="lazy" width="540" height="350" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/image.png?w=540" alt="Students in an auditorium." class="wp-image-86666" style="aspect-ratio:1.5428908390856428;width:781px;height:auto" srcset="https://en-blog.files.wordpress.com/2026/08/image.png 540w, https://en-blog.files.wordpress.com/2026/08/image.png?w=150 150w, https://en-blog.files.wordpress.com/2026/08/image.png?w=300 300w" sizes="auto, (max-width: 540px) 100vw, 540px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph"><a href="https://wordpress.com/education/">WordPress.com Education</a> is more than free hosting. It’s a program that works alongside educators to prepare students for the future of the open web, helping them retain ownership of their content while strengthening their employability and entrepreneurial skills.</p>
+
+
+
+<p class="wp-block-paragraph">This includes initiatives such as AI-assisted website creation, microcredentials, and professional certifications designed to build practical skills, validate knowledge, and turn ideas into real-world opportunities.</p>
+
+
+
+<p class="wp-block-paragraph">Educators can apply to bring the <a href="https://wordpress.com/support/plan-features/student-plan/">Student Plan</a> to their classes at <a href="http://wp.com/edu">wp.com/edu</a>.</p>
+
+
+
+<p class="wp-block-paragraph"><strong>If you&#8217;re a teacher, department head, or program coordinator who wants your students building real, lasting websites they can own and grow —</strong> <strong>apply today.</strong></p>
+
+
+
+<div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex">
+<div class="wp-block-button btn-primary text-color-white"><a class="wp-block-button__link wp-element-button" href="https://wordpress.com/education/?ref=blog">Educators, apply now</a></div>
+</div>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://wordpress.com/blog/2026/08/17/student-plan/feed/</wfw:commentRss>
+			<slash:comments>7</slash:comments>
+		
+		
+		<post-id xmlns="com-wordpress:feed-additions:1">86664</post-id>
+		<media:thumbnail url="https://en-blog.files.wordpress.com/2026/08/wp-education_program-announcement_v01_blog.png" />
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/wp-education_program-announcement_v01_blog.png" medium="image">
+			<media:title type="html">wp-education_program-announcement_v01_blog</media:title>
+		</media:content>
+
+		<media:content url="https://0.gravatar.com/avatar/69282acfecde82a10134cd4cf555ce1c8cf4580e2890a7323b75bd085cd9067f?s=96&#38;d=retro" medium="image">
+			<media:title type="html">mrfoxtalbot</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/wp-education_program-announcement_evergreen_blog.png?w=1024" medium="image">
+			<media:title type="html">Student working on their laptop with the wp.com/edu logo in the background.</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/image-3.png?w=1024" medium="image">
+			<media:title type="html">View of the WordPress block editor on a laptop screen.</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/wpcom-edu-announcement-classroom-1.jpg?w=1024" medium="image">
+			<media:title type="html">Teacher explaining something to two students in a classroom.</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/image-2.png?w=1024" medium="image">
+			<media:title type="html">Group photo from a WordPress community event.</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/image.png?w=540" medium="image">
+			<media:title type="html">Students in an auditorium.</media:title>
+		</media:content>
+	</item>
+		<item>
+		<title>WordPress.com Changelog: Brand Memory and Better Renewal Warnings</title>
+		<link>https://wordpress.com/blog/2026/08/14/changelog-brand-memory-renewal-warnings/</link>
+					<comments>https://wordpress.com/blog/2026/08/14/changelog-brand-memory-renewal-warnings/#comments</comments>
+		
+		<dc:creator><![CDATA[WordPress.com Staff]]></dc:creator>
+		<pubDate>Fri, 14 Aug 2026 20:10:00 +0000</pubDate>
+				<category><![CDATA[Changelog]]></category>
+		<category><![CDATA[AI]]></category>
+		<guid isPermaLink="false">http://en.blog.wordpress.com/?p=86714</guid>
+
+					<description><![CDATA[A new AI tool for brand voice guidelines, plan expiration notices, and various fixes.]]></description>
+										<content:encoded><![CDATA[
+<p class="wp-block-paragraph"><em>July 31 – August 13, 2026</em> </p>
+
+
+
+<p class="wp-block-paragraph">Welcome back to the WordPress.com changelog. There are two bigger updates worth paying attention to this round, as well as a run of fixes:</p>
+
+
+
+<h2 class="wp-block-heading">AI</h2>
+
+
+
+<h3 class="wp-block-heading">You know your brand, now your site does too</h3>
+
+
+
+<p class="wp-block-paragraph">Getting AI to write or design in your brand&#8217;s voice usually means describing that voice from scratch every single time, or settling for generic output when you don&#8217;t.</p>
+
+
+
+<p class="wp-block-paragraph"><a href="https://wordpress.com/support/guidelines-settings/">Guidelines</a> is a settings page where you write it down once: how you write, what your images should look like, and what you&#8217;re trying to accomplish. The WordPress Agent in the editor, via Telegram, or via email pulls from those guidelines so any and all outputs are grounded in what makes your site uniquely yours.</p>
+
+
+
+<figure class="wp-block-image size-full"><img loading="lazy" width="1400" height="835" src="https://en-blog.files.wordpress.com/2026/08/guidelines-wordpress-com.jpg" alt="The Guidelines screen on WordPresscom" class="wp-image-86719" srcset="https://en-blog.files.wordpress.com/2026/08/guidelines-wordpress-com.jpg 1400w, https://en-blog.files.wordpress.com/2026/08/guidelines-wordpress-com.jpg?w=150&amp;h=89 150w, https://en-blog.files.wordpress.com/2026/08/guidelines-wordpress-com.jpg?w=300&amp;h=179 300w, https://en-blog.files.wordpress.com/2026/08/guidelines-wordpress-com.jpg?w=768&amp;h=458 768w, https://en-blog.files.wordpress.com/2026/08/guidelines-wordpress-com.jpg?w=1024&amp;h=611 1024w" sizes="auto, (max-width: 1400px) 100vw, 1400px" /></figure>
+
+
+
+<p class="wp-block-paragraph">Plus, you don’t have to start from scratch. <a href="https://wordpress.com/pricing">On a paid plan</a>, the WordPress Agent can read what you&#8217;ve already published and <a href="https://github.com/Automattic/jetpack/pull/47959">draft your guidelines for you</a>, every section at once or one section at a time. Each suggestion arrives as a change you can accept or dismiss, nothing is saved until you choose to, and your published posts and pages are never edited without your review.</p>
+
+
+
+<p class="wp-block-paragraph">Find Guidelines under <strong>Settings → Guidelines</strong>, and <a href="https://wordpress.com/support/ai/wordpress-agent/">enable the WordPress Agent</a> on your site.</p>
+
+
+
+<h2 class="wp-block-heading">Plans</h2>
+
+
+
+<h3 class="wp-block-heading">Know where your plan stands before it lapses</h3>
+
+
+
+<p class="wp-block-paragraph">The <a href="https://wordpress.com/me/purchases">purchase page for your plan</a> now tells you plainly what&#8217;s happening and what it means for your site. As your expiration date gets closer, the message escalates from a heads-up months out, to a warning at 60 days, to an urgent notice in the final week. Each one <a href="https://github.com/Automattic/wp-calypso/pull/113195">spells out</a> what you&#8217;d actually lose if your plan expires, too: things like plugins, custom themes, and your storage.</p>
+
+
+
+<figure class="wp-block-image size-full"><img loading="lazy" width="1400" height="899" src="https://en-blog.files.wordpress.com/2026/08/purchases-wordpress-com.jpg" alt="The purchases page on WordPress.com showing a subscription for a Business plan" class="wp-image-86720" srcset="https://en-blog.files.wordpress.com/2026/08/purchases-wordpress-com.jpg 1400w, https://en-blog.files.wordpress.com/2026/08/purchases-wordpress-com.jpg?w=150&amp;h=96 150w, https://en-blog.files.wordpress.com/2026/08/purchases-wordpress-com.jpg?w=300&amp;h=193 300w, https://en-blog.files.wordpress.com/2026/08/purchases-wordpress-com.jpg?w=768&amp;h=493 768w, https://en-blog.files.wordpress.com/2026/08/purchases-wordpress-com.jpg?w=1024&amp;h=658 1024w" sizes="auto, (max-width: 1400px) 100vw, 1400px" /></figure>
+
+
+
+<h2 class="wp-block-heading">Fixes and improvements</h2>
+
+
+
+<p class="wp-block-paragraph">We shipped reliability and polish updates across WordPress.com too, including:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Adding FLAC to the audio formats you can upload on a paid plan, alongside MP3, M4A, WAV, and OGG.</li>
+
+
+
+<li>Giving you more context if your card was declined and your payment fails so it&#8217;s easier for you to troubleshoot. (<a href="https://github.com/Automattic/wp-calypso/pull/113519">GitHub PR</a>)</li>
+
+
+
+<li>Giving you a way out when a plugin install stalls (going to your plugin list or contacting support), instead of waiting for it to resolve itself. (<a href="https://github.com/Automattic/wp-calypso/pull/113266">GitHub PR</a>)</li>
+
+
+
+<li>Stopping posts from showing up multiple times <a href="https://wordpress.com/read/search">in the Reader</a>. (<a href="https://github.com/Automattic/wp-calypso/pull/113484">GitHub PR</a>)</li>
+
+
+
+<li>Sharpening featured images in the Reader&#8217;s compact mobile view. (<a href="https://github.com/Automattic/wp-calypso/pull/113481">GitHub PR</a>)</li>
+
+
+
+<li>Improving the contrast and accessibility of the Views and Visitors chart in <a href="https://wordpress.com/support/stats/">Stats</a>. (<a href="https://github.com/Automattic/wp-calypso/pull/113210">GitHub PR</a>)</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">If you&#8217;ve noticed these changes, we’d love to know what you think — leave a comment below!</p>
+
+
+
+<p class="wp-block-paragraph"></p>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://wordpress.com/blog/2026/08/14/changelog-brand-memory-renewal-warnings/feed/</wfw:commentRss>
+			<slash:comments>4</slash:comments>
+		
+		
+		<post-id xmlns="com-wordpress:feed-additions:1">86714</post-id>
+		<media:thumbnail url="https://en-blog.files.wordpress.com/2026/08/changelog-brand-memory-better-renewal-warnings.jpg" />
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/changelog-brand-memory-better-renewal-warnings.jpg" medium="image">
+			<media:title type="html">changelog-brand-memory-better-renewal-warnings</media:title>
+		</media:content>
+
+		<media:content url="https://1.gravatar.com/avatar/4339429cceca846189b3459ec5a09c3e3e1d04bc754afb9176a9e00102f839f7?s=96&#38;d=retro" medium="image">
+			<media:title type="html">wpcom</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/guidelines-wordpress-com.jpg" medium="image">
+			<media:title type="html">The Guidelines screen on WordPresscom</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/purchases-wordpress-com.jpg" medium="image">
+			<media:title type="html">The purchases page on WordPress.com showing a subscription for a Business plan</media:title>
+		</media:content>
+	</item>
+		<item>
+		<title>What to See at WordCamp US 2026: Speakers, Demos, and More</title>
+		<link>https://wordpress.com/blog/2026/08/14/wordcamp-us-2026/</link>
+					<comments>https://wordpress.com/blog/2026/08/14/wordcamp-us-2026/#respond</comments>
+		
+		<dc:creator><![CDATA[WordPress.com Staff]]></dc:creator>
+		<pubDate>Thu, 13 Aug 2026 23:19:10 +0000</pubDate>
+				<category><![CDATA[Admin Bar]]></category>
+		<category><![CDATA[News]]></category>
+		<category><![CDATA[Events]]></category>
+		<category><![CDATA[WordCamp US]]></category>
+		<category><![CDATA[WordPress Agent]]></category>
+		<category><![CDATA[WordPress Studio]]></category>
+		<guid isPermaLink="false">http://en.blog.wordpress.com/?p=86689</guid>
+
+					<description><![CDATA[WordCamp US 2026 is coming to Phoenix for the first time on August 16–19, and there’s a lot competing for your time and attention. If you’re planning your schedule, start here: our selection of eight speakers worth catching, hands-on demos of WordPress Studio and WordPress Agent, and something new for &#8230;]]></description>
+										<content:encoded><![CDATA[
+<p class="wp-block-paragraph"><a href="https://us.wordcamp.org/2026/">WordCamp US 2026</a> is coming to Phoenix for the first time on August 16–19, and there’s a lot competing for your time and attention.<br><br><strong>If you’re planning your schedule, start here:</strong> our selection of eight speakers worth catching, hands-on demos of WordPress Studio and WordPress Agent, and something new for students and educators.</p>
+
+
+
+<p class="wp-block-paragraph">This year, we’re offering a sponsor code <strong>WordPress.com-friend20</strong> for 20% off general admission.</p>
+
+
+
+<div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex">
+<div class="wp-block-button btn-primary text-color-white"><a class="wp-block-button__link wp-element-button" href="https://us.wordcamp.org/2026/tickets/">Get 20% off WordCamp US</a></div>
+</div>
+
+
+
+<h2 class="wp-block-heading">8 talks worth adding to your WordCamp US schedule&nbsp;</h2>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b5477c3&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b5477c3" class="wp-block-image size-large is-resized wp-lightbox-container"><img loading="lazy" width="1024" height="576" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/image-4.png?w=1024" alt="" class="wp-image-86692" style="aspect-ratio:1.7778045174820367;width:795px;height:auto" srcset="https://en-blog.files.wordpress.com/2026/08/image-4.png?w=1024 1024w, https://en-blog.files.wordpress.com/2026/08/image-4.png?w=150 150w, https://en-blog.files.wordpress.com/2026/08/image-4.png?w=300 300w, https://en-blog.files.wordpress.com/2026/08/image-4.png?w=768 768w, https://en-blog.files.wordpress.com/2026/08/image-4.png?w=1440 1440w, https://en-blog.files.wordpress.com/2026/08/image-4.png 1920w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph"><br><a href="https://us.wordcamp.org/2026/">WordCamp US 2026</a> has a strong AI thread this year, and Automattic speakers are right in the middle of it.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">We’re talking about vibe coding and agentic commerce to agency workflows, and the future of open source.<br><br>If you want to hear from the people building across WordPress.com, WooCommerce, and Automattic, start building your schedule here:</p>
+
+
+
+<ol class="wp-block-list">
+<li><a href="https://us.wordcamp.org/2026/speaker/ma-tt-mullenweg/">Matt Mullenweg</a>, WordPress co-founder and Automattic CEO joins <a href="https://us.wordcamp.org/2026/speaker/robert-jacobi/">Robert Jacobi</a> in a <a href="https://us.wordcamp.org/2026/pull-up-a-chair-for-the-state-of-open-source/">fireside chat</a> on the state of open source. AI, changing expectations, and the future of WordPress are all on the table, but the useful part is that it isn’t meant to be a prepared keynote: the final 30 minutes are audience Q&amp;A. If you have a burning question about where WordPress goes next, this is your chance to ask it.</li>
+</ol>
+
+
+
+<ol start="2" class="wp-block-list">
+<li><a href="https://us.wordcamp.org/2026/speaker/jamie-marsland/">Jamie Marsland</a> runs WordPress.com&#8217;s YouTube channel at Automattic, where his whole job is showing non-developers what they can build on WordPress without writing code. He’s doing triple duty at WCUS with “<a href="https://us.wordcamp.org/2026/session/wp101-contributor-day-1/">WP 101: Build a Real Website, Today</a>,” “<a href="https://us.wordcamp.org/2026/session/office-hours-day-2/">Office Hours: Take Your Site Live</a>,” and “<a href="https://us.wordcamp.org/2026/session/how-to-vibe-code-in-wordpress-for-non-techies/">How to Vibe Code in WordPress for Non-Techies</a>.” The last one is a must see if you’ve ever wanted to build a plugin, customize the editor, or connect WordPress to another tool, then talked yourself out of it because you don’t write code. He’ll show you what AI does instead, live.</li>
+</ol>
+
+
+
+<ol start="3" class="wp-block-list">
+<li><a href="https://us.wordcamp.org/2026/speaker/klaus-harris/">Klaus Harris</a> works on learning and credentialing at Automattic after more than 18 years as a software developer. In “<a href="https://us.wordcamp.org/2026/session/the-making-of-a-wordpress-credential/">The Making of a WordPress Credential</a>,” he joins Dr. Leslie Thomas to unpack a problem the ecosystem has somehow lived with for years: employers need a better way to recognize real WordPress engineering skill. The session goes behind the year-long Automattic effort to build a professionally governed credential, not another badge you collect and forget about.<br><br></li>
+
+
+
+<li><a href="https://us.wordcamp.org/2026/speaker/brian-coords/">Brian Coords</a>, Developer Advocate at WooCommerce and one of the block-theme community’s go-to teachers, is tackling the question every agency is quietly nervous about. His session, “<a href="https://us.wordcamp.org/2026/session/the-site-is-the-source-of-truth-block-themes-ai-and-agency-workflows/">The Site Is the Source of Truth: Block Themes, AI, and Agency Workflows</a>,” makes the case that once AI starts editing production sites directly, the site itself, not the AI’s memory of what it did, has to stay the one source of truth.<br><br></li>
+
+
+
+<li><a href="https://us.wordcamp.org/2026/speaker/shani-banerjee/">Shani Banerjee</a>, WooCommerce Developer Advocate, joins <a href="https://us.wordcamp.org/2026/speaker/danny-dudzic/">Danny Dudzic</a> to take the agentic-web conversation in a very practical direction: the checkout. “<a href="https://us.wordcamp.org/2026/session/from-crawlers-to-customers-wordpress-and-the-rise-of-ai-buyers/">From Crawlers to Customers: WordPress and the Rise of AI Buyers</a>” looks at what changes when bots stop simply indexing your site and start comparing products, making decisions, and potentially buying. If AI agents become a new kind of customer, WordPress and WooCommerce have to be ready for more than traffic.</li>
+</ol>
+
+
+
+<p class="wp-block-paragraph">Beyond Automattic, these speakers are well worth catching: <a href="https://us.wordcamp.org/2026/speaker/miriam-schwab/">Miriam Schwab’s</a> “<a href="https://us.wordcamp.org/2026/session/the-agentic-web-is-coming-is-wordpress-ready/">The Agentic Web Is Coming. Is WordPress Ready?</a>” tackles what the agentic web means for WordPress. Meanwhile, <a href="https://us.wordcamp.org/2026/speaker/nicola-catton/">Nicola Catton’s</a> “<a href="https://us.wordcamp.org/2026/session/own-your-audience-how-the-ankler-escaped-substack-and-took-back-control/">Own Your Audience</a>” gets into The Ankler’s move off Substack and the realities of owning your publishing platform. Last but not least, <a href="https://us.wordcamp.org/2026/speaker/manny-costa/">Manny Costa’s</a> “<a href="https://us.wordcamp.org/2026/session/wordpress-for-the-public-good-modernizing-civic-websites-for-accessibility-services-and-the-open-web/">WordPress for the Public Good</a>” looks at WordPress as civic infrastructure, with accessibility, public services, and long-term stewardship at the center.</p>
+
+
+
+<div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex">
+<div class="wp-block-button btn-primary text-color-white"><a class="wp-block-button__link wp-element-button" href="https://us.wordcamp.org/2026/speakers/">WordCamp US Speaker Lineup</a></div>
+</div>
+
+
+
+<h2 class="wp-block-heading">See how WordPress.com is helping students build on the open web</h2>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b5482df&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b5482df" class="wp-block-image size-large wp-lightbox-container"><img data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/image-2-edited.png" alt="" class="wp-image-86703" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph"><a href="https://wordpress.com/education/">WordPress.com Education</a> gives students access to a professional WordPress.com environment where they can build real websites, learn practical web skills, and keep ownership of what they create.</p>
+
+
+
+<p class="wp-block-paragraph">As Javier, an IT teacher at San Telmo Arts School in Málaga, put it: “I love the ‘forever’ nature of this. My students can build a real portfolio that they can actually keep and use after the course ends.”&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">More than 5,000 active students have already used the program. If you teach, study, or care about the future of the open web, visit our booth to see how WordPress.com is connecting classroom work to real-world skills and the wider WordPress community.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph"><strong>At WordCamp US, we’ll have something exciting to announce about what’s coming next for students and educators.</strong></p>
+
+
+
+<h2 class="wp-block-heading">Come say hello at the WordPress.com booth</h2>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b548cd0&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b548cd0" class="wp-block-image size-large is-resized wp-lightbox-container"><img loading="lazy" width="1024" height="682" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/image-6.png?w=1024" alt="" class="wp-image-86694" style="aspect-ratio:1.5;width:789px;height:auto" srcset="https://en-blog.files.wordpress.com/2026/08/image-6.png?w=1024 1024w, https://en-blog.files.wordpress.com/2026/08/image-6.png?w=150 150w, https://en-blog.files.wordpress.com/2026/08/image-6.png?w=300 300w, https://en-blog.files.wordpress.com/2026/08/image-6.png?w=768 768w, https://en-blog.files.wordpress.com/2026/08/image-6.png?w=1440 1440w, https://en-blog.files.wordpress.com/2026/08/image-6.png 1600w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph"><br>At the WordPress.com booth, our message is <strong>WordPress for the future</strong>. Our demos of Studio and Agent show what that future looks like: new ways to build, manage, and work with WordPress.</p>
+
+
+
+<p class="wp-block-paragraph"><a href="https://developer.wordpress.com/studio/?utm_source=wpcom_blog&amp;utm_medium=referral&amp;utm_campaign=wordcamp_us_2026">WordPress Studio</a> is our agentic development tool for WordPress developers and agencies. We&#8217;ll demo a brand-new UI, and you&#8217;ll see how our Studio Code agent can build, make changes, and ship to production, all from a conversation.</p>
+
+
+
+<p class="wp-block-paragraph"><a href="https://wordpress.com/support/ai/wordpress-agent/">WordPress Agent</a> is for people who spend more time running a site than coding one. The demos cover guidelines as memory, editorial review, image editing, and using the Agent through email and Telegram.</p>
+
+
+
+<p class="wp-block-paragraph">Watch the demos, ask questions, and tell us how these tools can improve.&nbsp;</p>
+
+
+
+<h2 class="wp-block-heading">Help shape what we build next</h2>
+
+
+
+<p class="wp-block-paragraph">The booth isn’t a finished-product victory lap. We’re using WCUS to learn what sparks your interest, what gives you pause, and how we can do better and build better to support you well into the future.</p>
+
+
+
+<p class="wp-block-paragraph">If you work at an agency, bring the client workflow that wastes your time so we can help solve it. If you publish or run a business, bring the task you wish your site could handle for you. Our booth staff will take that feedback back to the teams that build and market the products.</p>
+
+
+
+<h2 class="wp-block-heading">Have fun with something decidedly offline</h2>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b5496d8&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b5496d8" class="wp-block-image size-large is-resized wp-lightbox-container"><img loading="lazy" width="1024" height="682" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/image-5.png?w=1024" alt="" class="wp-image-86693" style="width:793px;height:auto" srcset="https://en-blog.files.wordpress.com/2026/08/image-5.png?w=1024 1024w, https://en-blog.files.wordpress.com/2026/08/image-5.png?w=150 150w, https://en-blog.files.wordpress.com/2026/08/image-5.png?w=300 300w, https://en-blog.files.wordpress.com/2026/08/image-5.png?w=768 768w, https://en-blog.files.wordpress.com/2026/08/image-5.png?w=1440 1440w, https://en-blog.files.wordpress.com/2026/08/image-5.png 1536w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph">After all the talk of AI, there’s something deliberately analog waiting in your attendee bag: <strong>The Little WordPress.com Zine</strong>.</p>
+
+
+
+<p class="wp-block-paragraph">Inside are stories from people building on WordPress.com, a few gloriously low-tech activities, and a look at <a href="https://developer.wordpress.com/studio/">WordPress Studio</a> and <a href="https://wordpress.com/support/ai/wordpress-agent/">WordPress Agent</a>.<br><br>The stories inside are all wrapped around a bigger idea: <strong>the things you build on the web should belong to you.</strong></p>
+
+
+
+<p class="wp-block-paragraph">It’s a limited edition made for <a href="https://us.wordcamp.org/2026/">WordCamp US 2026</a>, included in your attendee bag.</p>
+
+
+
+<h2 class="wp-block-heading">Don’t miss out on WordCamp US 2026</h2>
+
+
+
+<figure data-wp-context="{&quot;imageId&quot;:&quot;6a9d56b54a15e&quot;}" data-wp-interactive="core/image" data-wp-key="6a9d56b54a15e" class="wp-block-image size-large is-resized wp-lightbox-container"><img loading="lazy" width="1024" height="683" data-wp-class--hide="state.isContentHidden" data-wp-class--show="state.isContentVisible" data-wp-init="callbacks.setButtonStyles" data-wp-on--click="actions.showLightbox" data-wp-on--load="callbacks.setButtonStyles" data-wp-on--pointerdown="actions.preloadImage" data-wp-on--pointerenter="actions.preloadImageWithDelay" data-wp-on--pointerleave="actions.cancelPreload" data-wp-on-window--resize="callbacks.setButtonStyles" src="https://en-blog.files.wordpress.com/2026/08/dsc9344.jpeg?w=1024" alt="" class="wp-image-86698" style="aspect-ratio:1.5;width:747px;height:auto" srcset="https://en-blog.files.wordpress.com/2026/08/dsc9344.jpeg 1024w, https://en-blog.files.wordpress.com/2026/08/dsc9344.jpeg?w=150 150w, https://en-blog.files.wordpress.com/2026/08/dsc9344.jpeg?w=300 300w, https://en-blog.files.wordpress.com/2026/08/dsc9344.jpeg?w=768 768w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><button
+			class="lightbox-trigger"
+			type="button"
+			aria-haspopup="dialog"
+			data-wp-bind--aria-label="state.thisImage.triggerButtonAriaLabel"
+			data-wp-init="callbacks.initTriggerButton"
+			data-wp-on--click="actions.showLightbox"
+			data-wp-style--right="state.thisImage.buttonRight"
+			data-wp-style--top="state.thisImage.buttonTop"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
+				<path fill="#fff" d="M2 0a2 2 0 0 0-2 2v2h1.5V2a.5.5 0 0 1 .5-.5h2V0H2Zm2 10.5H2a.5.5 0 0 1-.5-.5V8H0v2a2 2 0 0 0 2 2h2v-1.5ZM8 12v-1.5h2a.5.5 0 0 0 .5-.5V8H12v2a2 2 0 0 1-2 2H8Zm2-12a2 2 0 0 1 2 2v2h-1.5V2a.5.5 0 0 0-.5-.5H8V0h2Z" />
+			</svg>
+		</button></figure>
+
+
+
+<p class="wp-block-paragraph">WordCamp US 2026 runs on <strong>August 16–19</strong> at the <strong>Phoenix Convention Center.</strong>&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">General admission is $100, while student tickets are just $25. Use sponsor code <strong>WordPress.com-friend20</strong> for 20% off general admission.<br><br><strong>Your ticket covers:</strong></p>
+
+
+
+<ul class="wp-block-list">
+<li>Two conference days with more than 50 talks and workshops</li>
+
+
+
+<li>Contributor Day</li>
+
+
+
+<li>Showcase Day</li>
+
+
+
+<li>Lunch and all-day coffee</li>
+
+
+
+<li>Sponsor Hall access</li>
+
+
+
+<li>Closing social</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">From the team at WordPress.com, we can’t wait to see you there in person, either at our booth or at the many social events!</p>
+
+
+
+<div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex">
+<div class="wp-block-button btn-primary text-color-white"><a class="wp-block-button__link wp-element-button" href="https://us.wordcamp.org/2026/tickets/">Get 20% off WordCamp US</a></div>
+</div>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://wordpress.com/blog/2026/08/14/wordcamp-us-2026/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+		<post-id xmlns="com-wordpress:feed-additions:1">86689</post-id>
+		<media:thumbnail url="https://en-blog.files.wordpress.com/2026/08/header-wpbrand-485_-blog-wordpress.com-e28094-social-asset-set_-wordcamp-europe-2026_-worth-the-wait-2.png" />
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/header-wpbrand-485_-blog-wordpress.com-e28094-social-asset-set_-wordcamp-europe-2026_-worth-the-wait-2.png" medium="image">
+			<media:title type="html">Header - WPBRAND-485_ [blog] WordPress.com — social asset set_ WordCamp Europe 2026_ Worth the Wait (2)</media:title>
+		</media:content>
+
+		<media:content url="https://1.gravatar.com/avatar/4339429cceca846189b3459ec5a09c3e3e1d04bc754afb9176a9e00102f839f7?s=96&#38;d=retro" medium="image">
+			<media:title type="html">wpcom</media:title>
+		</media:content>
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/image-4.png?w=1024" medium="image" />
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/image-2-edited.png" medium="image" />
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/image-6.png?w=1024" medium="image" />
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/image-5.png?w=1024" medium="image" />
+
+		<media:content url="https://en-blog.files.wordpress.com/2026/08/dsc9344.jpeg?w=1024" medium="image" />
+	</item>
+	</channel>
+</rss>

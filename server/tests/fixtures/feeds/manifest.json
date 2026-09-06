@@ -1,0 +1,69 @@
+{
+  "feeds": [
+    {
+      "file": "engadget-rss.xml",
+      "sourceUrl": "https://www.engadget.com/rss.xml",
+      "capturedAt": "2026-09-06T11:58:01.959Z",
+      "format": "rss",
+      "observedEntryCount": 20,
+      "sha256": "1d76b49f93d592e8b3de3dacc570b202173ec7e7e94280ad04d34cbdd1d2bd75",
+      "transformations": []
+    },
+    {
+      "file": "theverge-atom.xml",
+      "sourceUrl": "https://www.theverge.com/rss/index.xml",
+      "capturedAt": "2026-09-06T11:59:01.124Z",
+      "format": "atom",
+      "observedEntryCount": 10,
+      "sha256": "a99d8915d5f99e1a5c9f9a7a8e6b857ee477362e3e0189bdb0ee45596fa9331c",
+      "transformations": []
+    },
+    {
+      "file": "arstechnica-rss.xml",
+      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/index",
+      "capturedAt": "2026-09-06T12:01:08.491Z",
+      "format": "rss",
+      "observedEntryCount": 20,
+      "sha256": "024a7fee76f4134d000928fb568c9ae55299ad14006b9aa6e7df522d7cd6e4f3",
+      "transformations": []
+    },
+    {
+      "file": "xkcd-atom.xml",
+      "sourceUrl": "https://xkcd.com/atom.xml",
+      "capturedAt": "2026-09-06T12:02:09.971Z",
+      "format": "atom",
+      "observedEntryCount": 4,
+      "sha256": "7c9c48e88318b986dd1e4db2ada48a1fb828f0902be6d03935adbecf58591a53",
+      "transformations": []
+    },
+    {
+      "file": "hnrss-newest-rss.xml",
+      "sourceUrl": "https://hnrss.org/newest",
+      "capturedAt": "2026-09-06T12:02:51.248Z",
+      "format": "rss",
+      "observedEntryCount": 20,
+      "sha256": "ca8a6a1df39a7c2cf605979599ace9e6f4c0b179f9691542e5399963639e3bce",
+      "transformations": []
+    },
+    {
+      "file": "wordpress-com-rss.xml",
+      "sourceUrl": "https://wordpress.com/blog/feed/",
+      "capturedAt": "2026-09-06T12:04:38.395Z",
+      "format": "rss",
+      "observedEntryCount": 10,
+      "sha256": "2a4398399bddbff6a37e26c7af1d02d1094937ef0a48866e9b35521d7cdcfa24",
+      "transformations": []
+    },
+    {
+      "file": "reddit-atom.xml",
+      "sourceUrl": "https://www.reddit.com/.rss",
+      "capturedAt": null,
+      "acquisition": "user-provided attachment",
+      "storedAt": "2026-09-06T12:05:58.476Z",
+      "format": "atom",
+      "observedEntryCount": 25,
+      "sha256": "77cda0891d5ad04ba36b7c8642382c3a05b13c88e3601e748e37932115501219",
+      "transformations": []
+    }
+  ]
+}
