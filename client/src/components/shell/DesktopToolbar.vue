@@ -1084,7 +1084,7 @@ export default {
           id: 'sortDropdown',
           type: 'sort',
           label: 'Sort',
-          selectedLabel: selectedSortOption ? selectedSortOption.label : this.selectedSort === 'attention' ? 'Attention' : '',
+          selectedLabel: selectedSortOption ? selectedSortOption.label : '',
           selectedValue: this.selectedSort,
           options: visibleOptions(this.sortOptions),
           disabled: this.briefingPresentationControlsDisabled

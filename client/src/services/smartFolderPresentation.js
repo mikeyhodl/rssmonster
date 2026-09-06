@@ -10,7 +10,7 @@ export function smartFolderPresentation(query) {
   const presentation = { sort: 'desc', grouping: 'none', includeDevelopingEvents: false };
   for (const token of tokenizeSmartFolderExpression(query)) {
     const cleaned = token.replace(/[.,;]+$/, '');
-    const sort = cleaned.match(/^sort:(desc|asc|trust|topStories|recommended|quality|attention)$/i);
+    const sort = cleaned.match(/^sort:(desc|asc|topStories|recommended|quality)$/i);
     const grouping = cleaned.match(/^grouping:(none|event|topic)$/i);
     const developing = cleaned.match(/^developing:(true|false)$/i);
     if (sort) presentation.sort = normalizeSortValueForApi(sort[1].toLowerCase());
@@ -26,7 +26,7 @@ export function completeSmartFolderQuery(query, limitCount) {
   const tokens = tokenizeSmartFolderExpression(query).map(token => token.replace(/[.,;]+$/, ''));
   const presentation = smartFolderPresentation(query);
   const parts = [String(query || '').trim()];
-  if (!tokens.some(token => /^sort:(desc|asc|trust|topStories|recommended|quality|attention)$/i.test(token))) {
+  if (!tokens.some(token => /^sort:(desc|asc|topStories|recommended|quality)$/i.test(token))) {
     parts.push(`sort:${presentation.sort}`);
   }
   const groupingTokens = tokens.filter(token => /^grouping:(none|event|topic)$/i.test(token));

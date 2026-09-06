@@ -55,7 +55,6 @@ export function sortArticles(articles, {
   sortRecommended,
   sortTopStories,
   sortQuality,
-  sortAttention,
   sortDirection = 'desc',
   qualityFilter,
   freshnessFilter,
@@ -106,13 +105,6 @@ export function sortArticles(articles, {
   // Handles the case where sort quality is available.
   } else if (sortQuality) {
     articles = sortByScore(articles, computeQuality);
-  // Handles the case where sort attention is available.
-  } else if (sortAttention) {
-    // Runs the callback required while performing sort articles.
-    articles = sortByScore(
-      articles,
-      article => boostedSortScore(article, article.attentionScore, prioritizeHighTrust)
-    );
   // Applies the optional Unread trust boost to chronological sorts.
   } else if (prioritizeHighTrust && ['asc', 'desc'].includes(sortDirection)) {
     articles = sortByScore(articles, article => {

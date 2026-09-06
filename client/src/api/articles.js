@@ -1,18 +1,12 @@
 import api from './client';
-import {
-  normalizeQuerySortAliasesForApi,
-  normalizeSortValueForApi
-} from '../services/queryValidation';
+import { normalizeSortValueForApi } from '../services/queryValidation';
 
-// Canonicalizes legacy sort aliases before article collection requests reach the API.
+// Normalizes sort identifiers and disables settings persistence for folder requests.
 const normalizeArticleParams = params => {
   const normalized = { ...params };
   if (normalized.smartFolderId != null) normalized.persistSettings = false;
   if (Object.hasOwn(normalized, 'sort')) {
     normalized.sort = normalizeSortValueForApi(normalized.sort);
-  }
-  if (Object.hasOwn(normalized, 'search')) {
-    normalized.search = normalizeQuerySortAliasesForApi(normalized.search);
   }
   return normalized;
 };

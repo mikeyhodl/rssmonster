@@ -170,11 +170,11 @@ describe('Smart Folder query domain', () => {
     expect(buildSmartFolderQuery(parseSmartFolderQuery(query))).toBe(query);
   });
 
-  it('canonicalizes a legacy Trust sort when opening and rebuilding a folder', () => {
-    const config = parseSmartFolderQuery('unread:true sort:trust limit:50');
+  it.each(['trust', 'attention'])('uses newest when opening a folder with removed sort %s', sort => {
+    const config = parseSmartFolderQuery(`unread:true sort:${sort} limit:50`);
 
-    expect(config.sort.field).toBe('quality');
-    expect(buildSmartFolderQuery(config)).toBe('unread:true sort:quality grouping:none limit:50');
+    expect(config.sort.field).toBe('published-desc');
+    expect(buildSmartFolderQuery(config)).toBe('unread:true sort:desc grouping:none limit:50');
   });
 
   it.each([

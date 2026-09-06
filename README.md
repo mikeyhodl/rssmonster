@@ -378,10 +378,6 @@ The visible sort order is **Newest, Oldest, Top Stories, Recommended, Quality**.
 * **Quality ranking**: Combines `70%` article quality with `30%` FeedTrust while keeping both concepts separate.
 * **Uniqueness**: Describes how standalone an article is. Articles in larger event clusters receive a lower uniqueness signal, helping the interface identify redundant coverage without removing access to the underlying articles.
 
-Legacy `sort:attention` queries remain accepted for compatibility, but Most
-Engaged is no longer a visible sort option. Legacy `sort:trust` queries resolve
-to Quality.
-
 ## Prerequisites
 
 ### Docker Installation

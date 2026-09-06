@@ -60,12 +60,11 @@ const expressionFieldName = token => {
     : null;
 };
 
-// Canonicalizes supported article sorts while retaining Trust as a legacy Quality alias.
+// Canonicalizes supported article sorts.
 export const normalizeArticleSort = sortValue => {
   const normalized = String(sortValue || 'desc').toLowerCase();
-  if (normalized === 'trust') return 'quality';
   if (normalized === 'topstories') return 'topStories';
-  return ['asc', 'desc', 'recommended', 'quality', 'attention'].includes(normalized)
+  return ['asc', 'desc', 'recommended', 'quality'].includes(normalized)
     ? normalized
     : 'desc';
 };
@@ -396,7 +395,7 @@ export const parseArticleQuery = ({ search = '', defaultSort = 'desc', strict = 
     }
 
     // Derives the sort match through match while parsing article query.
-    const sortMatch = cleaned.match(/^sort:\s*(desc|asc|trust|topStories|recommended|quality|attention)$/i);
+    const sortMatch = cleaned.match(/^sort:\s*(desc|asc|topStories|recommended|quality)$/i);
     // Handles the case where sort match is available.
     if (sortMatch) {
       sort = normalizeArticleSort(sortMatch[1]);
@@ -568,7 +567,7 @@ export const normalizeSmartFolderExpression = expression => {
   const parsed = parseArticleQuery({ search: query });
   const tokens = tokenizeSearch(query).map(trimTrailingPunctuation);
   const parts = [query];
-  if (!tokens.some(token => /^sort:(desc|asc|trust|topStories|recommended|quality|attention)$/i.test(token))) {
+  if (!tokens.some(token => /^sort:(desc|asc|topStories|recommended|quality)$/i.test(token))) {
     parts.push(`sort:${parsed.sort}`);
   }
   const grouping = parsed.filters.developing === true ? 'event' : parsed.filters.grouping ?? 'none';

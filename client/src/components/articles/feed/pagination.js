@@ -5,7 +5,7 @@ import {
   fetchArticlePage
 } from '../../../api/articles.js';
 
-const COMPUTED_SORT_PATTERN = /(?:^|\s)sort:(?:trust|topStories|recommended|quality|attention)(?:\s|$)/i;
+const COMPUTED_SORT_PATTERN = /(?:^|\s)sort:(?:topStories|recommended|quality)(?:\s|$)/i;
 const RUNTIME_FILTER_PATTERN = /(?:^|\s)(?:quality|freshness):/i;
 
 // Returns whether the active selection can use database keyset pagination.

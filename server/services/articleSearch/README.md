@@ -185,9 +185,8 @@ interest, freshness, Quality, corroboration, and matching rule tags. Top Stories
 is non-personalized and uses event importance, freshness, and Quality. Both use
 Quality's fixed article-quality and feed-trust weights; neither adds a separate
 raw feed-trust preference boost. The generic Unread `prioritizeHighTrust`
-preference still affects the chronological Newest and Oldest sorts and the
-legacy `sort:attention` path. These preferences do not change eligibility or
-sidebar counts.
+preference still affects the chronological Newest and Oldest sorts. These
+preferences do not change eligibility or sidebar counts.
 
 Tag values should currently be a single unquoted token. Quoted tag values retain
 their quote characters and therefore should not be used.
@@ -245,11 +244,9 @@ saved or manually authored expressions.
 | --- | --- |
 | `sort:desc` | Newest publication first. This is the normal default. |
 | `sort:asc` | Oldest publication first. |
-| `sort:trust` | Legacy alias for `sort:quality`. |
 | `sort:topStories` | Non-personalized event importance, freshness, and Quality descending. |
 | `sort:recommended` | Personalized signed interest, freshness, Quality, corroboration, and rule-tag boost descending. |
 | `sort:quality` | 70% article-only quality and 30% feed trust, descending. |
-| `sort:attention` | Legacy computed attention score descending; no longer exposed as an editor option. |
 
 Computed score sorts are performed in memory across the complete eligible
 candidate set before a result limit is applied. They return a stable ordered ID

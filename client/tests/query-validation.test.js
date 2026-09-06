@@ -3,7 +3,6 @@ import {
   expressionPatterns,
   knownKeywords,
   levenshteinDistance,
-  normalizeQuerySortAliasesForApi,
   normalizeSortValueForApi,
   validateQuery,
   validateSearchQuery,
@@ -23,14 +22,10 @@ describe('query validation fundamentals', () => {
     expect(validateQuery()).toEqual({ valid: true, error: '' });
   });
 
-  it('canonicalizes legacy Trust API sort values and query aliases', () => {
+  it('canonicalizes supported API sort identifiers without aliasing Trust', () => {
     expect(normalizeSortValueForApi('recommended')).toBe('recommended');
-    expect(normalizeSortValueForApi('TrUsT')).toBe('quality');
+    expect(normalizeSortValueForApi('trust')).toBe('trust');
     expect(normalizeSortValueForApi('TOPSTORIES')).toBe('topStories');
-    expect(normalizeQuerySortAliasesForApi('sort:quality unread:true'))
-      .toBe('sort:quality unread:true');
-    expect(normalizeQuerySortAliasesForApi('unread:true sort:trust'))
-      .toBe('unread:true sort:quality');
   });
 
   it('calculates edit distance for equal, inserted, removed, and replaced characters', () => {
@@ -184,10 +179,11 @@ describe('query validation developing filters', () => {
   });
 });
 
-describe('query validation trust sorting', () => {
-  it('accepts trust sorting in searches and smart folders', () => {
-    expect(validateSearchQuery('sort:trust')).toEqual({ valid: true, error: '' });
-    expect(validateSmartFolderQuery('unread:true sort:trust')).toEqual({ valid: true, error: '' });
+describe('removed legacy sorts', () => {
+  it.each(['trust', 'attention', 'TRUST', 'ATTENTION'])('rejects sort:%s in searches and smart folders', sort => {
+    const query = `sort:${sort}`;
+    expect(validateSearchQuery(query).valid).toBe(false);
+    expect(validateSmartFolderQuery(`unread:true ${query}`).valid).toBe(false);
   });
 });
 

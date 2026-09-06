@@ -147,26 +147,6 @@ describe('articleSort.service', () => {
     expect(result.map(article => article.id)).toEqual([3, 2, 1]);
   });
 
-  // Treats missing attention as zero while sorting descending.
-  it('sorts by attention score with a zero fallback', () => {
-    const result = sortArticles([
-      { id: 1 },
-      { id: 2, attentionScore: 4 }
-    ], { sortAttention: true });
-
-    expect(result.map(article => article.id)).toEqual([2, 1]);
-  });
-
-  // Adds feed trust to Most Engaged without replacing the selected attention signal.
-  it('boosts attention sorting with feed trust', () => {
-    const result = sortArticles([
-      { id: 1, attentionScore: 0.8, Feed: { feedTrust: 0.1 } },
-      { id: 2, attentionScore: 0.2, Feed: { feedTrust: 0.9 } }
-    ], { sortAttention: true, prioritizeHighTrust: true });
-
-    expect(result.map(article => article.id)).toEqual([2, 1]);
-  });
-
   // Adds feed trust to both chronological directions using freshness as the base score.
   it.each([
     ['desc', [{ id: 1, freshness: 0.9, Feed: { feedTrust: 0.1 } }, { id: 2, freshness: 0.4, Feed: { feedTrust: 0.9 } }]],

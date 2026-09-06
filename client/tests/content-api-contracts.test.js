@@ -75,20 +75,20 @@ describe('article content API contracts', () => {
     );
   });
 
-  it('canonicalizes legacy Trust sorting in article requests', () => {
+  it('does not rewrite unsupported legacy sorting in article requests', () => {
     fetchArticleIds({ sort: 'trust', search: 'unread:true sort:trust' });
     fetchArticleDetails([3], 'trust');
 
     expect(get).toHaveBeenCalledWith('/articles', {
       params: {
-        sort: 'quality',
-        search: 'unread:true sort:quality',
+        sort: 'trust',
+        search: 'unread:true sort:trust',
         includeFirstPage: true
       }
     });
     expect(post).toHaveBeenCalledWith('/articles/details', {
       articleIds: '3',
-      sort: 'quality'
+      sort: 'trust'
     });
   });
 

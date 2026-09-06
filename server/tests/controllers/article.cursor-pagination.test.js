@@ -156,14 +156,14 @@ describe('article cursor pagination', () => {
     expect(second.body.page.hasMore).toBe(false);
   });
 
-  it('treats the legacy Trust alias as a computed sort without cursor pagination', async () => {
-    const { user, feed } = await createUserFeed('cursor-trust-alias');
-    await createArticle(user, feed, 'Legacy Trust alias', new Date('2026-08-11T12:00:00Z'));
+  it.each(['trust', 'attention'])('falls back to newest pagination for removed sort %s', async sort => {
+    const { user, feed } = await createUserFeed(`cursor-removed-${sort}`);
+    const article = await createArticle(user, feed, 'Removed sort fallback', new Date('2026-08-11T12:00:00Z'));
 
-    const response = await getPage(user, { sort: 'trust', pageSize: 1 });
+    const response = await getPage(user, { sort, pageSize: 1 });
 
-    expect(response.status).toBe(422);
-    expect(response.body.error.code).toBe('CURSOR_SORT_UNSUPPORTED');
+    expect(response.status).toBe(200);
+    expect(response.body.page.itemIds).toEqual([article.id]);
   });
 
   it('rejects mismatched, invalid, expired, unsupported, and invalid-size requests', async () => {

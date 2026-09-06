@@ -64,6 +64,9 @@ describe('getSmartFolderRecommendations', () => {
       content: 'Return ONLY valid JSON. No markdown. No prose.'
     });
     expect(request.messages[1].content).toContain(JSON.stringify(insights));
+    expect(request.messages[1].content).toContain('sort:topStories');
+    expect(request.messages[1].content).not.toContain('sort:trust');
+    expect(request.messages[1].content).not.toContain('sort:attention');
   });
 
   // Verifies that markdown fences around otherwise valid provider JSON are tolerated.

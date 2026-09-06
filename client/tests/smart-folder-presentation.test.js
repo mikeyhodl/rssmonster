@@ -60,6 +60,10 @@ describe('Smart Folder presentation ownership', () => {
     expect(store.currentSelection).toMatchObject({ smartFolderId: null, sort: 'quality', grouping: 'none' });
   });
 
+  it.each(['trust', 'attention'])('does not select removed sort %s', sort => {
+    expect(smartFolderPresentation(`sort:${sort}`).sort).toBe('desc');
+  });
+
   it('completes legacy expressions without treating quoted text as presentation', () => {
     const query = completeSmartFolderQuery('title:"sort:asc grouping:topic"', 50);
     expect(query).toBe('title:"sort:asc grouping:topic" sort:desc grouping:none limit:50');

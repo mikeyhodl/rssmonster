@@ -118,13 +118,13 @@ describe('data store remaining actions and getters', () => {
     const { selectionStore: store } = createStores();
 
     store.setSelectedSearch('author:ada, sort:quality; unread:true');
-    store.setSelectedSort('ATTENTION');
+    store.setSelectedSort('QUALITY');
     expect(store.currentSelection).toMatchObject({
-      sort: 'attention',
+      sort: 'quality',
       search: 'author:ada, unread:true'
     });
 
-    store.setSelectedSearch('sort:trust');
+    store.setSelectedSearch('sort:quality');
     store.setSelectedSort('unknown');
     expect(store.currentSelection).toMatchObject({
       sort: 'desc',
@@ -134,6 +134,12 @@ describe('data store remaining actions and getters', () => {
     store.setSelectedSearch('plain words');
     store.setSelectedSort('asc');
     expect(store.currentSelection.search).toBe('plain words');
+  });
+
+  it.each(['trust', 'attention'])('falls back to newest for removed sort %s', sort => {
+    const { selectionStore: store } = createStores();
+    store.setSelectedSort(sort);
+    expect(store.currentSelection.sort).toBe('desc');
   });
 
   // Verifies filter resets use the store-owned defaults without resetting user preferences.

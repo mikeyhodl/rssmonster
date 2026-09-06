@@ -108,16 +108,14 @@ function applyEventCountToken(config, token) {
 }
 
 const SMART_FOLDER_SORT_FIELDS = {
-    trust: 'quality',
     topstories: 'topStories',
     recommended: 'recommended',
     quality: 'quality',
-    attention: 'attention',
     desc: 'published-desc',
     asc: 'published-asc'
 };
 
-// Maps stored sort aliases onto the editor's select values.
+// Maps stored sort identifiers onto the editor's select values.
 function applySortToken(config, token) {
     const parsedSortValue = token.split(':')[1]?.toLowerCase();
     const sortField = SMART_FOLDER_SORT_FIELDS[parsedSortValue];

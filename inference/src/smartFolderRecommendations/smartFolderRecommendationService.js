@@ -138,7 +138,7 @@ Date filters:
 - @yesterday
 
 Sorting:
-- sort:desc | sort:asc | sort:trust | sort:recommended | sort:quality | sort:attention
+- sort:desc | sort:asc | sort:topStories | sort:recommended | sort:quality
 
 --------------------
 RULES

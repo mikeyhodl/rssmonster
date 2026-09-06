@@ -98,7 +98,7 @@ const applyCursorPosition = (articleQuery, sort, position) => {
  * Get all article IDs based on query parameters with advanced filtering.
  * Supports field filters in search string: favorite:true/false, unread:true/false, clicked:true/false,
  * event:true/false, island:true/false, briefing:true/false, developing:true/false, eventCount:>=2, tag:name, title:text, author:text, language:en,
- * sort:desc/asc/trust/topStories/recommended/quality/attention, and date filters: @YYYY-MM-DD, @today, @yesterday, @"N days ago", @"last DayName"
+ * sort:desc/asc/topStories/recommended/quality, and date filters: @YYYY-MM-DD, @today, @yesterday, @"N days ago", @"last DayName"
  */
 // Searches article ids for a user using query-string filters, score thresholds, feed/category scope, and optional ranking.
 export const searchArticles = async ({
@@ -280,7 +280,7 @@ export const searchArticles = async ({
      * Determine final filter values.
      * Field filters from search string take precedence over query parameters.
      */
-    // Sort: search token (sort:asc/desc/trust/topStories/recommended/quality/attention) overrides query param
+    // Sort: search token (sort:asc/desc/topStories/recommended/quality) overrides query param
     // Smart folder optimization: skip sort entirely (only counting articles)
     const logicalSort = normalizeArticleSort(sortFilter !== null ? sortFilter : sort);
     // Derives the sort recommended required while performing search articles.
@@ -289,10 +289,8 @@ export const searchArticles = async ({
     const sortTopStories = logicalSort === 'topStories';
     // Derives the sort quality required while performing search articles.
     const sortQuality = logicalSort === 'quality';
-    // Derives the sort attention required while performing search articles.
-    const sortAttention = logicalSort === 'attention';
     // Selects the database sort based on whether value contains logical sort.
-    const databaseSort = ['topStories', 'recommended', 'quality', 'attention'].includes(logicalSort)
+    const databaseSort = ['topStories', 'recommended', 'quality'].includes(logicalSort)
       ? 'desc'
       : logicalSort;
     debugLog(`\x1b[31mFinal sort value: "${databaseSort}" (logical: ${logicalSort}, smartFolder: ${smartFolderSearch})\x1b[0m`);
@@ -383,7 +381,6 @@ export const searchArticles = async ({
       sortRecommended,
       sortTopStories,
       sortQuality,
-      sortAttention,
       prioritizeHighTrust,
       workingSort: databaseSort,
       qualityFilter,
@@ -601,7 +598,6 @@ export const searchArticles = async ({
     const runtimeOrderingRequired = sortRecommended
       || sortTopStories
       || sortQuality
-      || sortAttention
       || needsHighTrustRuntimeSort;
     const boundedCandidateExecution = normalizedExecutionBounds
       && (runtimeOrderingRequired || runtimeFiltersRequired);
@@ -633,7 +629,6 @@ export const searchArticles = async ({
       || sortRecommended
       || sortTopStories
       || sortQuality
-      || sortAttention
       || qualityFilter
       || freshnessFilter
       || needsHighTrustRuntimeSort
@@ -642,7 +637,6 @@ export const searchArticles = async ({
         sortRecommended,
         sortTopStories,
         sortQuality,
-        sortAttention,
         sortDirection: logicalSort,
         qualityFilter,
         freshnessFilter,

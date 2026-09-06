@@ -660,10 +660,10 @@ describe('ArticleFeed loading races', () => {
   });
 
   // This test exercises the article-detail contract through a real Pinia data store.
-  it('requests article details with the normalized sort from the real data store', async () => {
+  it.each(['TrUsT', 'AtTeNtIoN'])('requests article details with newest fallback for removed sort %s', async sort => {
     setActivePinia(createPinia());
     const selectionStore = useSelectionStore();
-    selectionStore.setCurrentSelection({ sort: 'TrUsT' });
+    selectionStore.setCurrentSelection({ sort });
     fetchArticleDetails.mockResolvedValueOnce({ data: [] });
     const context = createLoadingContext(selectionStore);
     context.legacyItemIds = [7];
@@ -671,8 +671,8 @@ describe('ArticleFeed loading races', () => {
 
     await context.getContent();
 
-    expect(selectionStore.currentSelection.sort).toBe('quality');
-    expect(fetchArticleDetails).toHaveBeenCalledWith([7], 'quality');
+    expect(selectionStore.currentSelection.sort).toBe('desc');
+    expect(fetchArticleDetails).toHaveBeenCalledWith([7], 'desc');
   });
 
   it('loads another page only when the sentinel intersects and loading is ready', () => {

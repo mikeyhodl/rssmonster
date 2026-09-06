@@ -3,6 +3,7 @@ import {
   ArticleExpressionValidationError,
   MAX_ARTICLE_SEARCH_LENGTH,
   parseArticleQuery,
+  normalizeArticleSort,
   normalizeSmartFolderExpression,
   validateArticleExpression
 } from '../../services/articleSearch/articleQueryParser.service.js';
@@ -96,12 +97,12 @@ describe('articleQueryParser.service', () => {
     expect(result.textMode).toBe('terms');
   });
 
-  it('canonicalizes the legacy Trust sort while parsing a limit', () => {
-    const result = parseArticleQuery({ search: 'sort:trust limit:50', defaultSort: 'desc' });
-
-    expect(result.sort).toBe('quality');
+  it.each(['trust', 'attention', 'TRUST', 'ATTENTION'])('does not support legacy sort %s', sort => {
+    expect(() => validateArticleExpression(`sort:${sort}`)).toThrow(ArticleExpressionValidationError);
+    expect(normalizeArticleSort(sort)).toBe('desc');
+    const result = parseArticleQuery({ search: `sort:${sort} limit:50`, defaultSort: 'asc' });
+    expect(result.sort).toBe('asc');
     expect(result.limit).toBe(50);
-    expect(result.hasSearchIntent).toBe(true);
   });
 
   it('parses the Top Stories sort using its canonical API identifier', () => {
@@ -136,7 +137,7 @@ describe('articleQueryParser.service', () => {
 
   it('parses event and freshness filters', () => {
     const result = parseArticleQuery({
-      search: 'event:true eventCount:>=3 freshness:>=0.5 sort:attention'
+      search: 'event:true eventCount:>=3 freshness:>=0.5 sort:quality'
     });
 
     expect(result.filters.event).toBe(true);
@@ -145,7 +146,7 @@ describe('articleQueryParser.service', () => {
       operator: '>=',
       value: 0.5
     });
-    expect(result.sort).toBe('attention');
+    expect(result.sort).toBe('quality');
     expect(result.text).toBe('');
     expect(result.textMode).toBe('none');
   });

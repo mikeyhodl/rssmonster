@@ -291,7 +291,6 @@
                         <option v-if="aiEnabled" value="topStories">Top Stories</option>
                         <option v-if="aiEnabled" value="recommended">Recommended</option>
                         <option v-if="aiEnabled" value="quality">Quality</option>
-                        <option v-if="aiEnabled && draftConfig.sort.field === 'attention'" value="attention">Attention (legacy)</option>
                     </select>
                 </label>
 

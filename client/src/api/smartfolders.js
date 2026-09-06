@@ -1,5 +1,4 @@
 import api from './client';
-import { normalizeQuerySortAliasesForApi } from '../services/queryValidation';
 
 export const fetchSmartFolders = () =>
   api.get('/smartfolders?withCounts=false');
@@ -12,10 +11,7 @@ export const fetchSmartFolderCounts = () =>
  */
 export const saveSmartFolders = (smartFolders) =>
   api.post('/smartfolders', {
-    smartFolders: (smartFolders || []).map(smartFolder => ({
-      ...smartFolder,
-      query: normalizeQuerySortAliasesForApi(smartFolder.query)
-    }))
+    smartFolders: smartFolders || []
   });
 
 /**

@@ -42,7 +42,7 @@ const normalizeGrouping = value => (value === 'event' || value === 'topic' ? val
 
 const cursorCompatibleScope = ({ sort, search }) => (
   ['asc', 'desc'].includes(String(sort || 'desc').toLowerCase())
-  && !/(?:^|\s)sort:(?:trust|topStories|recommended|quality|attention)(?:\s|$)/i.test(String(search || ''))
+  && !/(?:^|\s)sort:(?:topStories|recommended|quality)(?:\s|$)/i.test(String(search || ''))
   && !/(?:^|\s)(?:quality|freshness):/i.test(String(search || ''))
 );
 

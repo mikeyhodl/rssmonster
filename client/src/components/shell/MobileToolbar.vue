@@ -792,10 +792,7 @@ export default {
     },
     // This function exposes sort options supported by the active mobile capabilities.
     visibleSortOptions() {
-      const options = this.currentSelection.smartFolderId != null && this.currentSelection.sort === 'attention'
-        ? [...ARTICLE_SORT_OPTIONS, { value: 'attention', label: 'Attention', requiresAI: true }]
-        : ARTICLE_SORT_OPTIONS;
-      return getAvailableArticleOptions(options, {
+      return getAvailableArticleOptions(ARTICLE_SORT_OPTIONS, {
         aiEnabled: this.isAIEnabled,
         mobile: true
       });

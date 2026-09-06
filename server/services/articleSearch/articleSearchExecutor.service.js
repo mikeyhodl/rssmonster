@@ -37,7 +37,6 @@ export const buildArticleSearchQuery = ({
   sortRecommended,
   sortTopStories,
   sortQuality,
-  sortAttention,
   prioritizeHighTrust = false,
   workingSort,
   qualityFilter,
@@ -75,7 +74,6 @@ export const buildArticleSearchQuery = ({
     || sortRecommended
     || sortTopStories
     || (prioritizeHighTrust && ['asc', 'desc'].includes(workingSort));
-  const needsAttention = sortAttention;
   const needsInterestScore = sortRecommended;
   const needsFeedTrust = needsQuality || prioritizeHighTrust;
   // Derives the needs published required while building article search query.
@@ -106,11 +104,6 @@ export const buildArticleSearchQuery = ({
     queryAttributes.push('publishedAt');
   }
 
-  // Handles the case where needs attention is available.
-  if (needsAttention) {
-    queryAttributes.push('attentionBucket', 'clickedAmount');
-  }
-
   // Handles the case where needs interest score is available.
   if (needsInterestScore) {
     queryAttributes.push('interestScore');
@@ -122,7 +115,7 @@ export const buildArticleSearchQuery = ({
     where: baseWhere
   };
 
-  // Handles the case where sort recommended is available or needs quality is available or sort trust is available.
+  // Handles the case where sort recommended is available, quality is needed, or feed trust is needed.
   if (sortRecommended || needsQuality || needsFeedTrust) {
     articleQuery.include = [
       {
@@ -153,7 +146,7 @@ export const buildArticleSearchQuery = ({
   }
 
   // Handles the case where smart folder search is unavailable and no computed sort is active.
-  if (!smartFolderSearch && !sortRecommended && !sortTopStories && !sortQuality && !sortAttention) {
+  if (!smartFolderSearch && !sortRecommended && !sortTopStories && !sortQuality) {
     // Derives the sql sort direction through to sql sort direction while building article search query.
     const sqlSortDirection = toSqlSortDirection(workingSort);
     articleQuery.order = [

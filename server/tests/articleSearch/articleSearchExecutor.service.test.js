@@ -41,7 +41,6 @@ const buildQuery = overrides => buildArticleSearchQuery({
   sortRecommended: false,
   sortTopStories: false,
   sortQuality: false,
-  sortAttention: false,
   prioritizeHighTrust: false,
   workingSort: 'desc',
   qualityFilter: null,
@@ -74,14 +73,6 @@ describe('articleSearchExecutor.service', () => {
     mocked.getDialect.mockReset().mockReturnValue('mysql');
     mocked.literal.mockClear();
     mocked.sequelizeWhere.mockClear();
-  });
-
-  // Loads attention inputs only when runtime attention ordering needs them.
-  it('selects attention attributes without database ordering', () => {
-    const query = buildQuery({ sortAttention: true });
-
-    expect(query.attributes).toEqual(expect.arrayContaining(['attentionBucket', 'clickedAmount']));
-    expect(query).not.toHaveProperty('order');
   });
 
   it('loads shared event and Quality inputs for Top Stories without Interest Islands or rule tags', () => {
