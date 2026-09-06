@@ -58,6 +58,13 @@ afterEach(() => {
 });
 
 describe('ArticleMeta', () => {
+  it('keeps author and badges when provenance moves to the Reader header', () => {
+    const wrapper = mountArticleMeta({ hideProvenance: true, author: 'Jane Reporter', duplicateCount: 2 });
+    expect(wrapper.find('.article-provenance').exists()).toBe(false);
+    expect(wrapper.get('.article-source').text()).toBe('Jane Reporter');
+    expect(wrapper.get('.duplicate-badge').text()).toBe('2 duplicates');
+  });
+
   // Verifies source metadata owns its date and origin presentation.
   it('renders the publication date and author link', () => {
     const wrapper = mountArticleMeta({ author: 'Jane Reporter' });

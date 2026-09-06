@@ -1,6 +1,13 @@
 <template>
-  <header class="article-header">
-    <h5 class="article-header-left">
+  <header class="article-header" :class="{ 'article-reader-heading': isReaderDetail }">
+    <div v-if="isReaderDetail" class="article-reader-source">
+      <img v-if="feedFavicon && !faviconFailed" :src="feedFavicon" class="article-reader-favicon" alt="" @error="faviconFailed = true" />
+      <BootstrapIcon v-else icon="rss-fill" context="control" class="article-reader-favicon" aria-hidden="true" />
+      <a v-if="sourceUrl" :href="sourceUrl" target="_blank" rel="noopener noreferrer" class="article-reader-source-name">{{ feed.feedName || author }}</a>
+      <span v-else class="article-reader-source-name">{{ feed.feedName || author }}</span>
+      <span v-if="publishedAt" class="article-reader-timestamp">{{ formatRelativeDate(publishedAt) }}</span>
+    </div>
+    <component :is="isReaderDetail ? 'h1' : 'h5'" class="article-header-left" :class="{ 'article-reader-title': isReaderDetail }">
       <BootstrapIcon v-if="isBlueSkyArticle" icon="bluesky" class="article-kind-icon bluesky-icon" />
       <BootstrapIcon v-if="isRedditArticle" icon="reddit" class="article-kind-icon reddit-icon" />
       <BootstrapIcon v-if="isGitHubArticle" icon="github" class="article-kind-icon github-icon" />
@@ -16,16 +23,25 @@
       <BootstrapIcon v-if="hasVideoMedia" icon="play-btn-fill" class="article-kind-icon media-video-icon" />
       <template v-else>
         <!-- <BootstrapIcon v-if="clickedAmount > 0" icon="arrow-up-right-square-fill" class="article-kind-icon clicked-icon" /> -->
-        <BootstrapIcon v-if="favoriteInd === 1" icon="bookmark-fill" class="article-kind-icon star-icon" />
+        <BootstrapIcon v-if="favoriteInd === 1 && !isReaderDetail" icon="bookmark-fill" class="article-kind-icon star-icon" />
         <BootstrapIcon v-if="hotInd === 1" icon="fire" class="article-kind-icon hot-icon" />
         <!-- <BootstrapIcon v-if="hasInterestScore && !hasSourceIcon && !isDeveloping" icon="award-fill" class="article-kind-icon recommendation-icon" /> -->
         <!-- <BootstrapIcon v-else-if="isGroupedView && eventArticleCountTotal > 1 && !hasSourceIcon && !isDeveloping" icon="megaphone-fill" class="article-kind-icon event-icon" /> -->
       </template>
       <a v-if="safeArticleUrl" ref="originalArticleLink" class="article-link" target="_blank" rel="noopener noreferrer" :href="safeArticleUrl" @click="$emit('article-clicked')"><HighlightedText :text="title" :terms="highlightTerms" /></a>
       <span v-else class="article-link"><HighlightedText :text="title" :terms="highlightTerms" /></span>
-    </h5>
-    <div class="article-header-actions">
+    </component>
+    <div class="article-header-actions" :class="{ 'article-reader-actions': isReaderDetail }">
       <ArticleActionsMenu :clickedAmount="clickedAmount" :clickPending="clickPending" :favoriteInd="favoriteInd" :favoritePending="favoritePending" :isReaderMode="isReaderMode" :status="status" @toggle-clicked="$emit('toggle-clicked')" @toggle-favorite="$emit('toggle-favorite')" @toggle-read-status="$emit('toggle-read-status')" @not-interested="$emit('not-interested')" @more-like-this="$emit('more-like-this')" @mute-feed="$emit('mute-feed')" />
+      <template v-if="isReaderDetail">
+        <button type="button" class="article-reader-favorite" :class="{ 'article-reader-favorite--active': favoriteInd === 1 }" :aria-label="favoriteInd === 1 ? 'Unmark favorite' : 'Mark as favorite'" :aria-pressed="favoriteInd === 1" :disabled="favoritePending" @click="$emit('toggle-favorite')">
+          <BootstrapIcon :icon="favoriteInd === 1 ? 'bookmark-fill' : 'bookmark'" aria-hidden="true" />
+        </button>
+        <button type="button" class="app-button app-button--outline-secondary app-button--compact article-reader-read" @click="$emit('toggle-read-status')">
+          <BootstrapIcon :icon="status === 'read' ? 'circle' : 'check2'" context="control" aria-hidden="true" />
+          <span>{{ status === 'read' ? 'Mark as unread' : 'Mark as read' }}</span>
+        </button>
+      </template>
     </div>
   </header>
 </template>
@@ -34,12 +50,18 @@
 import ArticleActionsMenu from './ArticleActionsMenu.vue';
 import ArticleDevelopingStoryPopover from './ArticleDevelopingStoryPopover.vue';
 import HighlightedText from '../shared/HighlightedText.vue';
+import { formatRelativeDate } from '../../utils/date.js';
 import { usableHttpUrl } from '../../utils/content.js';
 
 export default {
   components: { ArticleActionsMenu, ArticleDevelopingStoryPopover, HighlightedText },
   emits: ['article-clicked', 'toggle-clicked', 'toggle-favorite', 'toggle-read-status', 'not-interested', 'more-like-this', 'mute-feed'],
   props: {
+    readerDetail: { type: Boolean, default: false },
+    feed: { type: Object, default: () => ({}) },
+    feedFavicon: { type: String, default: '' },
+    author: { type: String, default: '' },
+    publishedAt: { type: [String, Date], default: '' },
     articleId: { type: [Number, String], default: null },
     url: { type: String, default: '' }, title: { type: String, default: '' }, clickedAmount: { type: Number, default: 0 },
     clickPending: { type: Boolean, default: false },
@@ -50,7 +72,22 @@ export default {
     isGroupedView: { type: Boolean, default: false }, eventArticleCountTotal: { type: Number, default: 0 },
     highlightTerms: { type: Array, default: () => [] }
   },
+  data() {
+    return { faviconFailed: false };
+  },
+  watch: {
+    feedFavicon() {
+      this.faviconFailed = false;
+    }
+  },
   computed: {
+    isReaderDetail() {
+      return this.readerDetail && this.isReaderMode;
+    },
+    sourceUrl() {
+      const url = usableHttpUrl(this.feed?.url);
+      return url ? `${new URL(url).origin}/` : '';
+    },
     // Returns an absolute HTTP(S) destination eligible for external navigation.
     safeArticleUrl() {
       return usableHttpUrl(this.url);
@@ -99,6 +136,7 @@ export default {
     }
   },
   methods: {
+    formatRelativeDate,
     // Opens the original article through the header-owned link behavior.
     openOriginalArticle() {
       this.$refs.originalArticleLink?.click();
@@ -210,5 +248,114 @@ export default {
 
 :global(:root[data-theme='dark'] .article-card .developing-story-icon) {
   color: var(--article-developing-icon);
+}
+.article-reader-heading {
+  flex-wrap: wrap;
+  gap: 16px 12px;
+}
+
+.article-reader-source {
+  display: flex;
+  align-items: center;
+  flex: 1 1 200px;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+
+.article-reader-source .article-reader-favicon {
+  display: block;
+  margin: 0;
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.article-reader-source-name {
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.article-reader-timestamp {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.article-reader-heading .article-reader-actions {
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-left: auto;
+  max-width: 100%;
+}
+
+.article-reader-heading .article-reader-title {
+  order: 1;
+  flex: 0 0 100%;
+  max-width: 900px;
+  align-items: baseline;
+}
+
+.article-reader-title .article-link {
+  color: var(--text-primary);
+  font-size: clamp(26px, 3cqi, 32px);
+  font-weight: 700;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.article-reader-favorite {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-height-compact);
+  height: var(--control-height-compact);
+  flex-shrink: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-compact);
+  background: var(--color-transparent);
+  color: var(--toolbar-text);
+  cursor: pointer;
+}
+
+.article-reader-favorite svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin-bottom: 0;
+}
+
+.article-reader-favorite--active {
+  color: var(--article-star-icon);
+}
+
+.article-reader-favorite:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.article-reader-favorite:hover:not(:disabled) {
+  background: var(--surface-hover);
+}
+
+.article-reader-actions :deep(.article-actions__trigger:hover) {
+  background: var(--surface-control);
+}
+
+.article-reader-favorite:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.article-reader-read {
+  color: var(--text-primary);
+  white-space: normal;
+  text-align: left;
 }
 </style>

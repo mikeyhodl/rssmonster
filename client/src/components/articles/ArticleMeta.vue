@@ -2,11 +2,12 @@
   <div class="article-meta">
     <!-- <BootstrapIcon v-if="showAnalysisScores && isMobilePortrait && advertisementScore !== undefined && advertisementScore < neutralScore" icon="megaphone-fill" class="mobile-score-icon ad-icon" :title="`Promotional content detected (score: ${advertisementScore})`" /> -->
     <!-- <BootstrapIcon v-if="showAnalysisScores && isMobilePortrait && sentimentScore !== undefined && sentimentScore < neutralScore" icon="arrow-down-circle-fill" :class="['mobile-score-icon', 'sentiment-icon', getSentimentClass(sentimentScore)]" :title="`Tone quality: ${sentimentScore}`" /> -->
-    <span v-if="hasProvenance" class="article-provenance">
+    <span v-if="hasProvenance && !hideProvenance" class="article-provenance">
       <span v-if="hasPublishedAt" class="article-published">{{ formatRelativeDate(publishedAt) }}</span>
       <span v-if="hasPublishedAt && hasSource" class="article-provenance-separator" aria-hidden="true">·</span>
       <span v-if="hasSource" class="article-source"><a v-if="sourceUrl" target="_blank" rel="noopener noreferrer" :href="sourceUrl">{{ sourceLabel }}</a><span v-else>{{ sourceLabel }}</span></span>
     </span>
+    <span v-if="hideProvenance && author" class="article-source">{{ author }}</span>
     <ArticleRecommendationExplanation
       v-if="showRecommendationExplanation"
       :recommendation="recommendation"
@@ -39,6 +40,7 @@ export default {
   components: { ArticleRecommendationExplanation, ArticleStorySourcesPopover },
   emits: ['view-event-articles', 'view-duplicate-articles'],
   props: {
+    hideProvenance: { type: Boolean, default: false },
     articleId: { type: [Number, String], default: null }, publishedAt: { type: [String, Date], default: '' }, feed: { type: Object, default: () => ({}) }, author: { type: String, default: '' }, event: { type: Object, default: null }, eventArticleCountTotal: { type: Number, default: 0 }, duplicateCount: { type: Number, default: 0 }, grouping: { type: String, default: '' }, isEventArticle: { type: Boolean, default: false }, eventExpanded: { type: Boolean, default: false }, duplicatesExpanded: { type: Boolean, default: false }, hasInterestScore: { type: Boolean, default: false }, isRecommendationView: { type: Boolean, default: false }, recommendation: { type: Object, default: null }, isMobilePortrait: { type: Boolean, default: false }, advertisementScore: { type: Number, default: undefined }, sentimentScore: { type: Number, default: undefined }, aiAnalysisStatus: { type: String, default: '' }, neutralScore: { type: Number, required: true }
   },
   computed: {

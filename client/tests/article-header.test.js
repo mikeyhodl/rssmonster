@@ -13,6 +13,7 @@ function mountArticleHeader(props = {}) {
   return mount(ArticleHeader, {
     props: {
       articleId: 42,
+      readerDetail: true,
       title: 'Article title',
       hasInterestScore: true,
       isGroupedView: true,
@@ -289,5 +290,80 @@ describe('ArticleHeader podcast icon', () => {
 
     expect(icons).not.toContain('mic-fill');
     expect(icons).not.toContain('award-fill');
+  });
+});
+
+
+describe('ArticleHeader Reader presentation', () => {
+  it('updates source, favicon, time, title and action state with the selected article', async () => {
+    const wrapper = mountArticleHeader({
+      viewMode: 'reader',
+      feed: { feedName: 'First feed', url: 'https://first.example/rss' },
+      feedFavicon: 'https://first.example/favicon.ico',
+      publishedAt: new Date(Date.now() - 3600000).toISOString(),
+      status: 'unread'
+    });
+
+    expect(wrapper.get('.article-reader-source-name').text()).toBe('First feed');
+    expect(wrapper.get('.article-reader-timestamp').text()).toMatch(/1 hour ago/i);
+    expect(wrapper.get('h1.article-reader-title').text()).toBe('Article title');
+    expect(wrapper.get('.article-reader-favorite [data-icon]').attributes('data-icon')).toBe('bookmark');
+    await wrapper.get('.article-reader-favorite').trigger('click');
+    await wrapper.get('.article-reader-read').trigger('click');
+    expect(wrapper.emitted('toggle-favorite')).toHaveLength(1);
+    expect(wrapper.emitted('toggle-read-status')).toHaveLength(1);
+
+    await wrapper.setProps({
+      title: 'Second article',
+      feed: { feedName: 'Second feed', url: 'https://second.example/rss' },
+      feedFavicon: 'https://second.example/favicon.ico',
+      publishedAt: new Date(Date.now() - 7200000).toISOString(),
+      favoriteInd: 1,
+      favoritePending: true,
+      status: 'read'
+    });
+    expect(wrapper.get('.article-reader-source-name').attributes('href')).toBe('https://second.example/');
+    expect(wrapper.get('.article-reader-source-name').text()).toBe('Second feed');
+    expect(wrapper.get('.article-reader-favicon').attributes('src')).toBe('https://second.example/favicon.ico');
+    expect(wrapper.get('.article-reader-timestamp').text()).toMatch(/2 hours ago/i);
+    expect(wrapper.get('h1').text()).toContain('Second article');
+    expect(wrapper.get('.article-reader-favorite').attributes('aria-pressed')).toBe('true');
+    expect(wrapper.get('.article-reader-favorite').element.disabled).toBe(true);
+    expect(wrapper.get('.article-reader-favorite [data-icon]').attributes('data-icon')).toBe('bookmark-fill');
+    expect(wrapper.get('.article-reader-read').text()).toBe('Mark as unread');
+    wrapper.getComponent({ name: 'ArticleActionsMenu' }).vm.$emit('more-like-this');
+    expect(wrapper.emitted('more-like-this')).toHaveLength(1);
+  });
+
+  it('handles missing favicon and unsafe source URLs', () => {
+    const wrapper = mountArticleHeader({ viewMode: 'reader', feed: { feedName: 'Source', url: 'javascript:alert(1)' } });
+    expect(wrapper.get('.article-reader-favicon').attributes('data-icon')).toBe('rss-fill');
+    expect(wrapper.get('.article-reader-source-name').element.tagName).toBe('SPAN');
+  });
+
+  it('falls back to RSS for failed images and retries when the feed favicon changes', async () => {
+    const wrapper = mountArticleHeader({ viewMode: 'reader', feedFavicon: 'https://example.com/broken.ico' });
+    await wrapper.get('img.article-reader-favicon').trigger('error');
+    expect(wrapper.get('.article-reader-favicon').attributes('data-icon')).toBe('rss-fill');
+    await wrapper.setProps({ feedFavicon: 'https://example.com/new.ico' });
+    expect(wrapper.get('img.article-reader-favicon').attributes('src')).toBe('https://example.com/new.ico');
+  });
+
+  it('preserves the stream header when mobile retains the Reader preference', () => {
+    const wrapper = mountArticleHeader({ viewMode: 'reader', readerDetail: false, favoriteInd: 1 });
+    expect(wrapper.find('.article-reader-source').exists()).toBe(false);
+    expect(wrapper.find('.article-reader-read').exists()).toBe(false);
+    expect(wrapper.find('.article-reader-favorite').exists()).toBe(false);
+    expect(wrapper.find('h5.article-header-left').exists()).toBe(true);
+    expect(wrapper.find('.star-icon').exists()).toBe(true);
+    expect(wrapper.getComponent({ name: 'ArticleActionsMenu' }).props('isReaderMode')).toBe(true);
+  });
+
+  it.each(['full', 'summarized', 'summaryBullets', 'minimal'])('keeps Reader controls out of %s mode', viewMode => {
+    const wrapper = mountArticleHeader({ viewMode });
+    expect(wrapper.find('.article-reader-source').exists()).toBe(false);
+    expect(wrapper.find('.article-reader-favorite').exists()).toBe(false);
+    expect(wrapper.find('.article-reader-read').exists()).toBe(false);
+    expect(wrapper.find('h5.article-header-left').exists()).toBe(true);
   });
 });

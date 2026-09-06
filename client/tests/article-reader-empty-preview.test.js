@@ -292,3 +292,34 @@ describe('Article empty previews', () => {
     expect(wrapper.find('.article-preview-empty__separator').exists()).toBe(false);
   });
 });
+
+
+describe('Reader article presentation boundary', () => {
+  it('keeps mobile stream metadata and spacing when Reader remains selected', async () => {
+    const wrapper = mountArticle({}, 'reader');
+    expect(wrapper.classes('article-reader-detail')).toBe(false);
+    expect(wrapper.find('.article-reader-metabar').exists()).toBe(false);
+    expect(wrapper.getComponent({ name: 'ArticleMeta' }).props('hideProvenance')).toBe(false);
+    expect(wrapper.getComponent({ name: 'ArticleHeader' }).props('readerDetail')).toBe(false);
+
+    await wrapper.setProps({ readerDetail: true });
+    expect(wrapper.classes('article-reader-detail')).toBe(true);
+    await wrapper.setProps({ readerDetail: false });
+    expect(wrapper.classes('article-reader-detail')).toBe(false);
+    expect(wrapper.getComponent({ name: 'ArticleMeta' }).props('hideProvenance')).toBe(false);
+  });
+
+  it('enables the refinement for the desktop Reader pane article', () => {
+    const wrapper = mountReader();
+    expect(wrapper.getComponent({ name: 'ArticleItem' }).props('readerDetail')).toBe(true);
+  });
+
+  it.each(['reader', 'full', 'summarized', 'summaryBullets'])('scopes detail presentation in %s mode', viewMode => {
+    const wrapper = mountArticle({ readerDetail: true, feed: { feedName: 'Example', favicon: 'https://example.com/icon.png' } }, viewMode);
+    const isReader = viewMode === 'reader';
+    expect(wrapper.classes('article-reader-detail')).toBe(isReader);
+    expect(wrapper.find('.article-reader-metabar').exists()).toBe(isReader);
+    expect(wrapper.getComponent({ name: 'ArticleMeta' }).props('hideProvenance')).toBe(isReader);
+    expect(wrapper.getComponent({ name: 'ArticleHeader' }).props('feedFavicon')).toBe('https://example.com/icon.png');
+  });
+});

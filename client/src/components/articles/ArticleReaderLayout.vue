@@ -203,6 +203,7 @@
         v-if="selectedArticle"
         ref="selectedArticleComponent"
         v-bind="selectedArticle"
+        reader-detail
         :key="selectedArticle.id"
         @update-favorite="$emit('update-favorite', $event)"
         @update-clicked="$emit('update-clicked', $event)"
@@ -218,6 +219,7 @@
         :key="article.id"
         :ref="element => setRelatedArticleRef(element, article.id)"
         v-bind="article"
+        reader-detail
         @update-favorite="$emit('update-favorite', $event)"
         @update-clicked="$emit('update-clicked', $event)"
         @toggle-read-status="$emit('toggle-read-status', $event)"
@@ -1244,6 +1246,7 @@ export default {
 }
 
 .article-reader__content {
+  container-type: inline-size;
   --reader-article-panel-scrollbar-thumb: var(--scrollbar-thumb-strong);
   min-height: 0;
   min-width: 0;

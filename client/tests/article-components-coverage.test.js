@@ -463,13 +463,14 @@ describe('ArticleContent compatibility markup', () => {
 });
 
 describe('ArticleHeader actions', () => {
-  // Verifies reader status is delegated to the dropdown without a standalone button.
+  // Verifies the Reader keeps menu actions alongside the direct read control.
   it('forwards reader status through the actions menu', async () => {
     const wrapper = mount(ArticleHeader, {
       props: {
         title: 'Article',
         url: 'https://example.com',
         viewMode: 'reader',
+        readerDetail: true,
         status: 'read',
         clickedAmount: 1,
         favoriteInd: 1,
@@ -487,13 +488,13 @@ describe('ArticleHeader actions', () => {
       }
     });
 
-    expect(wrapper.find('.article-read-status-button').exists()).toBe(false);
+    expect(wrapper.get('.article-reader-read').text()).toBe('Mark as unread');
     expect(wrapper.get('.actions-stub').attributes()).toMatchObject({
       'data-reader': 'true',
       'data-status': 'read'
     });
     expect(wrapper.findAll('.bootstrap-icon-stub').map(icon => icon.attributes('data-icon')))
-      .toEqual(['bookmark-fill', 'fire']);
+      .toEqual(['rss-fill', 'fire', 'bookmark-fill', 'circle']);
 
     await wrapper.get('.article-link').trigger('click');
     await wrapper.get('.actions-stub').trigger('click');
@@ -505,7 +506,7 @@ describe('ArticleHeader actions', () => {
   // Verifies unread reader state is passed to the dropdown contract.
   it('passes unread reader state to the actions menu', () => {
     const wrapper = mount(ArticleHeader, {
-      props: { viewMode: 'reader', status: 'unread' },
+      props: { viewMode: 'reader', readerDetail: true, status: 'unread' },
       global: {
         stubs: {
           BootstrapIcon: BootstrapIconStub,
@@ -517,7 +518,7 @@ describe('ArticleHeader actions', () => {
       }
     });
 
-    expect(wrapper.find('.article-read-status-button').exists()).toBe(false);
+    expect(wrapper.get('.article-reader-read').text()).toBe('Mark as read');
     expect(wrapper.get('.actions-stub').attributes()).toMatchObject({
       'data-reader': 'true',
       'data-status': 'unread'
