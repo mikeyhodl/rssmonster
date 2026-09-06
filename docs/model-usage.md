@@ -14,8 +14,8 @@ embedding requests to the inference HTTP API.
 
 The inference service currently supports these model families:
 
-- [OpenAI](model-openai.md), using `text-embedding-3-small` by default.
-- [Qwen](model-qwen.md), running `onnx-community/Qwen3-Embedding-0.6B-ONNX`
+- [OpenAI]({% link model-openai.md %}), using `text-embedding-3-small` by default.
+- [Qwen]({% link model-qwen.md %}), running `onnx-community/Qwen3-Embedding-0.6B-ONNX`
   locally with Transformers.js.
 - Qwen3.5 generation, running `onnx-community/Qwen3.5-0.8B-ONNX` locally.
 - ModernBERT article scoring, running
@@ -35,7 +35,7 @@ INFERENCE_CIRCUIT_COOLDOWN_MS=30000
 `INFERENCE_URL` is the base URL of the inference service. Use a private service
 name instead of `127.0.0.1` when the processes run in separate containers.
 `INFERENCE_TIMEOUT_MS` applies to non-agent inference requests. Local model startup
-and CPU inference can need a longer timeout; the [Qwen guide](model-qwen.md)
+and CPU inference can need a longer timeout; the [Qwen guide]({% link model-qwen.md %})
 contains a suitable starting point.
 
 The failure threshold and cooldown configure capability-specific server circuit

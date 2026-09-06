@@ -106,7 +106,7 @@ up production data and inspect the scope before using them.
 | --- | --- | --- |
 | `npm start` | None | Starts the Express application through `server/bootstrap.js`. Use it for a normal foreground server process. Production installations normally supervise this entry point with PM2. |
 | `npm run start-server` | None | Alias for `npm start`; it starts the same bootstrap entry point. Use whichever name is expected by the surrounding process configuration. |
-| `npm run start:worker` | None | Starts scheduled crawling only. It never consumes article-analysis or semantic-label jobs. Crawls run immediately and repeat after `CRAWL_WORKER_INTERVAL_MS`; see [Crawling](crawling.md). |
+| `npm run start:worker` | None | Starts scheduled crawling only. It never consumes article-analysis or semantic-label jobs. Crawls run immediately and repeat after `CRAWL_WORKER_INTERVAL_MS`; see [Crawling]({% link crawling.md %}). |
 | `npm run start:ai-worker` | None | Starts the durable processing-job consumer used by PM2 and the MySQL Compose profile. It pauses new claims while the crawl-critical lease is active. |
 | `npm run jobs:operator -- list-dead --user-id <id> [--type <type>] [--limit <1-100>]` | Existing database with processing-job migration applied | Lists a bounded dead-job set for one explicit owner without returning payloads. |
 | `npm run jobs:operator -- requeue-dead --user-id <id> --job-id <uuid> [...]` | Exact dead-job IDs inspected by an operator | Requeues only the selected owner's exact dead jobs. This is manual recovery, not an automatic repair. |
@@ -127,7 +127,7 @@ up production data and inspect the scope before using them.
 | --- | --- | --- |
 | `npm run semantic:repair` | `--userId=<positive-id>` | Repairs the recent semantic window, including Events, Topics, and interest scores. It targets all users by default; use `--userId` to limit work to one user. Prefer this bounded repair when a full historical rebuild is unnecessary. |
 | `npm run semantic:all` | `--userId=<positive-id>`; `--batchSize=<positive-count>` (default `250`) | Rebuilds historical Event and Topic assignments and Interest Islands for all users or one user. Use it after a large import or algorithm change when recent repair is insufficient. It is substantially heavier than `semantic:repair`. |
-| `npm run semantic:model-rebuild` | At least one of `--dry-run` or `--confirm`; optional `--userId=<positive-id>`; optional `--batchSize=<positive-count>` (default `100`) | **Destructive.** Resets model-dependent semantic state after an embedding-model change and rebuilds vectors for starred or clicked articles. Start with `--dry-run`; without it, the command refuses to make changes unless `--confirm` is present. If both flags are supplied, dry-run behavior takes precedence. See [Model Usage](model-usage.md#reset-and-rebuild-an-existing-environment). |
+| `npm run semantic:model-rebuild` | At least one of `--dry-run` or `--confirm`; optional `--userId=<positive-id>`; optional `--batchSize=<positive-count>` (default `100`) | **Destructive.** Resets model-dependent semantic state after an embedding-model change and rebuilds vectors for starred or clicked articles. Start with `--dry-run`; without it, the command refuses to make changes unless `--confirm` is present. If both flags are supplied, dry-run behavior takes precedence. See [Model Usage]({% link model-usage.md %}#reset-and-rebuild-an-existing-environment). |
 | `npm run events` | `--scope=recent-repair` (default) or `--scope=incremental`; `--userId=<positive-id>` | Runs Event assignment without Topic assignment. Use `recent-repair` to revisit the recent window or `incremental` to process only currently unassigned recent articles. It targets all users unless scoped by user ID. |
 | `npm run events:backfill` | `--userId=<positive-id>`; `--batchSize=<positive-count>` (default `250`); `--skipTopicAssignment` (already supplied by the npm command) | Backfills missing Events from all historical vectorized articles without clearing existing assignments. Use it to fill historical gaps. The package script always skips Topic assignment; run `topics` separately when needed. |
 | `npm run topics` | `--scope=full-rebuild` (default), `--scope=recent-repair`, or `--scope=incremental`; `--userId=<positive-id>` | Rebuilds Topic assignment for existing Events. Use the scope that matches the reconciliation context; the default is the broadest. It targets all users unless scoped by user ID. |
@@ -177,7 +177,7 @@ The vector generators have no CLI options. Their batch sizes are controlled by
 
 Run these commands from `inference`. The inference package has no
 RSSMonster-specific CLI arguments; configure providers, models, credentials,
-host, and port through `inference/.env`. See [Inference](inference.md) for the
+host, and port through `inference/.env`. See [Inference]({% link inference.md %}) for the
 full service configuration.
 
 | Command | Arguments | What it does and when to use it |

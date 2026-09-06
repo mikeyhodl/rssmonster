@@ -40,7 +40,7 @@ by the publisher.
 
 ### Rule-Based Tags
 
-Automation rules can assign your own tag when an incoming article matches a
+[Actions]({% link actions.md %}) can assign your own tag when an incoming article matches a
 regular expression. Rules are useful when publishers do not provide the label
 you need or when you want one consistent tag across several sources.
 
@@ -63,12 +63,12 @@ existing library.
 
 Rule-based tags and Smart Folder queries solve different problems. An
 Automation rule uses a JavaScript regular expression to attach a persistent
-tag during article processing. A [Smart Folder](smart-folders.md) uses a
-[search expression](search.md) to build a dynamic view without modifying the
+tag during article processing. A [Smart Folder]({% link smart-folders.md %}) uses a
+[search expression]({% link search.md %}) to build a dynamic view without modifying the
 article.
 
 To reject matching entries before they are stored or enriched, configure a
-[feed item filter](feed-item-filters.md) instead.
+[feed item filter]({% link feed-item-filters.md %}) instead.
 
 ## Finding Tagged Articles
 
@@ -98,4 +98,4 @@ tag:nintendo unread:true @lastweek sort:recommended
 ```
 
 Tag values in search expressions should be written as a single unquoted token.
-See the [Search Guide](search.md) for every supported expression.
+See the [Search Guide]({% link search.md %}) for every supported expression.

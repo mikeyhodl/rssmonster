@@ -26,7 +26,7 @@ views.
 | `S` | Toggle the selected article's favorite status. |
 
 In Reader mode, moving to another article marks the previously selected unread
-article as read. See [Marking Articles Read](marking-articles-read.md) for the
+article as read. See [Marking Articles Read]({% link marking-articles-read.md %}) for the
 full read-state behavior.
 
 ## Global Shortcuts

@@ -26,7 +26,7 @@ The menu action changes to **Unmark favorite** after the article is saved. Use
 it to remove the article from your bookmarks.
 
 You can also press `S` while an article is selected to toggle its favorite
-status. See [Keyboard Shortcuts](keyboard-shortcuts.md) for the complete
+status. See [Keyboard Shortcuts]({% link keyboard-shortcuts.md %}) for the complete
 keyboard reference.
 
 ## Find Your Bookmarks
@@ -49,7 +49,7 @@ favorite:true Nintendo sort:quality
 ```
 
 The legacy alias `star:true` has the same effect. See the
-[Search Guide](search.md) and [Smart Folders](smart-folders.md) for more ways to
+[Search Guide]({% link search.md %}) and [Smart Folders]({% link smart-folders.md %}) for more ways to
 build saved views around bookmarks.
 
 ## Assign Bookmarks Automatically
@@ -58,7 +58,7 @@ Automation rules can mark matching incoming articles as favorites during a
 feed crawl. This is useful when you consistently want to save articles about a
 particular subject, project, person, or source.
 
-In **Settings → Automation**, add an action with:
+In **Settings → Actions**, add an action with:
 
 - a descriptive name;
 - **Set favorite** as the action type; and
@@ -70,7 +70,7 @@ term appears in the title, HTML or plain-text body, description, or URL.
 Automation rules apply while incoming articles are processed. They are not a
 retroactive search over articles already stored in your library. If you only
 want a dynamic view without changing bookmark state, create a
-[Smart Folder](smart-folders.md) instead.
+[Smart Folder]({% link smart-folders.md %}) instead.
 
 ## Bookmarks and Interest Islands
 

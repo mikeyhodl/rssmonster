@@ -2,6 +2,7 @@
 layout: page
 title: How RSSMonster Works
 nav_order: 4
+has_children: true
 ---
 
 # How RSSMonster Works
@@ -83,28 +84,28 @@ outrank classification and generated text requests. Running model calls are not
 preempted.
 Retryable inference failures use leases and bounded backoff, exhausted jobs are
 dead-lettered, and expired leases are recoverable. Failures in optional work do
-not fail crawling or deterministic semantic processing. See [Crawling](crawling.md#durable-optional-processing-queue)
+not fail crawling or deterministic semantic processing. See [Crawling]({% link crawling.md %}#durable-optional-processing-queue)
 for queue states, concurrency, observability, shutdown, and operator recovery.
 
 ## Key Concepts
 
 ### Smart Folders
 
-[Smart Folders](smart-folders.md) are saved, dynamic views powered by the same
+[Smart Folders]({% link smart-folders.md %}) are saved, dynamic views powered by the same
 expressions used by RSSMonster search. New articles appear automatically when
 they match a folder's query, without moving or copying the articles from their
 feeds.
 
 ### Generated Feeds
 
-[Generated Feeds](generated-feeds.md) apply those same saved expressions when
+[Generated Feeds]({% link generated-feeds.md %}) apply those same saved expressions when
 an external RSS client requests a private tokenized URL. They dynamically
 render up to 50 current matching articles without copying or materializing a
 second collection of articles.
 
 ### FeedTrust
 
-[FeedTrust](feedtrust.md) estimates how consistently valuable a subscribed
+[FeedTrust]({% link feedtrust.md %}) estimates how consistently valuable a subscribed
 source has been as a source of articles. It combines recent article quality,
 supporting engagement, deterministic originality, and explicit negative
 feedback. It is separate from crawl reliability, personal topic interest,
@@ -112,26 +113,26 @@ article-level quality, and factual verification.
 
 ### Article Embedding
 
-[Article Embedding](article-embedding.md) represents an article's meaning as a
+[Article Embedding]({% link article-embedding.md %}) represents an article's meaning as a
 numeric vector. This lets RSSMonster compare articles semantically even when
 they use different words. Embeddings support recommendations and the semantic
 grouping layers; they do not alter or summarize the source article themselves.
 
 ### Events
 
-[Events](events.md) group articles that cover the same real-world occurrence.
+[Events]({% link events.md %}) group articles that cover the same real-world occurrence.
 This reduces repeated coverage in the reading stream while keeping the
 different sources available. An Event answers: **what happened?**
 
 ### Topics
 
-[Topics](topics.md) connect related Events into broader, recurring subjects.
+[Topics]({% link topics.md %}) connect related Events into broader, recurring subjects.
 They persist beyond an individual story and answer: **what ongoing subject does
 this belong to?**
 
 ### Interest Islands
 
-[Interest Islands](interest-islands.md) form the private, user-specific
+[Interest Islands]({% link interest-islands.md %}) form the private, user-specific
 personalization layer. They learn durable areas of interest from article
 relationships and reading signals such as clicks, bookmarks, and explicit
 feedback. An Interest Island answers: **what does this user consistently care
@@ -139,7 +140,7 @@ about?**
 
 ### Scoring and Ranking
 
-[Scoring and Ranking](scoring.md) explains how article quality, FeedTrust,
+[Scoring and Ranking]({% link scoring.md %}) explains how article quality, FeedTrust,
 freshness, personal interest, attention, and Event evidence remain separate and
 are composed by Quality, Recommended, and Top Stories ordering.
 
@@ -154,7 +155,7 @@ presentation labels can arrive afterward without changing that semantic order.
 Smart Folders provide a separate, deterministic way to build focused views
 using search rules.
 
-Start with [Concepts](concepts.md) for the broader philosophy and terminology.
+Start with [Concepts]({% link concepts.md %}) for the broader philosophy and terminology.
 For implementation-level details about the semantic pipeline, service
 boundaries, thresholds, and maintenance processes, see
-[Semantic Services Implementation](semantic-services-implementation.md).
+[Semantic Services Implementation]({% link semantic-services-implementation.md %}).

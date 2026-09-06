@@ -13,8 +13,8 @@ Folder recommendations, and feed rediscovery. The server retains authenticated
 tools and database/business logic; the inference process has no database access.
 
 For provider selection, model-specific environment variables, and observed
-semantic behavior, see [Model Usage](model-usage.md), [OpenAI](model-openai.md),
-and [Qwen](model-qwen.md).
+semantic behavior, see [Model Usage]({% link model-usage.md %}), [OpenAI]({% link model-openai.md %}),
+and [Qwen]({% link model-qwen.md %}).
 
 ## Configure the Connection
 
@@ -116,8 +116,8 @@ when `rssmonster-ai-worker` is also using inference. An active call is allowed
 to finish; prioritization applies to queued work and does not interrupt model
 execution.
 
-Add the settings for the selected [OpenAI](model-openai.md) or
-[Qwen](model-qwen.md) provider. Keep the service on loopback or a private
+Add the settings for the selected [OpenAI]({% link model-openai.md %}) or
+[Qwen]({% link model-qwen.md %}) provider. Keep the service on loopback or a private
 Docker network because its HTTP API does not currently require authentication.
 
 ## Run the Service
@@ -161,8 +161,8 @@ npm ci --omit=dev
 cp .env.example .env
 ```
 
-Edit `inference/.env` for [OpenAI](model-openai.md) or
-[Qwen](model-qwen.md), then start or reload all RSSMonster processes from the
+Edit `inference/.env` for [OpenAI]({% link model-openai.md %}) or
+[Qwen]({% link model-qwen.md %}), then start or reload all RSSMonster processes from the
 repository root:
 
 ```bash

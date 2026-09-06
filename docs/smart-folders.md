@@ -15,11 +15,11 @@ They update automatically as new articles arrive.
 
 ---
 ## How They Work
-- Each Smart Folder stores a search expression (same syntax as the [Search Guide](search.md)).
+- Each Smart Folder stores a search expression (same syntax as the [Search Guide]({% link search.md %})).
 - Results refresh continuously as new items match the query.
 - Limit: each folder returns up to `limitCount` articles (default 50).
-- Sorting respects the query (`sort:desc|asc`, `sort:topStories`, `sort:recommended`, and `sort:quality`; legacy `sort:trust` aliases Quality).
-- The editor exposes Newest, Oldest, Top Stories, Recommended, and Quality. Manually authored legacy `sort:attention` expressions remain valid even though Most Engaged is no longer an editor option.
+- Sorting respects the query (`sort:desc|asc`, `sort:topStories`, `sort:recommended`, and `sort:quality`).
+- The editor exposes Newest, Oldest, Top Stories, Recommended, and Quality.
 
 ---
 

@@ -1,3 +1,10 @@
+---
+layout: page
+title: macOS Installation
+parent: Getting Started
+nav_order: 3
+---
+
 # RSSMonster macOS Installation
 
 This guide describes how to install RSSMonster locally on macOS for development.
@@ -99,7 +106,8 @@ node --version
 npm --version
 ```
 
-The Node.js version should report `v22.x.x`.
+Use Node.js `22.19.0` or later; for this guide, verify that the installed
+Node.js 22 release meets that minimum.
 
 npm is included with Node.js and does not need to be installed separately.
 
@@ -460,7 +468,7 @@ Vite will print the local URL to open in your browser.
 Typically this resembles:
 
 ```text
-http://localhost:5173
+http://localhost:8080
 ```
 
 ## 17. Useful MySQL Commands

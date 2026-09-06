@@ -10,7 +10,7 @@ nav_order: 4
 Find the right articles fast with a few expressive tokens. You can mix free text with filters; tokens override the UI status/sort settings.
 
 Search expressions are also the query language used by
-[Smart Folders](smart-folders.md). A query that works in the search bar can be
+[Smart Folders]({% link smart-folders.md %}). A query that works in the search bar can be
 saved as a Smart Folder to create a reusable, dynamically updated view.
 
 ---
@@ -52,7 +52,8 @@ unless a filter's detailed description below states otherwise.
 | Quality score | `quality:0.7`, `quality:=0.7`, `quality:>0.7`, `quality:>=0.7`, `quality:<0.7`, `quality:<=0.7` |
 | Freshness score | `freshness:0.5`, `freshness:=0.5`, `freshness:>0.5`, `freshness:>=0.5`, `freshness:<0.5`, `freshness:<=0.5` |
 | Publication date | `@today`, `@yesterday`, `@lastweek`, `@YYYY-MM-DD`, `@"N days ago"`, `@N days ago`, `@"last Monday"`, `@last Monday` |
-| Sorting | `sort:desc`, `sort:asc`, `sort:topStories`, `sort:recommended`, `sort:quality`; legacy expressions also accept `sort:trust` and `sort:attention` |
+| Sorting | `sort:desc`, `sort:asc`, `sort:topStories`, `sort:recommended`, `sort:quality` |
+| Grouping | `grouping:none`, `grouping:event`, `grouping:topic` |
 | Result limit | `limit:50` |
 
 Use the lowercase expression spellings shown above. Boolean values are
@@ -110,10 +111,8 @@ Both score filters accept `>`, `<`, `>=`, `<=`, or `=`. Omitting the operator us
 
 - `sort:desc` orders newest first; `sort:asc` orders oldest first.
 - `sort:quality` orders by `70%` article quality and `30%` FeedTrust.
-- `sort:trust` is retained as a legacy alias for `sort:quality`.
 - `sort:recommended` emphasizes personal interest, then freshness, Quality, corroboration, and an applicable rule-match boost.
 - `sort:topStories` emphasizes current Event importance, freshness, and Quality without personal-interest input.
-- `sort:attention` remains available for manually authored legacy queries, but Most Engaged is no longer shown in the toolbar or Smart Folder editor.
 - `limit:50` caps the result set and overrides the normal search or Smart Folder limit.
 
 Use a positive integer for `limit`. A value of `0` is treated as though no
@@ -152,5 +151,5 @@ Date filters replace the normal published-date window; they are inclusive of the
 
 Use these expressions directly in the search bar or save them as Smart Folder
 queries—the two features share the same syntax. See
-[Smart Folders](smart-folders.md) for instructions on creating and managing
+[Smart Folders]({% link smart-folders.md %}) for instructions on creating and managing
 saved views.

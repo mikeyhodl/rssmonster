@@ -81,7 +81,7 @@ A successful request contains `"auth": 1` and
 
 The server must have a stable `FEVER_CREDENTIAL_SECRET`. Changing it prevents
 existing stored Fever credential hashes from matching client keys. See
-[Configuration](configuration.md#application-and-authentication).
+[Configuration]({% link configuration.md %}#application-and-authentication).
 
 When an administrator changes a user's username, the password should be
 submitted as part of the same user update so RSSMonster can regenerate the
@@ -124,7 +124,7 @@ Create, edit, move, or delete subscriptions in RSSMonster itself.
 
 Use `unread_item_ids` and `saved_item_ids` to retrieve comma-separated lists
 of canonical article IDs. Saved items correspond to RSSMonster Favorites or
-[Bookmarks](bookmarks.md).
+[Bookmarks]({% link bookmarks.md %}).
 
 Known duplicate records are excluded. This keeps one canonical item in the
 client while RSSMonster retains its internal duplicate relationships.

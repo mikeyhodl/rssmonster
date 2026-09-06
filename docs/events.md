@@ -20,7 +20,7 @@ Examples of Events include:
 
 An Event answers **what happened?** It is not a feed category, a long-running
 subject, or a model of the user's interests. Those broader responsibilities
-belong to [Topics](topics.md) and [Interest Islands](interest-islands.md).
+belong to [Topics]({% link topics.md %}) and [Interest Islands]({% link interest-islands.md %}).
 
 ## How Events Are Created
 
@@ -88,7 +88,7 @@ Different publishers can report on one Event without their articles being
 duplicates. A semantic resemblance therefore never overrides the normal
 article identity rules.
 
-See [Article Embedding](article-embedding.md) for how the comparison text and
+See [Article Embedding]({% link article-embedding.md %}) for how the comparison text and
 vectors are produced.
 
 ## What an Event Stores
@@ -176,7 +176,7 @@ members.
 
 If new coverage joins after the grouped Event was consumed, it can start a new
 developing wave and appear again when **Developing events** is enabled. See
-[Marking Articles Read](marking-articles-read.md) for the other ways reading
+[Marking Articles Read]({% link marking-articles-read.md %}) for the other ways reading
 state can be updated.
 
 ## Inspecting Event Health

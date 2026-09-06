@@ -20,7 +20,7 @@ The score summarizes recent source value. It is not:
 - a penalty for covering events that other publishers also cover; or
 - a reflection of whether the feed is muted.
 
-[Article quality](scoring.md#article-quality) asks how good one particular
+[Article quality]({% link scoring.md %}#article-quality) asks how good one particular
 article is. FeedTrust asks whether the source has produced consistently
 valuable articles across its recent history. Interest Islands and Recommended
 ranking remain responsible for personal topic relevance.
@@ -161,9 +161,6 @@ Quality = 0.70 × articleQuality + 0.30 × feedTrust
 Recommended and Top Stories consume this combined Quality signal at their own
 documented weights. FeedTrust therefore has a bounded, indirect influence; it
 does not determine eligibility and never hides a source by itself.
-
-The legacy `sort:trust` expression is retained as an alias for `sort:quality`.
-It does not mean a pure FeedTrust-only ordering.
 
 Articles whose FeedTrust is strictly greater than `0.85` can display a
 **Trusted source** signal. This indicates strong source value under the model,

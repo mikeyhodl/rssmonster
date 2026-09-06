@@ -17,7 +17,7 @@ private to that account and are learned only from that user's articles and
 behavior.
 
 An Interest Island answers **what does this user consistently care about?** It
-is not an [Event](events.md), a [Topic](topics.md), a feed category, or simply a
+is not an [Event]({% link events.md %}), a [Topic]({% link topics.md %}), a feed category, or simply a
 folder of similar articles.
 
 ## Where Islands Fit
@@ -68,7 +68,7 @@ feedback produces signed evidence, allowing RSSMonster to learn that a
 semantic area should reduce rather than increase personalized relevance.
 
 Bookmarks are especially clear evidence because they represent an explicit
-decision to retain an article. See [Bookmarks](bookmarks.md).
+decision to retain an article. See [Bookmarks]({% link bookmarks.md %}).
 
 ## Forming Candidate Islands
 
@@ -208,8 +208,8 @@ become new behavioral evidence and does not itself change an Island.
 
 Use `island:true` in Search or a Smart Folder to select articles whose Event
 has a primary or secondary Topic linked to an active Island. `island:false`
-selects articles without such a relationship. See [Search](search.md) and
-[Smart Folders](smart-folders.md).
+selects articles without such a relationship. See [Search]({% link search.md %}) and
+[Smart Folders]({% link smart-folders.md %}).
 
 ## Inspecting Your Islands
 

@@ -64,20 +64,25 @@ decoded token data, and whether agentic features are enabled.
 JWT lifetime is controlled by `JWT_EXPIRES_IN` and defaults to 86,400 seconds
 (24 hours). RSSMonster does not expose refresh-token, logout, or token-revocation
 endpoints. When a token expires, log in again; to log out a client should discard
-its token. Changing `JWT_SECRET` invalidates all previously issued JWTs. See
-[Configuration](configuration.md#application-and-authentication) for the server
+its token. Changing a password invalidates older sessions using the stored password-change
+version; changing `JWT_SECRET` invalidates all previously issued JWTs. See
+[Configuration]({% link configuration.md %}#application-and-authentication) for the server
 settings.
 
 ### Registration and development login
 
 `POST /api/auth/register` creates an account from `username`, `password`, and
-`password_repeat`. Registration does not return a JWT, so the new user must log
-in afterwards.
+`password_repeat`, plus `email` when email is enabled. Registration does not
+return a JWT, so the new user must log in afterwards. Read
+`GET /api/auth/configuration` for the email capability. With email enabled, login
+can return an email-verification requirement and a short-lived
+`emailEnrollmentToken` instead of a normal session. Use that bearer token only
+for `/api/auth/email-enrollment` and its resend endpoint. See [Account and Email]({% link account.md %}).
 
 `POST /api/auth/development-login` can issue a normal JWT without a password,
 but only when all of the development-login settings are enabled. This is meant
 for local debugging or a deliberately configured personal installation, never
-for a publicly reachable production server. See [First Login](first-login.md)
+for a publicly reachable production server. See [First Login]({% link first-login.md %})
 for setup and security details.
 
 ### Authentication errors
@@ -100,6 +105,10 @@ These native routes do not require a JWT:
 
 | Method | Endpoint | Purpose |
 | --- | --- | --- |
+| `GET` | `/api/auth/configuration` | Read public authentication capability flags |
+| `POST` | `/api/auth/verify-email/confirm` | Confirm an email verification token |
+| `POST` | `/api/auth/password-reset/request` | Request recovery for an email address without disclosing account existence |
+| `POST` | `/api/auth/password-reset/confirm` | Reset a password with its recovery token |
 | `POST` | `/api/auth/register` | Create a user account |
 | `POST` | `/api/auth/login` | Exchange username and password for a JWT |
 | `POST` | `/api/auth/development-login` | Log in as the configured development user when enabled |
@@ -119,10 +128,12 @@ the route names below as the discovery map when building an integration.
 | Method | Endpoint | Purpose |
 | --- | --- | --- |
 | `GET` | `/api/articles` | List and search articles |
-| `GET` | `/api/articles/briefing` | Get articles for the briefing view |
+| `GET` | `/api/articles/briefing` | Get structured briefing context and story overview |
 | `GET` | `/api/articles/:articleId` | Get one article |
 | `GET` | `/api/articles/duplicates/:articleId` | Get duplicate articles |
 | `GET` | `/api/articles/:articleId/recommendations` | Get related recommendations |
+| `GET` | `/api/articles/:articleId/developing-story` | Get continuing coverage for an article's story |
+| `GET` | `/api/articles/:articleId/story-sources` | Get the story's source coverage |
 | `POST` | `/api/articles/details` | Get details for a set of articles |
 | `POST` | `/api/articles/markasread` | Mark articles as read |
 | `POST` | `/api/articles/markallasread` | Mark the selected article set as read |
@@ -135,7 +146,7 @@ the route names below as the discovery map when building an integration.
 | `POST` | `/api/articles/marknotinterested/:articleId` | Record negative interest feedback |
 | `POST` | `/api/articles/markmorelikethis/:articleId` | Record positive interest feedback |
 
-The article list accepts RSSMonster's search language. See [Search](search.md)
+The article list accepts RSSMonster's search language. See [Search]({% link search.md %})
 for all expressions, including expressions shared with Smart Folders.
 
 ### Feeds and categories
@@ -144,6 +155,7 @@ for all expressions, including expressions shared with Smart Folders.
 | --- | --- | --- |
 | `GET`, `POST` | `/api/feeds` | List or create feeds |
 | `GET`, `PUT`, `DELETE` | `/api/feeds/:feedId` | Read, update, or delete a feed |
+| `POST` | `/api/feeds/test-scraper` | Preview HTML + XPath extraction |
 | `POST` | `/api/feeds/validate` | Validate a prospective feed |
 | `POST` | `/api/feeds/refresh` | Start a feed refresh job |
 | `GET` | `/api/feeds/refresh/:jobId/events` | Follow refresh progress using server-sent events |
@@ -169,6 +181,38 @@ for all expressions, including expressions shared with Smart Folders.
 | `POST` | `/api/topics/articles` | Get articles associated with a topic |
 | `GET` | `/api/briefing/preferences` | Get briefing preferences |
 | `PUT` | `/api/briefing/preferences` | Update briefing preferences |
+
+### Generated feeds
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| `GET`, `POST` | `/api/generated-feeds` | List or create generated feeds |
+| `GET`, `PUT`, `DELETE` | `/api/generated-feeds/:id` | Read, update, or delete a generated feed |
+| `POST` | `/api/generated-feeds/:id/regenerate-token` | Rotate the public URL's access token |
+
+`GET /rss/generated/:token` returns RSS without a login header; possession of the
+URL grants access. See [Generated Feeds]({% link generated-feeds.md %}) for expressions,
+limits, and revocation.
+
+### Account, email, and notifications
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| `GET`, `PATCH` | `/api/auth/account` | Read or update the user's password, email, and digest preferences |
+| `POST` | `/api/auth/account/daily-briefing-test` | Queue a test briefing for a verified address |
+| `GET`, `PATCH` | `/api/auth/email` | Read or change the saved email address |
+| `POST` | `/api/auth/verify-email/request` | Request verification for the saved email address |
+| `GET`, `PUT` | `/api/auth/email-enrollment` | Inspect or update enrollment; requires an enrollment token, not a session JWT |
+| `POST` | `/api/auth/email-enrollment/resend` | Resend verification using an enrollment token |
+| `GET` | `/api/push/configuration` | Read Push availability and public VAPID key |
+| `GET` | `/api/push/subscription` | Report whether the user has any stored Push subscription |
+| `POST` | `/api/push/subscription` | Save `endpoint`, `keys`, and optional `expirationTime` from a browser subscription |
+| `DELETE` | `/api/push/subscription` | Remove the user's subscription identified by body field `endpoint` |
+
+Account updates use the full form contract; inspect `client/src/api/auth.js` and
+`server/services/accountSettings.js` before constructing a request. Verification,
+recovery, and enrollment tokens have separate purposes and cannot replace a
+normal API session. See [Account and Email]({% link account.md %}).
 
 ### Subscription management and maintenance
 
@@ -197,6 +241,11 @@ Maintenance routes can be expensive and should not be polled unnecessarily.
 | `GET` | `/api/setting/crawl-statistics` | Get crawl statistics |
 | `GET` | `/api/setting/processing-jobs` | Get the current user's AI processing queue and worker health status |
 | `DELETE` | `/api/setting/processing-jobs` | Delete the current user's succeeded and dead processing-job history |
+| `GET` | `/api/setting/observability` | Get grouped processing failures |
+| `GET` | `/api/setting/observability/groups/:fingerprint` | Get occurrences of a failure group |
+| `GET` | `/api/setting/observability/failures/:failureId` | Get one failure's details |
+| `DELETE` | `/api/setting/observability` | Clear the current user's recorded processing failures |
+| `POST` | `/api/setting/islands/recalculate` | Recalculate the current user's interest islands |
 | `GET` | `/api/setting/islands` | Get Interest Island insights |
 | `GET` | `/api/setting/topics` | Get topic insights |
 | `GET`, `POST` | `/api/setting/official-sources` | Get or update official-source settings |
@@ -207,6 +256,8 @@ Maintenance routes can be expensive and should not be polled unnecessarily.
 | `PATCH` | `/api/setting/prioritize-high-trust` | Update high-trust prioritization |
 | `GET` | `/api/actions` | List article-processing rules |
 | `POST` | `/api/actions` | Replace the user's complete rules list |
+| `GET` | `/api/users/email-configuration` | Inspect email readiness; administrator only |
+| `POST` | `/api/users/email-configuration/test` | Test SMTP connectivity without sending mail; administrator only |
 | `GET` | `/api/users` | List users; administrator only |
 | `GET` | `/api/users/:userId` | Get a user; administrator only |
 | `POST` | `/api/users/:userId` | Update a user; administrator only |
@@ -223,15 +274,16 @@ RSSMonster also exposes protocol-specific and machine-oriented interfaces:
 
 | Endpoint | Authentication | Documentation |
 | --- | --- | --- |
-| `/api/fever` | Fever `api_key` or legacy Fever login cookie | [Fever API](fever-api.md) |
-| `/api/greader/*` | `GoogleLogin` token; mutations also require an action token | [Google Reader API](google-reader-api.md) |
+| `/api/fever` | Fever `api_key` or legacy Fever login cookie | [Fever API]({% link fever-api.md %}) |
+| `/api/greader/*` | `GoogleLogin` token; mutations also require an action token | [Google Reader API]({% link google-reader-api.md %}) |
 | `/api/agent` | JWT bearer token | Accepts agent messages or input and returns an assistant response when the provider is configured |
 | `/mcp` | JWT bearer token | Model Context Protocol transport for authenticated RSSMonster tools |
 | `/rss` | JWT bearer token | Personal RSS output with feed, category, unread, starred, and limit filters |
 
-`/api/agent` and semantic enrichment depend on the server's configured AI
+`/api/agent` requires the AI and assistant enable flags and a configured inference
+provider. MCP exposes authenticated tools independently of the built-in assistant
 provider. The `/rss` and `/mcp` routes are mounted outside `/api`, but use the
-same JWT bearer authentication.
+same JWT bearer authentication. See [Assistant and MCP]({% link assistant.md %}).
 
 ## Request conventions and limits
 

@@ -19,9 +19,11 @@ After starting RSSMonster, open its address in a browser. The default Docker
 installation is available at `http://localhost:3000`.
 
 1. Select **Create an account** on the sign-in page.
-2. Enter a username and password, then repeat the password.
+2. Enter a username and password, then repeat the password. If the server
+   requires email, also enter your email address.
 3. Select **Register**.
-4. Return to the sign-in form and enter the credentials you just created.
+4. If email verification is required, follow the link sent to that mailbox.
+5. Return to the sign-in form and enter the credentials you just created.
 
 The first account registered in a new RSSMonster database receives the `admin`
 role. Later registrations create regular user accounts. Each person should
@@ -29,7 +31,9 @@ register and use their own credentials so that subscriptions, articles,
 reading state, preferences, and other user data remain scoped correctly.
 
 Keep your credentials somewhere safe. RSSMonster has no default account to
-fall back to.
+fall back to. When email is enabled, existing users without a verified address
+complete email enrollment on their next sign-in. See [Account and Email]({% link account.md %})
+for password recovery, address changes, and briefing delivery.
 
 ## Optional Development Login
 
@@ -95,4 +99,4 @@ production deployment; development login is disabled unless both of its gates
 are explicitly enabled.
 
 For all related environment options, see the
-[configuration guide](configuration.md).
+[configuration guide]({% link configuration.md %}).

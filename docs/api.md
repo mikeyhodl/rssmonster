@@ -5,73 +5,52 @@ nav_order: 5
 has_children: true
 ---
 
-# API and Integrations
+# APIs and Integrations
 
-RSSMonster exposes REST-style endpoints plus compatibility layers for common RSS clients.
+Choose an interface according to the client you want to connect. Endpoint paths
+and authentication schemes differ; a JWT is not a Fever or Google Reader token.
 
----
+| Interface | Endpoint | Authentication | Guide |
+| --- | --- | --- | --- |
+| Native JSON API | `/api/*` | JWT bearer token for protected routes | [Endpoint reference]({% link rssmonster-api.md %}) |
+| Fever | `/api/fever` | Fever API key derived from account credentials | [Fever setup and compatibility]({% link fever-api.md %}) |
+| Google Reader | `/api/greader/*` | GoogleLogin token and action token for mutations | [Google Reader setup]({% link google-reader-api.md %}) |
+| Personal RSS output | `/rss` | JWT bearer token | [Native API]({% link rssmonster-api.md %}#other-api-surfaces) |
+| Generated RSS | `/rss/generated/:token` | Secret token in the URL | [Generated feeds]({% link generated-feeds.md %}) |
+| Built-in assistant | `/api/agent` | JWT; AI and assistant must be enabled | [Assistant]({% link assistant.md %}) |
+| MCP tools | `/mcp` | JWT bearer token | [MCP integration]({% link assistant.md %}#integrate-using-mcp) |
 
-## Base Conventions
-- Base URL: `http://<host>:3000`
-- All JSON endpoints live under `/api/*`.
-- Auth: JWT bearer tokens. Obtain via `POST /api/auth/login` with `username` and `password`; include `Authorization: Bearer <token>` on subsequent requests.
-- Content type: `application/json`.
+## Native API quick start
 
----
+Log in with `POST /api/auth/login`, then include `Authorization: Bearer <jwt>`
+when requesting protected resources such as `GET /api/feeds` or
+`GET /api/articles`. JSON bodies use `Content-Type: application/json`.
 
-## Core REST Endpoints (shortlist)
-- Auth: `POST /api/auth/login`, `POST /api/auth/register`, `POST /api/auth/logout`
-- Feeds: `GET /api/feed`, `POST /api/feed`, `PUT /api/feed/:id`, `DELETE /api/feed/:id`
-- Categories: `GET /api/category`, `POST /api/category`, `PUT /api/category/:id`, `DELETE /api/category/:id`
-- Articles: `GET /api/article`, `PUT /api/article/:id` (status/star/click/open updates), `POST /api/article/bulk` (bulk status)
-- Tags: `GET /api/tag`, `POST /api/tag`, `DELETE /api/tag/:articleId/:tag`
-- Smart Folders: `GET /api/smartfolders`, `POST /api/smartfolders` (replace list), `GET /api/smartfolders/insights`
-- Crawl triggers: `POST /api/crawl` (manual crawl), `POST /api/cleanup`
-- OPML: `POST /api/opml/preview`, `GET /api/opml/preview/:previewId/status`, `POST /api/opml/import`, `GET /api/opml/export`
+Routes use plural `/api/feeds`, `/api/articles`, and `/api/categories`.
+Reading-state changes have dedicated `POST` endpoints; there is no generic
+`PUT /api/article/:id`, and logout is a client-side token discard rather than
+`POST /api/auth/logout`. See the [complete reference]({% link rssmonster-api.md %}) for
+payload conventions, authentication errors, and account/email endpoints.
 
-Note: Endpoints may require specific payload shapes; see controller code for details.
+## Search and state
 
----
+Article search shares the [expression language]({% link search.md %}) used by
+[Smart Folders]({% link smart-folders.md %}) and generated feeds. Feed item filters and
+Actions use different rule formats. Check the relevant guide before reusing a
+filter in another interface.
 
-## Search & Sorting
-- Use the `search` query parameter on article endpoints. Syntax matches the [Search Guide](search.md) (tokens like `unread:true`, `tag:ai`, `@today`, `event:true`, `island:true`, `sort:recommended`).
-- Sorting: the user-facing identifiers are `desc`, `asc`, `topStories`, `recommended`, and `quality`. The API also accepts legacy `trust` (canonicalized to `quality`) and `attention`. Computed rankings are evaluated in memory across the eligible candidate set before limits are applied.
+Compatibility clients can sync only the protocol features implemented by
+RSSMonster. Do not assume a third-party client exposes Daily Briefing, semantic
+grouping, or all web-reader settings; consult the protocol's supported endpoint
+matrix and deliberate limits.
 
----
+## Deployment and access
 
-## Fever API Compatibility
-- Endpoint: `/api/fever` with the Fever API token-based scheme.
-- Supported: syncing feeds, groups, items, unread/starred states.
-- Configure your client with the Fever endpoint URL and your Fever-compatible credentials (see Settings → API Tokens).
+Use HTTPS for network access and preserve the `Authorization` header through a
+reverse proxy. Native resources are scoped to the signed-in user, with additional
+administrator checks for user management. API and MCP rate limits are described
+in [Configuration]({% link configuration.md %}#rate-limiting).
 
----
-
-## Google Reader API Compatibility
-- Endpoint prefix: `/api/greader/*`.
-- Supports: subscription list, unread/starred markers, item sync for Reader-compatible apps.
-- Authenticate using the provided Reader token (similar to Fever flow) and point your client to the GReader endpoint.
-
----
-
-## MCP / AI Assistant
-- Agent endpoints live under `/api/agent` and `/api/mcp` when AI inference is enabled.
-- Use these from the built-in UI; not intended for third-party clients.
-
----
-
-## Status Codes
-- `200` success, including updates that return a response body (for example, category updates).
-- `201` created, `204` no content for deletions or updates that return no body.
-- `400` validation errors, `401` missing/invalid token, `403` forbidden, `404` not found.
-
----
-
-## Rate and Size Notes
-- Typical payloads are small JSON bodies; OPML import/export handles larger XML files.
-- Crawling endpoints should be protected; avoid public exposure without auth.
-
----
-
-## Where to Learn More
-- Explore controller files in `server/controllers/` for exact payloads and edge cases.
-- Use the [Search Guide](search.md) and [Smart Folders](smart-folders.md) docs for query syntax reused by the API.
+Generated-feed URLs grant access to their matching article selection to anyone
+holding the URL. Disable the feed or rotate its token to revoke that access.
+They are useful for clients that cannot supply a bearer header to `/rss`.

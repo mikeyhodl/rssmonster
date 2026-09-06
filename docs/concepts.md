@@ -2,237 +2,106 @@
 layout: page
 title: Concepts
 parent: How RSSMonster Works
-nav_order: 7
+nav_order: 8
 ---
 
-## RSSMonster’s Philosophy
-
-RSSMonster treats RSS not as a chronological inbox, but as an **information ranking problem**.
-
-Modern RSS usage suffers from:
-- Repeated coverage of the same stories
-- Syndication noise
-- Uneven source quality
-- Ever-growing unread backlogs
-
-RSSMonster addresses this by introducing **signals**, **scores**, and **intent-driven views** — while remaining fully self-hosted and under your control.
-
----
-
-## Articles
-
-An **article** is a single item fetched from an RSS or Atom feed.
-
-In RSSMonster, articles are more than raw entries:
-- They are analyzed for quality
-- Compared against other articles for uniqueness
-- Ranked relative to time, trust, and engagement
-
-Articles remain immutable: RSSMonster never rewrites or alters feed content.
-
----
-
-## Clusters (Stories)
-
-RSSMonster groups similar articles into **clusters** using semantic similarity.
-
-A cluster represents:
-- One story
-- One topic
-- One news event covered by multiple sources
-
-### Why clustering matters
-
-Clustering allows RSSMonster to:
-- Collapse duplicate coverage
-- Reduce noise from syndication
-- Compare originality between sources
-- Rank *stories* instead of posts
-
-Reading one article contributes to reading the entire cluster.
-
----
-
-## Quality
-
-Each article receives a **quality score** between `0.0` and `1.0`.
-
-Quality reflects:
-- Writing structure and clarity
-- Promotional language detection
-- Sentiment neutrality
-- Content richness
-
-Quality is not a value judgment — it is a signal used for:
-- Ranking
-- Filtering
-- Automation rules
-
----
-
-## Uniqueness
-
-Uniqueness measures how much **new information** an article adds relative to others in the same cluster.
-
-The signal is higher when articles:
-- Provide original reporting
-- Add context or analysis
-- Are not near-duplicates
-
-Syndicated copies and rewrites score lower, even if published later.
-
----
-
-## Freshness
-
-Freshness measures how recent an article is, normalized over time.
-
-Freshness:
-- Decays smoothly
-- Never drops to zero instantly
-- Is balanced against quality and trust
-
-This prevents “latest wins” behavior while still surfacing breaking news.
-
----
-
-## Feed Trust
-
-Feed trust is a recent-history score (`0.0 – 1.0`) estimating how consistently
-valuable each source has been as a source of articles.
-
-Trust reflects:
-- Average article quality
-- Supporting engagement from meaningfully exposed articles
-- Deterministic originality versus actual duplicates
-- Explicit negative-feedback quality
-
-Sparse evidence is shrunk toward the neutral value `0.75`; publication volume,
-semantic event co-coverage, mute state, crawl health, and topic interest are not
-FeedTrust inputs.
-
-High-trust feeds influence ranking more, but never silence others.
-
-[Read the complete FeedTrust model →](feedtrust.md)
-
-## Adaptive feed scheduling
-
-RSSMonster estimates publisher activity from valid, non-future entry timestamps,
-including entries that were already known, deduplicated, or filtered locally. It
-sorts and deduplicates the timestamps, derives adjacent publication intervals,
-and feeds their median into a bounded EWMA. A first feed snapshot records only
-the newest publication time; it does not infer cadence from a potentially large
-historical backlog.
-
-This intentionally differs from CommaFeed’s arithmetic average over one feed
-snapshot. RSSMonster uses publisher evidence across observations and a median
-sample so duplicates, ordering, and one long gap have less influence. Adaptive
-fetch intervals remain bounded between five minutes and four hours.
-
----
-
-## Engagement Signals
-
-RSSMonster learns from *how you actually read*.
-
-Engagement signals include:
-- Reading time
-- Scroll-based mark-as-read
-- Clicks
-- Starred articles
-
-These signals support different features: meaningfully exposed articles
-provide bounded evidence for FeedTrust, while Interest Islands and Recommended
-ranking own personal topic relevance.
-
-RSSMonster does not track behavior externally.
-
----
-
-## Ranking
-
-RSSMonster exposes several ranking modes rather than one universal Importance
-score. Quality combines article quality with FeedTrust; Recommended adds
-personal interest, freshness, corroboration, and rule evidence; Top Stories
-emphasizes current multi-source Event importance. See
-[Scoring and Ranking](scoring.md).
-
----
-
-## Smart Folders
-
-Smart Folders are **declarative, dynamic views** built from search expressions.
-
-They:
-- Replace static folders
-- Encode intent
-- Update automatically
-
-Example:
-
-```text
-@today unread:true sort:recommended
-```
-
-Smart Folders allow you to define what matters — not just what arrived.
-
-## Automation & Actions
-
-RSSMonster supports **automated actions** using regular expressions and signals.
-
-Actions can:
-
-- Star articles  
-- Mark articles as read  
-- Delete low-quality content  
-- Flag advertisements  
-
-Automation works **with scoring, not against it**.  
-Instead of relying on fragile keyword rules alone, actions can be combined with quality, freshness, and trust signals to reduce noise safely.
-
----
-
-## Transparency by Design
-
-RSSMonster is built on transparent principles:
-
-- No black-box algorithms  
-- No external tracking  
-- No advertising incentives  
-- No forced personalization  
-
-Every decision can be:
-
-- Inspected  
-- Filtered  
-- Overridden  
-
-You decide how much automation and ranking you want — nothing is hidden or imposed.
-
----
-
-## Who These Concepts Are For
-
-These concepts matter most if you:
-
-- Follow many overlapping sources  
-- Care about signal over volume  
-- Want control over ranking  
-- Prefer explainable systems  
-
-If you only follow a few feeds, RSSMonster will still work — but its strengths shine at scale.
-
----
-
-## Summary
-
-RSSMonster introduces:
-
-- Clusters instead of repetition  
-- Signals instead of guesses  
-- Ranking instead of inboxes  
-- Control instead of magic  
-
-It is not a replacement for RSS.
-
-It is RSS — taken seriously.
+# Concepts
+
+RSSMonster combines a conventional feed reader with optional analysis and
+recommendation features. Understanding the following distinctions helps explain
+why an article appears, how it is grouped, and what changes when you read it.
+
+## Articles and revisions
+
+An article is an entry collected from a syndication feed or an HTML + XPath
+source. Stable publisher identity is checked before duplicate-content matching.
+When a publisher updates an existing entry, RSSMonster can revise the stored
+article while preserving read state, bookmarks, clicks, and manual tags.
+A metadata correction or extraction repair is not necessarily a new revision.
+
+RSSMonster stores source and presentation data separately. Raw source content
+(`contentOriginal`), sanitized presentation HTML (`contentHtml`), canonical plain
+text (`contentText`), and description fields have distinct purposes. Historical
+`contentStripped` data is not interchangeable with all of these representations.
+API JSON omits raw `contentOriginal`; use the returned normalized content fields.
+
+## Duplicates, events, topics, and interests
+
+| Concept | What it represents | Example |
+| --- | --- | --- |
+| Duplicate | Another record representing the same content, based on deterministic identity/content evidence | A syndicated copy |
+| [Event]({% link events.md %}) | Coverage of a particular occurrence | Several reports about one product announcement |
+| [Topic]({% link topics.md %}) | A broader semantic theme connecting events or behavior | Developments in battery technology |
+| [Interest Island]({% link interest-islands.md %}) | A recurring personal interest inferred from engagement | The user's sustained interest in electric transport |
+
+Articles about the same event can provide different reporting and remain distinct.
+Semantic similarity alone is not duplicate evidence. Likewise, an event and a
+broad topic are not interchangeable “clusters.” Event grouping can show a
+representative article and continuing developments while keeping coverage
+available through story-source controls.
+
+Read-state behavior depends on the selected view and grouping. See
+[Marking Articles Read]({% link marking-articles-read.md %}) and
+[grouped-event reading]({% link events.md %}#marking-a-grouped-event-read); reading one
+article does not universally mark every related topic article read.
+
+## Quality, originality, and trust
+
+Article quality combines stored quality, sentiment, and advertising scores into
+a normalized `0`–`1` value. Higher advertising scores mean less promotional
+content. AI analysis supplies estimates when enabled; otherwise default values
+can be used. These are ranking signals, not verification of facts.
+
+Originality evidence in FeedTrust comes from actual duplicate links. It does not
+measure how much novel reporting every article adds to its semantic event.
+[FeedTrust]({% link feedtrust.md %}) combines recent article quality, exposure-backed
+engagement, deterministic originality, and explicit negative feedback. Sparse
+evidence is pulled toward a neutral value of `0.75`.
+
+FeedTrust is user-specific source history. It is separate from crawl health and
+personal topic affinity. A reliable HTTP endpoint is not necessarily a valuable
+source, and a low personal interest match is not necessarily a low-quality article.
+
+## Ranking and filtering
+
+[Ranking]({% link scoring.md %}) orders an eligible collection. Newest and Oldest order by
+date; Quality combines article quality with FeedTrust; Recommended incorporates
+personal relevance; Top Stories emphasizes recent event coverage.
+
+Filtering decides which articles qualify. Score thresholds, the selected status,
+feed/category scope, and search expressions can exclude articles before you see
+the ranking. Grouping can further reduce visible rows without deleting coverage.
+Chronological ordering alone therefore does not remove every active filter.
+
+## Reading feedback
+
+Read state, exposure, clicks, bookmarks, and explicit **More like this** or
+**Not interested** feedback provide different signals. Interest Islands use
+behavioral evidence for personal relevance; FeedTrust uses its own bounded
+engagement model. Fresh installations may have little useful personal evidence,
+and zero related recommendations is a valid outcome.
+
+## Organization and automation
+
+Categories organize subscriptions. Tags label articles. [Smart Folders]({% link smart-folders.md %})
+store queries, while [generated feeds]({% link generated-feeds.md %}) expose query results
+as RSS. These features complement one another.
+
+[Actions]({% link actions.md %}) match article fields with regular expressions during crawling.
+They can tag, bookmark, change state, override scores, or store filtered articles.
+Discarding through an Action is not deletion. [Feed item filters]({% link feed-item-filters.md %})
+control acceptance of future entries from a particular feed; search filters
+operate on stored articles.
+
+## Processing and availability
+
+Crawling extracts and normalizes entries, resolves identity and revisions, applies
+duplicate/filter rules, and persists results. Optional processing adds analysis,
+vectors, and semantic organization. Work is split across web, crawl-worker, and
+AI-worker processes; see [How RSSMonster Works]({% link how-rssmonster-works.md %}).
+
+The default SQLite deployment is a lightweight reader. The MySQL deployment
+supports the background AI workflow. Per-feed switches cannot override disabled
+server capabilities. Model choice and provider availability affect semantic
+results, so inspect the [configuration]({% link configuration.md %}) before interpreting
+missing summaries or recommendations as missing articles.

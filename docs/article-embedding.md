@@ -96,13 +96,13 @@ Content that still appears to contain raw HTML is rejected.
 The topic vector is a processing input rather than a second stored article
 vector. It helps the semantic pipeline consider the article's broader subject
 when the vector is first generated. Durable Topics are subsequently built and
-maintained from Event vectors; see [Topics](topics.md).
+maintained from Event vectors; see [Topics]({% link topics.md %}).
 
 ## Generation and Storage
 
 Article embeddings use the model selected by the standalone inference service:
 OpenAI `text-embedding-3-small` or local Qwen. The server contains no provider
-credential. See [Model Usage](model-usage.md) for configuration and the warning
+credential. See [Model Usage]({% link model-usage.md %}) for configuration and the warning
 about incompatible embedding spaces.
 
 For batch processing, RSSMonster only selects articles that are:
@@ -146,11 +146,11 @@ The stored article vector contributes to several features:
   deterministic identity checks.
 - **Events** combine semantic similarity with headline, entity, source, and
   time evidence to group reporting about the same occurrence. An Event vector
-  is derived from the vectors of its member articles. See [Events](events.md).
+  is derived from the vectors of its member articles. See [Events]({% link events.md %}).
 - **Topics** connect recurring subjects across Events rather than treating
-  every article as an isolated item. See [Topics](topics.md).
+  every article as an isolated item. See [Topics]({% link topics.md %}).
 - **Interest Islands** use semantic evidence alongside explicit user behavior
-  to model durable personal interests. See [Interest Islands](interest-islands.md).
+  to model durable personal interests. See [Interest Islands]({% link interest-islands.md %}).
 - **Related-article recommendations** compare a source article with recent
   vectorized articles belonging to the same user. Articles already in the same
   Event are excluded from these recommendations.

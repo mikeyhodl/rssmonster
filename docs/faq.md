@@ -25,12 +25,10 @@ RSSMonster composes visible signals such as article quality, FeedTrust,
 freshness, personal interest, reading attention, and Event corroboration. Each
 ranking mode gives those signals a specific meaning.
 
-There is:
-- No black-box personalization
-- No external tracking
-- No advertising incentives
-
-Everything can be inspected, filtered, or overridden.
+Ranking formulas and many supporting signals are documented. Model-generated
+analysis and semantic matches remain estimates; explanations do not make them
+factual guarantees. Optional external model providers receive data used in their
+requests. See [Model Usage]({% link model-usage.md %}).
 
 ---
 
@@ -63,26 +61,17 @@ representative first while keeping the related sources available.
 
 ## Why do I sometimes see only one article for a big news story?
 
-RSSMonster uses **semantic clustering**.
-
-If multiple feeds publish the same story:
-- They are grouped into a single cluster
-- You see the best or most original article first
-- You can expand the cluster to view all sources
-
-This reduces noise from syndication.
-
----
+Duplicate suppression and event grouping can reduce repetition for different
+reasons. A duplicate represents the same content; an event connects coverage of
+one occurrence, including distinct reporting. Open the available story-source
+controls to compare coverage. See [Events]({% link events.md %}).
 
 ## What is a cluster, exactly?
 
-A cluster represents **one story or topic** covered by multiple articles.
-
-Clusters allow RSSMonster to:
-- Reduce repetition
-- Compare originality
-- Track engagement at the story level
-- Rank coverage, not just posts
+Older descriptions use “cluster” loosely. RSSMonster distinguishes duplicates,
+Events, Topics, and Interest Islands. An event describes a specific occurrence,
+a topic connects broader themes, and an island represents personal interests.
+See [Concepts]({% link concepts.md %}) for examples and read-state implications.
 
 ---
 
@@ -108,12 +97,9 @@ Quality is used for ranking, filtering, and automation — not censorship.
 
 ## What does “uniqueness” mean?
 
-Uniqueness measures **how much new information** an article adds compared to others in the same cluster.
-
-The signal is higher for original reporting than for:
-- Rewrites
-- Syndicated copies
-- Press-release clones
+Originality in FeedTrust uses deterministic duplicate evidence. Semantic
+co-coverage does not automatically make an article unoriginal, and RSSMonster
+does not measure every article's journalistic novelty. See [FeedTrust]({% link feedtrust.md %}).
 
 ---
 
@@ -149,4 +135,29 @@ You can manually recalculate trust using:
 npm run feedtrust
 ```
 
-[Read the complete FeedTrust explanation →](feedtrust.md)
+[Read the complete FeedTrust explanation →]({% link feedtrust.md %})
+
+## Can I use RSSMonster without AI?
+
+Yes. The default SQLite Docker profile supports basic reading without running
+the AI worker. For background analysis and semantic features, use the MySQL
+profile and configure inference. See [Configuration]({% link configuration.md %}).
+
+## Why is my briefing or recommendation list empty?
+
+Your filters may exclude all candidates, or the available content may lack
+sufficient semantic or personal-interest evidence. Try broader
+[Briefing Preferences]({% link daily-briefing.md %}) and check processing-job health.
+Recommendation thresholds deliberately allow no results.
+
+## Can I read offline after installing the app?
+
+Installation caches the application shell, not your entire article archive.
+Article loading and reading-state changes require server access. See
+[Web App and Notifications]({% link web-app-and-notifications.md %}).
+
+## Can RSSMonster email my briefing or reset my password?
+
+Yes, when the operator enables SMTP and you verify your address.
+[Account and Email]({% link account.md %}) covers both workflows; [Email Configuration]({% link email-configuration.md %})
+explains server setup and delivery diagnostics.

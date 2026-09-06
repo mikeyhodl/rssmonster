@@ -109,7 +109,7 @@ the pin deliberately when updating, review the release or source changes, back
 up the database, and then run `docker compose pull` followed by
 `docker compose up -d` with the applicable Compose file.
 
-See [Backup and Restore](backup-restore.md) for consistent SQLite and MySQL
+See [Backup and Restore]({% link backup-restore.md %}) for consistent SQLite and MySQL
 procedures and guidance on preserving the root `.env` separately.
 
 ## Database
@@ -177,7 +177,7 @@ Authentication and API credential flows require these secrets. The supplied
 Compose files refuse to start without them. Keep both values stable across
 restarts and upgrades.
 
-See [First Login](first-login.md) for the normal registration flow and the
+See [First Login]({% link first-login.md %}) for the normal registration flow and the
 security implications of enabling development login.
 
 ## Feed Crawling and Scheduling
@@ -363,7 +363,7 @@ semantic labeling remains disabled, and assistant, Smart Folder recommendation, 
 `INFERENCE_DISABLED` without contacting an inference endpoint.
 
 OpenAI credentials and model names belong only in `inference/.env`; see
-[Model Usage](model-usage.md). The server executes authenticated assistant
+[Model Usage]({% link model-usage.md %}). The server executes authenticated assistant
 tools locally, while inference performs every provider model call. The server
 uses only `INFERENCE_ASSISTANT_ENABLED` and never receives the OpenAI key.
 
@@ -434,3 +434,16 @@ TRUST_PROXY=false
 
 Start with defaults, change one group of settings at a time, and inspect crawl
 statistics and logs before increasing concurrency or resource limits.
+
+## Email and Web Push
+
+Email and browser notifications are independent optional features:
+
+- [Email Configuration]({% link email-configuration.md %}) documents `EMAIL_ENABLED`,
+  `PUBLIC_APP_URL`, SMTP authentication/TLS, password-reset rate limits, and
+  delivery diagnostics. Enabling email also changes account enrollment requirements.
+- [Web App and Notifications]({% link web-app-and-notifications.md %}) documents
+  `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, and `VAPID_SUBJECT` for browser Push.
+
+Neither feature is enabled merely by installing the web app. Pass the appropriate
+variables to each responsible process and recreate containers after changes.

@@ -139,6 +139,6 @@ Item filters apply only as entries are encountered in later crawls:
   longer matches, RSSMonster keeps the last accepted version. The rejected
   revision does not update, hide, or delete it.
 
-Use [Search](search.md) or a [Smart Folder](smart-folders.md) when you want a
+Use [Search]({% link search.md %}) or a [Smart Folder]({% link smart-folders.md %}) when you want a
 dynamic view over articles that are already stored. Use an item filter only
 when the unwanted entries should not enter the article library at all.

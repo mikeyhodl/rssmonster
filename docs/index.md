@@ -4,113 +4,75 @@ title: Home
 nav_order: 1
 ---
 
-## Your Reading, Intelligently Curated
+# RSSMonster
 
-Imagine opening your RSS reader and seeing **exactly what matters**—not buried under hundreds of duplicates, promotional fluff, or yesterday's news. No endless scrolling. No FOMO. Just the stories you actually want to read.
+RSSMonster is a self-hosted RSS reader for people who enjoy following their own
+sources. Read chronologically, organize subscriptions, and save useful articles.
+With optional AI processing, you can also explore related coverage, follow
+ongoing stories, and rank articles by quality or personal interest.
 
-**That's RSSMonster.**
+![RSSMonster reading interface](assets/screenshot04.png)
 
-![Screenshot](/rssmonster/assets/screenshot04.png)
+## Start reading
 
----
+- [Get Started →]({% link getting-started.md %}) — Installation and first steps.
+- [See It In Action →]({% link usability.md %}) — Reading modes and mobile layouts.
+- [Deep Dive →]({% link how-rssmonster-works.md %}) — How it all works.
 
-## The Problem with Traditional RSS Readers
+[Install RSSMonster]({% link getting-started.md %}), [create your account]({% link first-login.md %}),
+and [add feeds]({% link feeds-and-categories.md %}) or [import an OPML file]({% link opml.md %}).
+The default SQLite Docker deployment provides a lightweight reader. Use the
+MySQL deployment with inference and its AI worker for background analysis and
+semantic features; these are not enabled by default in the SQLite quick start.
 
-You subscribe to 50 feeds. The same breaking story appears in 15 of them. Promotional content sneaks through. Clickbait competes with long-form journalism. Everything fights for your attention in a never-ending chronological stream.
+Choose [Expanded, Reader, Summarized, Summary Bullets, or Headlines]({% link usability.md %})
+to suit your reading session and screen. [Bookmarks]({% link bookmarks.md %}),
+[keyboard shortcuts]({% link keyboard-shortcuts.md %}), and configurable
+[read behavior]({% link marking-articles-read.md %}) help you work through your subscriptions.
 
-**You end up skimming everything and reading nothing.**
+## Find and organize
 
----
+- **[Search]({% link search.md %}):** combine words with filters such as
+  `title:javascript @today quality:>0.7`.
+- **[Smart Folders]({% link smart-folders.md %}):** save a search as a reusable view.
+- **[Tags]({% link tag.md %}):** organize articles using publisher, feed, generated, or rule-based labels.
+- **[Actions]({% link actions.md %}):** automatically bookmark, mark read, tag, score, or hide incoming articles.
+- **[Feed item filters]({% link feed-item-filters.md %}):** decide which future entries a subscription accepts.
+- **[HTML + XPath feeds]({% link html-xpath-feeds.md %}):** follow sites without a usable syndication feed.
+- **[Generated feeds]({% link generated-feeds.md %}):** publish a saved selection at a revocable, token-protected RSS URL.
 
-## How RSSMonster Is Different
+## Explore optional intelligent features
 
-### 🧠 **It Understands Your Content**
+[Quality, Recommended, and Top Stories]({% link scoring.md %}) provide different ways to
+order your reading. [FeedTrust]({% link feedtrust.md %}) explains how source
+history contributes to those rankings. [Events]({% link events.md %}) collect coverage of a particular story;
+[Topics]({% link topics.md %}) connect related themes; [Interest Islands]({% link interest-islands.md %})
+use reading feedback to model recurring interests. Similar coverage is not
+necessarily duplicate content, and a ranking score is not a fact check.
 
-RSSMonster doesn't just collect articles—it reads them. It evaluates quality, identifies duplicates, and learns which sources you trust. Every article gets scored on what matters: writing quality, originality, and whether it's actually worth your time.
+[Daily Briefing]({% link daily-briefing.md %}) offers a tunable recent collection and a
+source-based story overview. The [assistant]({% link assistant.md %}) lets you ask questions
+about stored articles in natural language. Ordinary search uses the documented
+expression syntax; conversational requests belong in the assistant.
 
-### 🎯 **You See What Matters First**
+## Use RSSMonster beyond the browser tab
 
-Alongside chronological ordering, RSSMonster provides separate **Quality**,
-**Recommended**, and **Top Stories** rankings. Breaking news with broad
-corroboration can rise in Top Stories, while Recommended emphasizes personal
-interest. Duplicate coverage remains grouped and available for comparison.
+[Install the web app and enable notifications]({% link web-app-and-notifications.md %}),
+configure [account recovery and briefing emails]({% link account.md %}), or connect a
+[Fever or Google Reader client]({% link api.md %}). Developers can use the
+[native API]({% link rssmonster-api.md %}), authenticated RSS output, or MCP tools.
 
-[Learn how scoring works →](scoring.md) · [Understand FeedTrust →](feedtrust.md)
+Self-hosting gives you control over storage and deployment. Optional external
+inference providers receive the content needed for enabled model requests;
+SMTP and browser Push delivery also use configured external services. Choose
+[models and providers]({% link model-usage.md %}) to match your deployment preferences.
 
-### 📂 **Smart Folders Do The Work For You**
+## Operate and understand your server
 
-Create views that adapt automatically:
-- **"Top Stories Today"** — what's breaking and why it matters
-- **"Worth Your Time"** — high-quality deep dives, no fluff
-- **"Quick Scan"** — your daily overview, summarized
-- **"Low Noise Mode"** — maximum signal, zero spam
+Start with [Configuration]({% link configuration.md %}) and [Administration]({% link administration.md %})
+for crawling, processing jobs, email, maintenance, and backups. Read
+[How RSSMonster Works]({% link how-rssmonster-works.md %}) for the processing architecture,
+or [Concepts]({% link concepts.md %}) for the distinctions behind the interface.
+The [FAQ]({% link faq.md %}) answers common questions about filtering and ranking.
 
-Each Smart Folder is a living query. New content flows in; irrelevant content stays out.
-
-[Explore Smart Folders →](smart-folders.md)
-
-### 🔍 **Search Like You Think**
-
-Ask for what you want, naturally:
-- `title:javascript @today quality:>0.7`
-- `unread:true sort:recommended`
-- Or just: *"Show me tech articles from last week"*
-
-No complex syntax to memorize. RSSMonster speaks your language.
-
----
-
-## Built For Real Reading
-
-✨ **Intelligent Ranking** — Freshness, quality, and coverage combine to surface what actually matters  
-🤖 **AI Assistant** — Ask questions in plain language, get instant answers from your reading history  
-🚫 **Duplicate Filtering** — See each story once, even if 20 feeds cover it  
-📱 **Works Everywhere** — Install as a Progressive Web App on any device  
-🔒 **Privacy First** — Self-hosted, multi-user, your data stays yours  
-🔗 **Universal Compatibility** — Works with Reeder, FeedMe, News+, and other RSS clients
-
----
-
-## Who RSSMonster Is For
-
-You'll love RSSMonster if you:
-
-- **Follow overlapping sources** and see the same stories everywhere
-- **Want less noise** without subscribing to fewer feeds
-- **Care about quality** over quantity
-- **Like being in control** — transparent scoring, customizable views
-- **Miss Google Reader** and want something better
-
----
-
-## Ready to Take Back Your Reading Time?
-
-RSSMonster works out of the box with sensible defaults, but every ranking decision is transparent and adjustable. No black-box algorithms. No vendor lock-in. Just intelligent content curation under your control.
-
-**[Get Started →](getting-started.md)** — Up and running in minutes  
-**[See It In Action →](usability.md)** — Reading modes and mobile layouts
-**[Deep Dive →](concepts.md)** — How it all works
-
----
-
-## Explore the Documentation
-
-- **[Getting Started](getting-started.html)** — Installation, setup, first steps
-- **[Configuration](configuration.html)** — Environment variables and tuning
-- **[Backup and Restore](backup-restore.html)** — Protect and recover Docker data and secrets
-- **[First Login](first-login.html)** — Registration, sign-in, and development login
-- **[Core Concepts](concepts.html)** — How RSSMonster thinks about content
-- **[Compare RSSMonster]({{ '/compare/' | relative_url }})** — Find the RSS reader whose design philosophy best fits your workflow
-- **[Smart Folders](smart-folders.html)** — Create powerful dynamic views
-- **[Generated Feeds](generated-feeds.html)** — Share an expression-backed article selection as a private RSS feed
-- **[Scoring & Ranking](scoring.html)** — Newest, Oldest, Quality, Recommended, and Top Stories explained
-- **[FeedTrust](feedtrust.html)** — How RSSMonster estimates consistent source value
-- **[Search Guide](search.html)** — Master search expressions
-- **[Feed Item Filters](feed-item-filters.html)** — Accept or reject future entries from individual feeds
-- **[Article Embedding](article-embedding.html)** — How semantic article representations work
-- **[API & Integrations](api.html)** — Fever API, Google Reader API, and more
-- **[Rule-Based Tags](tag.html#rule-based-tags)** — Apply tags automatically using filters
-
----
-
-*RSSMonster is open source and built with love by [Piethein Strengholt](mailto:piethein@strengholt-online.nl). MIT licensed.*
+RSSMonster is open source under the MIT license.

@@ -7,7 +7,7 @@ nav_order: 5
 
 # Topics
 
-Topics connect related [Events](events.md) into recurring subjects. An Event
+Topics connect related [Events]({% link events.md %}) into recurring subjects. An Event
 answers **what happened?** A Topic answers **what recurring subject does this
 belong to?**
 
@@ -17,7 +17,7 @@ Topic about that company or technology.
 
 Topics are deliberately broader and longer-lived than Events. They are not
 feeds, categories, individual stories, or personal-interest profiles.
-[Interest Islands](interest-islands.md) form the separate, user-specific layer
+[Interest Islands]({% link interest-islands.md %}) form the separate, user-specific layer
 that models what someone consistently cares about.
 
 ## Where Topics Fit

@@ -2,12 +2,13 @@
 layout: page
 title: Getting Started
 nav_order: 2
+has_children: true
 ---
 
 Welcome! This guide will walk you through installing and setting up RSSMonster. Choose your preferred method and you'll be up and running in minutes.
 
 For a complete reference to database, crawler, security, AI, and client
-settings, see the [configuration guide](configuration.md).
+settings, see the [configuration guide]({% link configuration.md %}).
 
 ---
 
@@ -15,7 +16,7 @@ settings, see the [configuration guide](configuration.md).
 
 Before you begin, make sure you have:
 
-- **Node.js** 22.x or higher
+- **Node.js** 22.19.0 or higher
 - **npm** (comes bundled with Node.js)
 - **Git** for cloning the repository
 
@@ -79,7 +80,7 @@ The port is bound to host loopback by default. To make a direct, non-proxied
 installation reachable from other machines, set
 `RSSMONSTER_BIND_ADDRESS=0.0.0.0` and keep `TRUST_PROXY=false`. For reverse-proxy
 deployments, keep the loopback binding and follow the
-[proxy and network security guidance](configuration.md#proxy-and-network-security).
+[proxy and network security guidance]({% link configuration.md %}#proxy-and-network-security).
 
 Check the deployment or follow its logs with:
 
@@ -92,7 +93,7 @@ docker compose logs -f rssmonster rssmonster-worker
 
 The quick start uses the moving `latest` tag. For an unattended production
 deployment, first pin a published source-revision tag or image digest in the
-root `.env`; see [Pinning the Docker image](configuration.md#pinning-the-docker-image).
+root `.env`; see [Pinning the Docker image]({% link configuration.md %}#pinning-the-docker-image).
 Change that pin deliberately when you are ready to update. Then run:
 
 ```bash
@@ -102,7 +103,7 @@ docker compose up -d
 
 Pending migrations are applied automatically when the new container starts.
 Back up the database and stable configuration secrets before changing a
-production image pin. See [Backup and Restore](backup-restore.md) for the SQLite
+production image pin. See [Backup and Restore]({% link backup-restore.md %}) for the SQLite
 and MySQL procedures.
 
 ### SQLite Data Persistence
@@ -171,7 +172,7 @@ docker compose -f docker-compose.mysql.yml logs -f inference rssmonster rssmonst
 Both Docker profiles monitor the crawl worker independently. The MySQL profile
 also monitors `rssmonster-ai-worker` independently. By default, three
 consecutive failures or 15 minutes without a state update mark the relevant
-worker unhealthy. See the [configuration guide](configuration.md) to tune these
+worker unhealthy. See the [configuration guide]({% link configuration.md %}) to tune these
 thresholds.
 
 ---
@@ -309,7 +310,7 @@ npm run start
 
 Navigate to `http://localhost:8080` (development) or `http://localhost:3000` (production).
 Create your first account if you have not already done so, then log in with
-those credentials. See [First Login](first-login.md) for the registration flow
+those credentials. See [First Login]({% link first-login.md %}) for the registration flow
 and the optional development-login configuration.
 
 ### 2. Add Your First Feed
@@ -328,7 +329,7 @@ If you're migrating from another RSS reader:
 4. Review the categories and subscriptions found in the file
 5. Approve the preview to create the subscriptions, or discard it without making changes
 
-See [OPML Import and Export](opml.md) for preview statuses, duplicate handling,
+See [OPML Import and Export]({% link opml.md %}) for preview statuses, duplicate handling,
 category editing, and export details.
 
 ### 4. Set Up Feed Crawling
@@ -341,12 +342,12 @@ Run this command whenever you want to fetch new articles:
 
 ```bash
 cd server
-DISABLE_LISTENER=true npm run crawl
+npm run crawl
 ```
 
 **Option B: Dedicated Crawl Worker (Recommended)**
 
-Set the polling interval in `server/.env`, then start both production processes
+Set the polling interval in `server/.env`, then start the configured production processes
 from the repository root:
 
 ```env
@@ -376,16 +377,16 @@ INFERENCE_AGENT_TIMEOUT_MS=300000
 ```
 
 Put `OPENAI_API_KEY`, `ASSISTANT_PROVIDER`, and `ASSISTANT_MODEL` in
-`inference/.env`; see [Model Usage](model-usage.md). Keep
+`inference/.env`; see [Model Usage]({% link model-usage.md %}). Keep
 `INFERENCE_ASSISTANT_ENABLED` only in `server/.env`. Restart inference and the
 server. The client shows chat when the server reports the enabled capability.
 
-The AI assistant enables:
-- Natural language search: *"Show me tech articles from last week"*
-- Article summarization and tagging
-- Smart recommendations based on reading habits
+The assistant supports natural-language article discovery and source-based
+answers. Background summaries, generated tags, and semantic recommendations
+have their own processing requirements; enabling chat alone does not run those
+jobs. See [Assistant and MCP]({% link assistant.md %}).
 
-[Learn more about AI configuration →](configuration.md#inference-and-openai-features)
+[Learn more about AI configuration →]({% link configuration.md %}#inference-and-openai-features)
 
 ### Calculate Feed Trust Scores
 
@@ -402,18 +403,15 @@ This analyzes your feeds based on:
 - **Originality** — actual duplicate relationships, not shared Event coverage
 - **Negative feedback** — explicit negative actions among exposed articles
 
-[Learn how FeedTrust works →](feedtrust.md)
+[Learn how FeedTrust works →]({% link feedtrust.md %})
 
-### Rebuild Article Clusters
+### Maintain semantic organization
 
-If you've enabled semantic search or bulk-imported articles:
-
-```bash
-cd server
-npm run recluster
-```
-
-This groups similar articles together to reduce duplicate coverage.
+Normal enabled crawls run embedding, event, topic, and island processing in
+order. Historical rebuilds are maintenance operations, not an installation step.
+Back up the database and read [Server Jobs]({% link server-jobs.md %}) before selecting an
+incremental, repair, or full rebuild command. There is no `npm run recluster`
+script; use the documented commands appropriate to the intended operation.
 
 ---
 
@@ -515,12 +513,12 @@ kill -9 <PID>
 
 Now that RSSMonster is running, explore these guides:
 
-- **[Create Smart Folders](smart-folders.md)** — Build dynamic views of your content
-- **[Master Search](search.md)** — Learn powerful search expressions
-- **[Understand Scoring](scoring.md)** — How articles are ranked
-- **[Set Up Rule-Based Tags](tag.md#rule-based-tags)** — Create tags automatically with rules
-- **[Connect RSS Clients](api.md)** — Use Fever or Google Reader APIs
+- **[Create Smart Folders]({% link smart-folders.md %})** — Build dynamic views of your content
+- **[Master Search]({% link search.md %})** — Learn powerful search expressions
+- **[Understand Scoring]({% link scoring.md %})** — How articles are ranked
+- **[Set Up Rule-Based Tags]({% link tag.md %}#rule-based-tags)** — Create tags automatically with rules
+- **[Connect RSS Clients]({% link api.md %})** — Use Fever or Google Reader APIs
 
 ---
 
-**Questions?** Check the [documentation index](index.md) or [open an issue](https://github.com/pietheinstrengholt/rssmonster/issues) on GitHub.
+**Questions?** Check the [documentation index]({% link index.md %}) or [open an issue](https://github.com/pietheinstrengholt/rssmonster/issues) on GitHub.

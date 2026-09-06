@@ -1,7 +1,8 @@
 title: RSSMonster
 description: Signal-driven RSS reader that prioritizes what matters
 theme: just-the-docs
-url: https://pietheinstrengholt.github.io/rssmonster
+url: https://pietheinstrengholt.github.io
+baseurl: /rssmonster
 favicon_ico: "/assets/favicon.ico"
 
 aux_links:

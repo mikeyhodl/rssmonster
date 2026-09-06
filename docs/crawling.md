@@ -24,7 +24,7 @@ checks, crawl-run guards, and feed leases make ingestion idempotent and prevent
 the same due work from being processed concurrently.
 
 Individual feeds can also reject entries before identity lookup, persistence,
-and semantic processing. See [Filtering Feed Items](feed-item-filters.md) for
+and semantic processing. See [Filtering Feed Items]({% link feed-item-filters.md %}) for
 the supported expressions and non-retroactive behavior.
 
 ## Scheduling Due Feeds
@@ -100,7 +100,7 @@ The principal execution controls are:
 | `CRAWL_VERBOSE_LOGGING` | `false` | Include candidate, retry, and discovery diagnostics in crawl logs. |
 
 Additional response-size, parser, HTTP, per-origin, retry, and article-field
-limits are documented in [Configuration](configuration.md#feed-crawling-and-scheduling).
+limits are documented in [Configuration]({% link configuration.md %}#feed-crawling-and-scheduling).
 
 ### Overlap protection
 
@@ -174,7 +174,7 @@ inference processes:
 - `rssmonster-ai-worker` runs `server/src/workers/aiWorker.js` as one fork-mode
   instance and consumes `processing_jobs`;
 - `rssmonster-inference` runs `inference/src/index.js` as one fork-mode
-  instance; see [Inference](inference.md).
+  instance; see [Inference]({% link inference.md %}).
 
 From the repository root, start or reload all processes with the production
 environment:

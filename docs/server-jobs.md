@@ -31,7 +31,7 @@ a routine scheduler unless its description explicitly calls for that use.
 | --- | --- |
 | `npm start` | Start the Express application with `node bootstrap.js`. This is the normal server start command. |
 | `npm run start-server` | Alias for `npm start`; it starts the same `bootstrap.js` entry point. |
-| `npm run start:worker` | Start the long-running crawl worker directly. It runs an immediate crawl iteration and continues polling; see [Crawling](crawling.md). |
+| `npm run start:worker` | Start the long-running crawl worker directly. It runs an immediate crawl iteration and continues polling; see [Crawling]({% link crawling.md %}). |
 | `npm run start:ai-worker` | Start the long-running durable processing-job consumer used by PM2 and MySQL Compose. |
 | `npm run dev` | Start the Express server with Node's watch mode and restart it when server source files change. |
 | `npm run debug` | Start the same watched development server with the Node inspector enabled. |
@@ -71,7 +71,7 @@ feeds will be checked twice.
 | --- | --- |
 | `npm run semantic:repair` | Repair the recent semantic window for all users, or one user with `--userId=<id>`. It repairs Events and Topics and refreshes interest scores without rebuilding all history. |
 | `npm run semantic:all` | Run a full historical semantic rebuild for all users. Supports `--userId=<id>` and `--batchSize=<count>`. This is substantially heavier than a recent repair. |
-| `npm run semantic:model-rebuild` | Clear incompatible vectors and semantic state after changing embedding models, then rebuild vectors only for starred or clicked articles. Requires `--dry-run` or explicit `--confirm`; see [Model Usage](model-usage.md#reset-and-rebuild-an-existing-environment). |
+| `npm run semantic:model-rebuild` | Clear incompatible vectors and semantic state after changing embedding models, then rebuild vectors only for starred or clicked articles. Requires `--dry-run` or explicit `--confirm`; see [Model Usage]({% link model-usage.md %}#reset-and-rebuild-an-existing-environment). |
 | `npm run events` | Re-evaluate recent Event assignment independently of Topic construction. The default scope is `recent-repair`; pass `--scope=incremental` for only currently unassigned recent articles and optionally `--userId=<id>`. |
 | `npm run events:backfill` | Backfill missing Events from historical vectorized articles and intentionally skip Topic assignment. The package command accepts additional `--userId=<id>` or `--batchSize=<count>` arguments. |
 | `npm run topics` | Rebuild Topic assignments for all users. It defaults to `full-rebuild`; the script also accepts `--scope=recent-repair`, `--scope=incremental`, and `--userId=<id>`. |

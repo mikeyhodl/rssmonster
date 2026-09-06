@@ -32,7 +32,7 @@ application sees only the matching, higher-quality security articles instead
 of the entire source feed. The `quality` value is RSSMonster's normalized
 `0.0`–`1.0` article-quality score, which includes the advertising score; a
 higher advertising score means the article is less promotional. See
-[Scoring and Ranking](scoring.md) for the complete calculation.
+[Scoring and Ranking]({% link scoring.md %}) for the complete calculation.
 
 Other examples include:
 
@@ -111,8 +111,8 @@ article properties. They can also control ordering with tokens such as
 `sort:desc`, `sort:asc`, `sort:quality`, `sort:recommended`, and
 `sort:topStories`.
 
-See the [Search Guide](search.md) for the complete syntax and
-[Smart Folders](smart-folders.md) for examples of reusable article selections.
+See the [Search Guide]({% link search.md %}) for the complete syntax and
+[Smart Folders]({% link smart-folders.md %}) for examples of reusable article selections.
 
 ## Request-time generation
 

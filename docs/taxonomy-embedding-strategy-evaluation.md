@@ -1,6 +1,17 @@
+---
+layout: page
+title: Taxonomy Embedding Evaluation
+parent: How RSSMonster Works
+nav_order: 10
+---
+
 # Taxonomy Embedding Strategy Evaluation
 
 Date: 2026-08-21
+
+This is a dated experiment report, not an installation prerequisite. For current
+provider configuration and model changes, use [Model Usage]({% link model-usage.md %}) and
+[Article Embedding]({% link article-embedding.md %}).
 
 ## Recommendation
 

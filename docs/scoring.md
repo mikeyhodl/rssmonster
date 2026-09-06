@@ -42,7 +42,7 @@ articles?**
 It summarizes 30 days of article quality, supporting engagement, deterministic
 originality, and explicit negative feedback. It is user-specific and remains
 separate from factual verification, crawl health, and topic interest. See
-[FeedTrust](feedtrust.md) for the complete conceptual model.
+[FeedTrust]({% link feedtrust.md %}) for the complete conceptual model.
 
 ### Freshness
 
@@ -101,9 +101,6 @@ Quality = 0.70 × articleQuality + 0.30 × feedTrust
 
 The two inputs remain independently visible and conceptually distinct.
 
-`sort:trust` is retained as a legacy alias for `sort:quality`; it does not
-perform a pure FeedTrust-only sort.
-
 ### Recommended
 
 Recommended is personalized. Its bounded base score combines:
@@ -150,13 +147,10 @@ Recommended answers which articles are likely to matter to this user. Top
 Stories does not use Interest Islands or rule tags. A standalone article
 remains eligible and can receive only its freshness and Quality contributions.
 
-### Visible and legacy sorts
+### Supported sorts
 
 The visible toolbar order is **Newest, Oldest, Top Stories, Recommended,
-Quality**. `sort:attention` remains accepted in manually authored search and
-legacy Smart Folder expressions, but Most Engaged is no longer a toolbar or
-Smart Folder editor option. `sort:trust` remains an API/query compatibility
-alias for Quality.
+Quality**. These are the supported sorts for search and Smart Folder expressions.
 
 Recommended, Top Stories, and Quality are computed across the complete eligible
 candidate set before a result limit is applied. Equal scores fall back to
@@ -169,5 +163,5 @@ Ranking changes order. It does not make an otherwise ineligible article
 eligible, and a low score does not delete or unsubscribe a source. Smart Folder
 and search filters determine eligibility before runtime ranking is applied.
 
-See the [Search Guide](search.md) for the supported sort expressions and
-[Smart Folders](smart-folders.md) for reusable filtered views.
+See the [Search Guide]({% link search.md %}) for the supported sort expressions and
+[Smart Folders]({% link smart-folders.md %}) for reusable filtered views.

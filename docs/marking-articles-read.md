@@ -64,3 +64,14 @@ or below the current Reader selection.
 
 These explicit actions are useful when automatic scrolling does not match how
 you reviewed a collection.
+
+## Other unread preferences
+
+**Tune your unread selection** also controls whether to include developing-event
+coverage, prioritize high-trust coverage, and use the default unread view on
+startup. Disable **Use default view on startup** to use the last-used selection
+instead. Save changes to persist these preferences.
+
+Daily Briefing has its own unread-only and scroll-reading preferences; changing
+one collection's scroll option does not change the other's. See
+[Daily Briefing]({% link daily-briefing.md %}).
