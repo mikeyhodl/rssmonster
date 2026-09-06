@@ -189,7 +189,6 @@
   color: var(--text-muted);
   font-size: 12px;
   font-weight: 500;
-  transform: translateY(-1px);
 }
 
 .toolbar-filter-value {
@@ -197,7 +196,6 @@
   font-size: 14px;
   font-weight: 600;
   margin-left: 0;
-  transform: translateY(-1px);
 }
 
 .toolbar-filter-chevron {
