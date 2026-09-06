@@ -31,7 +31,7 @@
           {{ uiStore.chatAssistantOpen ? 'Close Chat' : 'Chat' }}
         </span>
       </button>
-      <div ref="searchContainer" class="toolbar-search-control">
+      <div ref="searchContainer" class="toolbar-search-control" @keydown.esc.stop="dismissSearch" @focusout="handleSearchFocusOut">
         <div class="toolbar-search" :class="{ 'toolbar-search-invalid': isSearchQueryInvalid, 'toolbar-search-open': isCompactSearchOpen }">
           <span class="toolbar-search-icon" aria-hidden="true">
             <svg viewBox="0 0 16 16" aria-hidden="true">
@@ -43,12 +43,25 @@
             type="text"
             v-model="searchQuery"
             @input="debounceSearchEvent"
-            @keydown.esc="closeCompactSearch"
+            @focus="isSearchDropdownOpen = true"
+            @click="isSearchDropdownOpen = true"
+            @keydown.enter.prevent="emitSearchEvent"
+            aria-label="Search articles"
+            :aria-expanded="isSearchDropdownOpen"
+            aria-controls="navbar-search-dropdown"
             :placeholder="searchPlaceholder"
             autocomplete="off"
             class="toolbar-search-input"
             :class="{ 'toolbar-search-input-invalid': isSearchQueryInvalid }"
             :title="searchQueryError"
+          />
+          <SearchDropdown
+            v-if="isSearchDropdownOpen"
+            id="navbar-search-dropdown"
+            :recent-searches="recentSearches"
+            @select="selectSearch"
+            @remove="removeSearch"
+            @clear="clearSearches"
           />
         </div>
         <button ref="searchButton" type="button" class="toolbar-search-button" title="Search" @click="toggleCompactSearch">
@@ -486,6 +499,7 @@
 }
 
 .toolbar-search {
+  position: relative;
   flex: 1;
   min-width: 0;
   box-sizing: border-box;
@@ -786,6 +800,8 @@ import { notifyActionError } from '../../services/actionNotifications.js';
 import { validateSearchQuery } from '../../services/queryValidation.js';
 import { getThemeMode, setThemeMode } from '../../services/theme.js';
 import AppDropdown from '../shared/AppDropdown.vue';
+import SearchDropdown from './SearchDropdown.vue';
+import { getRecentSearches, saveRecentSearches } from '../../services/recentSearches.js';
 
 const SEARCH_DEBOUNCE_DELAY = 300;
 
@@ -795,6 +811,7 @@ const Settings = defineAsyncComponent(() => import('../settings/Settings.vue'));
 export default {
   components: {
     AppDropdown,
+    SearchDropdown,
     Settings
   },
   // Exposes the toolbar-specific copy boundary without tracking every viewport resize.
@@ -811,6 +828,8 @@ export default {
     return {
       showSettingsModal: false,
       isCompactSearchOpen: false,
+      isSearchDropdownOpen: false,
+      recentSearches: getRecentSearches(),
       searchDebounceTimer: null,
       selectedThemeMode: getThemeMode(),
       statusOptions: ARTICLE_STATUS_OPTIONS,
@@ -824,6 +843,26 @@ export default {
     document.addEventListener('pointerdown', this.handleSearchOutsideClick);
   },
   methods: {
+    selectSearch(query) {
+      this.searchQuery = query;
+      this.focusSearchInput();
+      this.debounceSearchEvent();
+    },
+    removeSearch(query) {
+      this.recentSearches = saveRecentSearches(this.recentSearches.filter(item => item !== query));
+      this.$refs.searchInput.focus();
+    },
+    clearSearches() {
+      this.recentSearches = saveRecentSearches([]);
+      this.$refs.searchInput.focus();
+    },
+    dismissSearch() {
+      this.$refs.searchInput.focus();
+      this.closeCompactSearch();
+    },
+    handleSearchFocusOut(event) {
+      if (!this.$refs.searchContainer.contains(event.relatedTarget)) this.closeCompactSearch();
+    },
     // This function toggles the compact search field and focuses it when opening.
     toggleCompactSearch: function() {
       if (this.isCompactSearchOpen) {
@@ -836,10 +875,11 @@ export default {
     // This function closes the compact search field.
     closeCompactSearch: function() {
       this.isCompactSearchOpen = false;
+      this.isSearchDropdownOpen = false;
     },
     // This function closes compact search when a pointer press occurs outside its controls.
     handleSearchOutsideClick: function(event) {
-      if (!this.isCompactSearchOpen) return;
+      if (!this.isCompactSearchOpen && !this.isSearchDropdownOpen) return;
       if (this.$refs.searchContainer?.contains(event.target)) return;
       if (this.$refs.searchButton?.contains(event.target)) return;
       this.closeCompactSearch();
@@ -847,6 +887,7 @@ export default {
     // This function opens the compact search field and puts focus in it.
     focusSearchInput: function() {
       this.isCompactSearchOpen = true;
+      this.isSearchDropdownOpen = true;
       this.$nextTick(() => this.$refs.searchInput?.focus());
     },
     // This function delays search updates until typing pauses.
@@ -858,10 +899,12 @@ export default {
     },
     // This function updates the selected search query when it is valid.
     emitSearchEvent: function() {
+      clearTimeout(this.searchDebounceTimer);
       if (!(this.uiStore.searchQuery === undefined || this.uiStore.searchQuery === null)) {
         const { valid } = validateSearchQuery(this.uiStore.searchQuery);
         if (valid) {
           this.selectionStore.setSelectedSearch(this.uiStore.searchQuery);
+          this.recentSearches = saveRecentSearches([this.uiStore.searchQuery, ...this.recentSearches]);
         }
       }
     },
