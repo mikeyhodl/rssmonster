@@ -31,7 +31,7 @@ export const getInferenceCircuitConfig = (environment = process.env) => ({
 
 export class InferenceCircuitOpenError extends Error {
   constructor({ requestId, inferencePath, retryAfterMs, openedAt }) {
-    super(`Inference circuit is open; retry after ${retryAfterMs}ms`);
+    super('Inference circuit is open');
     this.name = 'InferenceCircuitOpenError';
     this.code = CIRCUIT_OPEN_CODE;
     this.requestId = requestId;

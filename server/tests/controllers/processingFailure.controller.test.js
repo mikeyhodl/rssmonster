@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { Sequelize } from 'sequelize';
 
 const mocked = vi.hoisted(() => ({
   count: vi.fn(),
@@ -85,6 +86,15 @@ describe('processing failure settings controller', () => {
       userId: 42,
       stage: 'feed_fetch',
       failureType: 'TIMEOUT'
+    });
+    expect(mocked.findAll.mock.calls[1][0]).toMatchObject({
+      order: [
+        [Sequelize.fn('COUNT', Sequelize.col('id')), 'DESC'],
+        [Sequelize.fn('MAX', Sequelize.col('occurredAt')), 'DESC'],
+        ['fingerprint', 'ASC']
+      ],
+      limit: 25,
+      offset: 0
     });
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({

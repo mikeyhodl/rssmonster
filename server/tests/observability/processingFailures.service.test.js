@@ -16,6 +16,7 @@ import {
   recordProcessingFailure,
   wasProcessingFailureRecorded
 } from '../../services/observability/processingFailures.js';
+import { InferenceCircuitOpenError } from '../../services/inference/inferenceCircuitBreaker.js';
 
 describe('processing failure observability', () => {
   beforeEach(() => {
@@ -74,6 +75,31 @@ describe('processing failure observability', () => {
 
     await recordProcessingFailure({ userId: 4, stage: 'embedding', error });
     expect(mocks.create).toHaveBeenCalledOnce();
+  });
+
+  it('groups open inference circuits while preserving each retry delay in the details', async () => {
+    const occurrences = [];
+    for (const retryAfterMs of [29630, 12345]) {
+      occurrences.push(await recordProcessingFailure({
+        userId: 4,
+        stage: 'embedding',
+        error: new InferenceCircuitOpenError({
+          requestId: `request-${retryAfterMs}`,
+          inferencePath: '/api/embeddings',
+          retryAfterMs,
+          openedAt: 10000
+        }),
+        context: { embeddingModel: 'test-model' }
+      }));
+    }
+
+    expect(occurrences[0].fingerprint).toBe(occurrences[1].fingerprint);
+    for (const [index, retryAfterMs] of [29630, 12345].entries()) {
+      expect(occurrences[index]).toMatchObject({
+        message: 'Inference circuit is open',
+        context: { embeddingModel: 'test-model', retryAfterMs }
+      });
+    }
   });
 
   it('generates the same fingerprint for messages that differ only by identifiers', () => {

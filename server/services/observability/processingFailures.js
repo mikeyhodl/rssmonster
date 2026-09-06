@@ -157,7 +157,12 @@ export const recordProcessingFailure = async ({
     articleId: articleId ? Number(articleId) : null,
     retryable: retryable ?? ['TIMEOUT', 'RATE_LIMITED', 'UNAVAILABLE', 'LEASE_LOST'].includes(resolvedType),
     attemptNumber: Number.isSafeInteger(Number(attemptNumber)) ? Number(attemptNumber) : null,
-    context: sanitizeContext(context),
+    context: sanitizeContext(
+      error?.code === 'INFERENCE_CIRCUIT_OPEN' &&
+      Number.isSafeInteger(error.retryAfterMs) && error.retryAfterMs >= 0
+        ? { ...context, retryAfterMs: error.retryAfterMs }
+        : context
+    ),
     occurredAt
   };
   values.fingerprint = processingFailureFingerprint(values);

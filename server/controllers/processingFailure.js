@@ -121,7 +121,11 @@ export const getProcessingFailureGroups = async (req, res, _next) => {
         ],
         where: query.where,
         group: ['fingerprint'],
-        order: [[Sequelize.fn('MAX', Sequelize.col('occurredAt')), 'DESC']],
+        order: [
+          [Sequelize.fn('COUNT', Sequelize.col('id')), 'DESC'],
+          [Sequelize.fn('MAX', Sequelize.col('occurredAt')), 'DESC'],
+          ['fingerprint', 'ASC']
+        ],
         limit: query.limit,
         offset: query.offset,
         raw: true
