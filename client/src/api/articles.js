@@ -7,6 +7,7 @@ import {
 // Canonicalizes legacy sort aliases before article collection requests reach the API.
 const normalizeArticleParams = params => {
   const normalized = { ...params };
+  if (normalized.smartFolderId != null) normalized.persistSettings = false;
   if (Object.hasOwn(normalized, 'sort')) {
     normalized.sort = normalizeSortValueForApi(normalized.sort);
   }

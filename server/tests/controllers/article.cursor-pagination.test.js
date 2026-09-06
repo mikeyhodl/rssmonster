@@ -391,6 +391,22 @@ describe('article cursor pagination', () => {
     expect(count.body).toEqual({ newerArticleCount: 1 });
   });
 
+  it('honors expression grouping with event filters without saving folder presentation', async () => {
+    const { user, feed } = await createUserFeed('folder-expression');
+    await Setting.create({ userId: user.id, sort: 'recommended', grouping: 'topic' });
+    const representative = await createArticle(user, feed, 'Representative', new Date());
+    const event = await Event.create({ userId: user.id, representativeArticleId: representative.id });
+    await representative.update({ eventId: event.id });
+    await createArticle(user, feed, 'Other event member', new Date(), { eventId: event.id });
+    const response = await request(app).get('/api/articles').query({
+      feedId: feed.id, search: 'event:true sort:asc grouping:event', sort: 'desc', grouping: 'none', persistSettings: false
+    }).set('Authorization', authHeaderFor(user));
+    expect(response.status).toBe(200);
+    expect(response.body.itemIds).toEqual([representative.id]);
+    expect(await Setting.findOne({ where: { userId: user.id }, raw: true }))
+      .toMatchObject({ sort: 'recommended', grouping: 'topic' });
+  });
+
   it('counts arrivals only inside the current query limit', async () => {
     const { user, feed } = await createUserFeed('limited-arrivals');
     const initial = await createArticle(user, feed, 'First', new Date('2026-08-10T12:00:00Z'));

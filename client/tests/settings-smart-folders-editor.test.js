@@ -68,6 +68,23 @@ beforeEach(() => {
 });
 
 describe('SettingsSmartFolders coordinator', () => {
+  it.each([false, true])('reconciles the active folder after saving, deleted: %s', async deleted => {
+    const context = createContext();
+    vi.spyOn(context.overviewStore, 'fetchTopTags').mockResolvedValue();
+    context.loaded = true;
+    context.smartFolders = [{ id: 1, name: 'Science', query: 'sort:asc grouping:topic' }];
+    context.selectionStore.setCurrentSelection({ sort: 'recommended', grouping: 'event' });
+    context.selectionStore.setSmartFolder(context.smartFolders[0]);
+    const saved = { id: 9, name: 'Science', query: 'sort:quality grouping:none' };
+    if (deleted) context.smartFolders = [];
+    saveSmartFolders.mockResolvedValue({ data: { smartFolders: deleted ? [] : [saved] } });
+
+    await context.save();
+
+    expect(context.selectionStore.currentSelection).toMatchObject(deleted
+      ? { smartFolderId: null, sort: 'recommended', grouping: 'event' }
+      : { smartFolderId: 9, sort: 'quality', grouping: 'none' });
+  });
   it('loads an isolated Smart Folder collection from authoritative store state', async () => {
     const context = createContext();
 
@@ -148,7 +165,7 @@ describe('SettingsSmartFolders coordinator', () => {
     expect(context.smartFolders.at(-1)).toMatchObject({
       localId: 'local-1234',
       name: 'New Smart Folder',
-      query: 'sort:recommended limit:50',
+      query: 'sort:recommended grouping:none limit:50',
       markAsReadOnScroll: false
     });
     expect(context.selectedSmartFolderId).toBe('local-1234');

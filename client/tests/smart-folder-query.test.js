@@ -12,6 +12,12 @@ import {
 } from '../src/components/settings/smartFolders/smartFolderQuery.js';
 
 describe('Smart Folder query domain', () => {
+  it('round-trips an explicit grouping independently of event eligibility', () => {
+    const query = 'event:true sort:recommended grouping:event limit:50';
+    const config = parseSmartFolderQuery(query);
+    expect(config.grouping).toBe('event');
+    expect(buildSmartFolderQuery(config)).toBe(query);
+  });
   it.each([
     ['security', 'security'],
     [' security, ai ', 'security'],
@@ -110,7 +116,7 @@ describe('Smart Folder query domain', () => {
     const config = createEmptySmartFolderConfig();
     config.date.preset = preset;
 
-    expect(buildSmartFolderQuery(config)).toBe(`${expectedToken} limit:50`);
+    expect(buildSmartFolderQuery(config)).toBe(`${expectedToken} sort:desc grouping:none limit:50`);
   });
 
   it('generates filters in the established order with the established aliases', () => {
@@ -152,14 +158,14 @@ describe('Smart Folder query domain', () => {
       'unread:true favorite:true clicked:true hot:true firstSeen:3d '
       + 'tag:security title:"Daily Brief" author:"Jane Doe" language:en '
       + '"zero trust" quality:>=0.70 freshness:>=0.50 event:true '
-      + 'eventCount:>=3 sort:desc limit:40'
+      + 'eventCount:>=3 sort:desc grouping:none limit:40'
     );
   });
 
   it('round-trips a representable query through the editor configuration', () => {
     const query = 'unread:true favorite:true firstSeen:8h tag:security '
       + 'title:"Daily Brief" author:"Jane Doe" language:en "zero trust" '
-      + 'quality:>=0.70 freshness:>=0.50 event:true sort:recommended limit:40';
+      + 'quality:>=0.70 freshness:>=0.50 event:true sort:recommended grouping:none limit:40';
 
     expect(buildSmartFolderQuery(parseSmartFolderQuery(query))).toBe(query);
   });
@@ -168,7 +174,7 @@ describe('Smart Folder query domain', () => {
     const config = parseSmartFolderQuery('unread:true sort:trust limit:50');
 
     expect(config.sort.field).toBe('quality');
-    expect(buildSmartFolderQuery(config)).toBe('unread:true sort:quality limit:50');
+    expect(buildSmartFolderQuery(config)).toBe('unread:true sort:quality grouping:none limit:50');
   });
 
   it.each([
@@ -179,13 +185,13 @@ describe('Smart Folder query domain', () => {
     const query = `unread:true sort:${storedSort} limit:50`;
 
     expect(buildSmartFolderQuery(parseSmartFolderQuery(query)))
-      .toBe(`unread:true sort:${expectedSort} limit:50`);
+      .toBe(`unread:true sort:${expectedSort} grouping:none limit:50`);
   });
 
   it.each(['developing:true', 'developing:false'])(
     'round-trips the developing story filter %s',
     developingFilter => {
-      const query = `${developingFilter} limit:50`;
+      const query = `${developingFilter} sort:desc grouping:${developingFilter === 'developing:true' ? 'event' : 'none'} limit:50`;
 
       expect(buildSmartFolderQuery(parseSmartFolderQuery(query))).toBe(query);
     }

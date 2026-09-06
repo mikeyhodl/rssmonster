@@ -54,7 +54,6 @@ describe('SettingsSmartFolders AI options', () => {
     expect(wrapper.text()).not.toContain('Quality & Scores');
     expect(wrapper.text()).not.toContain('Events & Clusters');
     expect(optionLabels).toEqual([
-      'None',
       'Published date (newest)',
       'Published date (oldest)'
     ]);
@@ -69,7 +68,6 @@ describe('SettingsSmartFolders AI options', () => {
     expect(wrapper.text()).toContain('Quality & Scores');
     expect(wrapper.text()).toContain('Events & Clusters');
     expect(optionLabels).toEqual([
-      'None',
       'Published date (newest)',
       'Published date (oldest)',
       'Top Stories',
@@ -84,7 +82,7 @@ describe('SettingsSmartFolders AI options', () => {
 
     await wrapper.get('.smart-folders-list-header .settings-add-button').trigger('click');
 
-    expect(wrapper.vm.smartFolders.at(-1).query).toBe('limit:50');
-    expect(wrapper.findComponent(SmartFolderEditor).vm.generatedSmartFolderQuery).toBe('limit:50');
+    expect(wrapper.vm.smartFolders.at(-1).query).toBe('sort:desc grouping:none limit:50');
+    expect(wrapper.findComponent(SmartFolderEditor).vm.generatedSmartFolderQuery).toBe('sort:desc grouping:none limit:50');
   });
 });

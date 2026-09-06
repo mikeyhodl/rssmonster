@@ -3,6 +3,7 @@ import {
   fetchDevelopingStoryArticles,
   fetchStorySourceArticles,
   fetchNewerArticleCount,
+  fetchArticleIds,
   markAllAsRead,
   markArticlesAsRead
 } from '../src/api/articles.js';
@@ -14,6 +15,12 @@ vi.mock('../src/api/client', () => ({
 }));
 
 describe('articles API', () => {
+  it('does not persist a Smart Folder presentation as ordinary reading preferences', () => {
+    fetchArticleIds({ smartFolderId: 4, sort: 'asc', grouping: 'topic' });
+    expect(get).toHaveBeenCalledWith('/articles', { params: {
+      smartFolderId: 4, sort: 'asc', grouping: 'topic', persistSettings: false, includeFirstPage: true
+    } });
+  });
   beforeEach(() => {
     get.mockReset();
     post.mockReset();

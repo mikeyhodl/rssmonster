@@ -29,6 +29,7 @@ const KNOWN_FILTER_KEYS = new Set([
   'author',
   'language',
   'sort',
+  'grouping',
   'quality',
   'freshness',
   'event',
@@ -388,6 +389,12 @@ export const parseArticleQuery = ({ search = '', defaultSort = 'desc', strict = 
       continue;
     }
 
+    const groupingMatch = cleaned.match(/^grouping:(none|event|topic)$/i);
+    if (groupingMatch) {
+      filters.grouping = groupingMatch[1].toLowerCase();
+      continue;
+    }
+
     // Derives the sort match through match while parsing article query.
     const sortMatch = cleaned.match(/^sort:\s*(desc|asc|trust|topStories|recommended|quality|attention)$/i);
     // Handles the case where sort match is available.
@@ -553,6 +560,20 @@ export const parseArticleQuery = ({ search = '', defaultSort = 'desc', strict = 
     limit,
     hasSearchIntent
   };
+};
+
+// Completes legacy saved expressions while retaining their original filters and explicit choices.
+export const normalizeSmartFolderExpression = expression => {
+  const query = String(expression ?? '').trim();
+  const parsed = parseArticleQuery({ search: query });
+  const tokens = tokenizeSearch(query).map(trimTrailingPunctuation);
+  const parts = [query];
+  if (!tokens.some(token => /^sort:(desc|asc|trust|topStories|recommended|quality|attention)$/i.test(token))) {
+    parts.push(`sort:${parsed.sort}`);
+  }
+  const grouping = parsed.filters.developing === true ? 'event' : parsed.filters.grouping ?? 'none';
+  if (parsed.filters.grouping !== grouping) parts.push(`grouping:${grouping}`);
+  return parts.filter(Boolean).join(' ');
 };
 
 // Validates a persisted expression through the same parser used to execute article searches.

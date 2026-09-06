@@ -149,16 +149,21 @@ describe('toolbar Daily Briefing status', () => {
     expect(wrapper.emitted('forceReload')).toBeUndefined();
   });
 
-  it('keeps desktop sort and grouping visible but disabled for Briefing', async () => {
+  it.each(['briefing', 'folder'])('locks desktop presentation for %s', async owner => {
     const store = createStore(true);
-    store.selectionStore.currentSelection.status = 'briefing';
+    if (owner === 'briefing') store.selectionStore.currentSelection.status = 'briefing';
+    else store.selectionStore.$patch({ currentSelection: { smartFolderId: 3, sort: 'recommended', grouping: 'event' } });
     const wrapper = mount(DesktopToolbar);
     const sortButton = desktopSortDropdown(wrapper).get('.toolbar-filter-button');
     const groupingButton = desktopGroupingDropdown(wrapper).get('.toolbar-filter-button');
 
     expect(sortButton.element.disabled).toBe(true);
     expect(groupingButton.element.disabled).toBe(true);
-    expect(sortButton.attributes('title')).toContain('Briefing settings');
+    expect(sortButton.attributes('title')).toContain(owner === 'briefing' ? 'Briefing settings' : 'Smart Folder');
+    if (owner === 'folder') {
+      expect(sortButton.text()).toContain('Recommended');
+      expect(groupingButton.text()).toContain('Events');
+    }
 
     wrapper.vm.sortClicked('quality');
     wrapper.vm.setGrouping('topic');
@@ -167,9 +172,10 @@ describe('toolbar Daily Briefing status', () => {
     expect(store.selectionStore.setGrouping).not.toHaveBeenCalled();
   });
 
-  it('keeps mobile sort and grouping options visible but disabled for Briefing', async () => {
+  it.each(['briefing', 'folder'])('locks mobile presentation for %s', async owner => {
     const store = createStore(true);
-    store.selectionStore.currentSelection.status = 'briefing';
+    if (owner === 'briefing') store.selectionStore.currentSelection.status = 'briefing';
+    else store.selectionStore.$patch({ currentSelection: { smartFolderId: 3, sort: 'quality', grouping: 'topic' } });
     const wrapper = mount(MobileToolbar);
     const sortOption = wrapper.findAll('#readModeDropdown-menu [role="menuitem"]')
       .find(option => option.text() === 'Quality');

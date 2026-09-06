@@ -5,6 +5,7 @@ import { Op, fn, col, literal } from 'sequelize';
 import { searchArticles } from "../services/articleSearch/articleSearch.service.js";
 import {
   ArticleExpressionValidationError,
+  normalizeSmartFolderExpression,
   validateArticleExpression
 } from '../services/articleSearch/articleQueryParser.service.js';
 import { fetchFeedIds } from '../services/articleSearch/articleSearchDataAccess.service.js';
@@ -55,7 +56,7 @@ const getSmartFolderCountsForUser = async userId => {
     try {
       const result = await searchArticles({
         userId,
-        search: folder.query,
+        search: normalizeSmartFolderExpression(folder.query),
         minAdvertisementScore,
         minSentimentScore,
         minQualityScore,
@@ -105,6 +106,9 @@ const getSmartFolders = async (req, res, next) => {
       }
     }
 
+    for (const folder of smartFolders) {
+      folder.dataValues.query = normalizeSmartFolderExpression(folder.query);
+    }
     res.status(200).json({ total: smartFolders.length, smartFolders });
   } catch (err) {
     next(err);
@@ -165,6 +169,8 @@ const postSmartFolder = async (req, res, next) => {
 
       try {
         const parsedExpression = validateArticleExpression(smartFolder.query);
+        smartFolder.query = normalizeSmartFolderExpression(smartFolder.query);
+        validateArticleExpression(smartFolder.query);
         if (
           smartFolder.markAsReadOnScroll &&
           parsedExpression.filters.unread !== true

@@ -299,7 +299,7 @@ describe('Sidebar navigation and action coverage', () => {
     expect(markAllAsRead).toHaveBeenCalledWith(selection);
     expect(selection).toMatchObject({
       smartFolderId: 20,
-      search: 'unread:true title:"Windows 11" sort:recommended limit:50 limit:50'
+      search: 'unread:true title:"Windows 11" sort:recommended limit:50 grouping:none'
     });
     expect(stores.selectionStore.effectiveMarkAsReadOnScroll).toBe(true);
     expect(fetchSmartFolderCounts).toHaveBeenCalledOnce();

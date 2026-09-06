@@ -338,14 +338,21 @@ statuses unless an explicit state filter is present. Special status views such a
 favorite, hot, and clicked remain active unless explicitly overridden by their
 corresponding filter.
 
-Grouping changes which representative articles are eligible when no explicit
-`event:true` or `event:false` filter is present:
+The expression token `grouping:none|event|topic` overrides the API grouping
+parameter. Smart Folder expressions contain explicit sort and grouping tokens;
+legacy folders acquire Newest/None defaults when loaded or saved, with developing
+stories retaining required event grouping. Folder list requests use
+`persistSettings=false` to preserve ordinary reading preferences.
+
+Grouping changes which representative articles are eligible:
 
 - `grouping=event` returns each event's representative article plus articles not
   assigned to an event.
 - `grouping=topic` returns the representative article of the strongest event for
   each topic.
-- An explicit `event:` filter disables those grouping representative predicates.
+- An explicit `event:` filter disables implicit API grouping predicates, but an
+  explicit `grouping:` token applies representative grouping alongside event
+  eligibility filters.
 
 `hot:true` and the hot status view retain the selected feed/category scope. With
 the all-feeds selection they search the user's complete library; with a category

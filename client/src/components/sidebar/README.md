@@ -26,7 +26,7 @@ These actions operate independently of scrolling and remain part of the sidebar'
 
 Smart folders are saved query-based collections. The section appears only when at least one smart folder exists.
 
-Selecting a smart folder replaces category, feed, and tag filtering with the folder's query. Smart folders open as an unread, newest-first collection. Selecting a regular article-status filter exits the smart-folder context.
+Selecting a smart folder replaces category, feed, and tag filtering with the folder's query. The expression owns sorting and grouping, and those toolbar controls remain disabled while the folder is active. Older expressions without presentation tokens use Newest and None. Leaving the folder restores the user's ordinary presentation preferences.
 
 Smart-folder counts are fetched snapshots. They describe the result size when the smart-folder data was loaded and do not change merely because the user scrolls, opens an article, or moves between sidebar selections. They change when smart-folder data and its counts are explicitly refreshed, such as after smart-folder management or another relevant reload.
 

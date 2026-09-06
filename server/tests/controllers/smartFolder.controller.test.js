@@ -88,7 +88,7 @@ describe('smartFolder controller', () => {
       });
       mocked.feedFindAll.mockResolvedValue([{ id: 8 }, { id: 13 }]);
       mocked.searchArticles.mockImplementation(async ({ search }) => ({
-        articleCount: search === 'sort:recommended' ? 4 : 0
+        articleCount: search === 'sort:recommended grouping:none' ? 4 : 0
       }));
 
       const req = { userData: { userId: 42 } };
@@ -105,7 +105,7 @@ describe('smartFolder controller', () => {
 
       expect(mocked.searchArticles).toHaveBeenCalledWith({
         userId: 42,
-        search: 'sort:recommended',
+        search: 'sort:recommended grouping:none',
         minAdvertisementScore: 0,
         minSentimentScore: 0,
         minQualityScore: 0,
@@ -117,7 +117,7 @@ describe('smartFolder controller', () => {
 
       expect(mocked.searchArticles).toHaveBeenCalledWith({
         userId: 42,
-        search: 'unread:true',
+        search: 'unread:true sort:desc grouping:none',
         minAdvertisementScore: 0,
         minSentimentScore: 0,
         minQualityScore: 0,
@@ -200,7 +200,7 @@ describe('smartFolder controller', () => {
       mocked.settingFindOne.mockResolvedValue(null);
       mocked.feedFindAll.mockResolvedValue([{ id: 8 }]);
       mocked.searchArticles.mockImplementation(({ search }) => (
-        search === 'title:broken'
+        search.startsWith('title:broken')
           ? Promise.reject(error)
           : Promise.resolve({ articleCount: 6 })
       ));
@@ -324,14 +324,14 @@ describe('smartFolder controller', () => {
         {
           userId: 42,
           name: 'Top Stories',
-          query: 'event:true sort:recommended',
+          query: 'event:true sort:recommended grouping:none',
           limitCount: 30,
           markAsReadOnScroll: false
         },
         {
           userId: 42,
           name: '',
-          query: 'unread:true',
+          query: 'unread:true sort:desc grouping:none',
           limitCount: 50,
           markAsReadOnScroll: true
         }
@@ -344,14 +344,14 @@ describe('smartFolder controller', () => {
           {
             userId: 42,
             name: 'Top Stories',
-            query: 'event:true sort:recommended',
+            query: 'event:true sort:recommended grouping:none',
             limitCount: 30,
             markAsReadOnScroll: false
           },
           {
             userId: 42,
             name: '',
-            query: 'unread:true',
+            query: 'unread:true sort:desc grouping:none',
             limitCount: 50,
             markAsReadOnScroll: true
           }

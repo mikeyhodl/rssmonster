@@ -255,7 +255,7 @@ export const searchArticles = async ({
       || briefingShowOnlyDevelopingEventArticles;
     const effectiveGrouping = status === 'briefing' || requiresDevelopingEventSelection
       ? 'event'
-      : grouping;
+      : filters.grouping ?? grouping;
     const effectiveIncludeDevelopingEvents = requiresDevelopingEventSelection
       ? true
       : includeDevelopingEvents;
@@ -405,6 +405,7 @@ export const searchArticles = async ({
       briefingShowOnlyDevelopingEventArticles,
       includeDevelopingEvents: effectiveIncludeDevelopingEvents,
       grouping: effectiveGrouping,
+      groupingExplicit: filters.grouping != null,
       eventCountFilter,
       firstSeenAgeFilter,
       authorFilter,

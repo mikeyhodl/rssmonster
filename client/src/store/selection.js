@@ -3,6 +3,7 @@ import { fetchSettings as fetchSettingsAPI } from '../api/settings';
 import { useOverviewStore } from './overview.js';
 import { normalizeResourceError } from './resourceState.js';
 import { useUiStore } from './ui.js';
+import { completeSmartFolderQuery, detachSmartFolderQuery, smartFolderPresentation } from '../services/smartFolderPresentation.js';
 
 const DEFAULT_BRIEFING_SELECTION_PERIOD = '7d';
 // This selection subset defines the canonical unfiltered article collection.
@@ -125,6 +126,7 @@ const supportedSelection = selection => Object.fromEntries(
 const initialSelectionState = () => ({
   currentSelection: defaultSelection(),
   activeSmartFolderMarkAsReadOnScroll: false,
+  ordinaryPresentation: null,
   briefingSelectionPeriod: DEFAULT_BRIEFING_SELECTION_PERIOD,
   briefingIncludeOnlyUnreadArticles: false,
   briefingMarkAsReadOnScroll: false,
@@ -185,7 +187,11 @@ export const useSelectionStore = defineStore('selection', {
         if (requestId !== this.settingsRequestId) return false;
 
         useUiStore().setThemeMode(data.themeMode);
-        this.setCurrentSelection(data);
+        this.setCurrentSelection(this.currentSelection.smartFolderId !== null ? {
+          AIEnabled: data.AIEnabled,
+          AssistantEnabled: data.AssistantEnabled,
+          markAsReadOnScroll: data.markAsReadOnScroll
+        } : data);
         this.settingsStatus = 'success';
         return true;
       } catch (error) {
@@ -205,7 +211,7 @@ export const useSelectionStore = defineStore('selection', {
       const previousGrouping = previous.grouping;
       const previousStatus = previous.status;
       const previousIncludeDevelopingEvents = Boolean(previous.includeDevelopingEvents);
-      const supported = supportedSelection(selection);
+      const supported = supportedSelection(this.restoreSmartFolderPresentation(selection));
       const includeDevelopingEvents = supported.includeDevelopingEvents != null
         ? Boolean(supported.includeDevelopingEvents)
         : Boolean(previous.includeDevelopingEvents);
@@ -238,6 +244,7 @@ export const useSelectionStore = defineStore('selection', {
 
     // This action applies selection and related UI changes as one coherent transition.
     applySelection(selection, { closeChat = true } = {}) {
+      selection = this.restoreSmartFolderPresentation(selection);
       const previousStatus = this.currentSelection.status;
       this.$patch({
         currentSelection: {
@@ -249,6 +256,15 @@ export const useSelectionStore = defineStore('selection', {
       if (this.currentSelection.status !== previousStatus) {
         void useOverviewStore().fetchTopTags();
       }
+    },
+
+    // Leaving a saved expression restores the ordinary presentation captured before entry.
+    restoreSmartFolderPresentation(selection) {
+      if (this.currentSelection.smartFolderId === null || selection.smartFolderId !== null) return selection;
+      const restored = { ...this.ordinaryPresentation, ...selection };
+      this.ordinaryPresentation = null;
+      this.activeSmartFolderMarkAsReadOnScroll = false;
+      return restored;
     },
 
     // This action selects an article status and constructs an active Briefing query when required.
@@ -379,15 +395,20 @@ export const useSelectionStore = defineStore('selection', {
 
     // This action selects a free-form search and clears the competing tag filter.
     setSelectedSearch(search) {
+      const detached = this.currentSelection.smartFolderId !== null
+        ? detachSmartFolderQuery(search, this.currentSelection.search)
+        : { search };
       this.applySelection({
-        search,
+        ...detached,
         tag: null,
+        smartFolderId: null,
         ...developingSelection(search)
       });
     },
 
     // This action normalizes explicit sorting and removes embedded query sorting.
     setSelectedSort(sort) {
+      if (this.currentSelection.smartFolderId !== null) return;
       this.applySelection({
         sort: normalizeSort(sort),
         search: removeSortTokens(this.currentSelection.search)
@@ -407,10 +428,11 @@ export const useSelectionStore = defineStore('selection', {
 
     // This action converts a smart folder into the existing article selection contract.
     setSmartFolder(smartFolder) {
-      const search = smartFolder
-        ? smartFolder.query +
-          (smartFolder.limitCount ? ` limit:${smartFolder.limitCount}` : '')
-        : null;
+      if (smartFolder && this.currentSelection.smartFolderId === null) {
+        const { sort, grouping, includeDevelopingEvents } = this.currentSelection;
+        this.ordinaryPresentation = { sort, grouping, includeDevelopingEvents };
+      }
+      const search = smartFolder ? completeSmartFolderQuery(smartFolder.query, smartFolder.limitCount) : null;
       this.activeSmartFolderMarkAsReadOnScroll = Boolean(
         smartFolder?.markAsReadOnScroll
       );
@@ -419,13 +441,10 @@ export const useSelectionStore = defineStore('selection', {
         categoryId: '%',
         feedId: '%',
         status: 'unread',
-        sort: 'desc',
-        grouping: 'none',
-        includeDevelopingEvents: false,
         tag: null,
         smartFolderId: smartFolder?.id ?? null,
         search,
-        ...developingSelection(search)
+        ...(smartFolder ? smartFolderPresentation(search) : {})
       });
     },
 
@@ -451,6 +470,7 @@ export const useSelectionStore = defineStore('selection', {
 
     // This action normalizes grouping and refreshes its dependent overview and tag resources.
     setGrouping(value) {
+      if (this.currentSelection.smartFolderId !== null) return;
       const grouping = normalizeGrouping(value);
       const groupingChanged = grouping !== this.currentSelection.grouping;
       this.currentSelection.grouping = grouping;

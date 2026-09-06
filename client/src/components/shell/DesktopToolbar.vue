@@ -1004,10 +1004,11 @@ export default {
     },
     // This function disables presentation controls whose values are owned by Briefing settings.
     briefingPresentationControlsDisabled() {
-      return this.currentSelection.status === 'briefing';
+      return this.currentSelection.status === 'briefing' || this.currentSelection.smartFolderId != null;
     },
     // This function explains why Briefing presentation controls cannot be changed here.
     briefingPresentationDisabledTitle() {
+      if (this.currentSelection.smartFolderId != null) return 'Sorting and grouping are managed by this Smart Folder.';
       return 'Briefing sorting and grouping are managed in Briefing settings.';
     },
     // This function builds the configured view, show, and sort dropdowns.
@@ -1042,7 +1043,7 @@ export default {
           id: 'sortDropdown',
           type: 'sort',
           label: 'Sort',
-          selectedLabel: selectedSortOption ? selectedSortOption.label : '',
+          selectedLabel: selectedSortOption ? selectedSortOption.label : this.selectedSort === 'attention' ? 'Attention' : '',
           selectedValue: this.selectedSort,
           options: visibleOptions(this.sortOptions),
           disabled: this.briefingPresentationControlsDisabled

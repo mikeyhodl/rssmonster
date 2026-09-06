@@ -49,6 +49,7 @@ describe('Sidebar manager', () => {
 		expect(store.currentSelection.grouping).toBe('event');
 		expect(store.currentSelection.includeDevelopingEvents).toBe(true);
 
+		store.setSmartFolder(null);
 		store.setCurrentSelection({ grouping: 'none', includeDevelopingEvents: false });
 		store.setSelectedSearch('developing:true developing:false');
 

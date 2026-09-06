@@ -90,12 +90,14 @@ Navigation transitions update all related fields together so watchers never obse
 | Select a category | Keeps status, sort, grouping, and view; selects all feeds in that category; clears tag, query, and Smart Folder |
 | Select a feed | Keeps status, sort, grouping, and view; selects its parent category; clears tag, query, and Smart Folder |
 | Select a tag | Keeps status, sort, grouping, and view; returns to all categories and feeds; clears query and Smart Folder |
-| Enter a free-form search | Keeps existing navigation scope and status; clears the tag because tag and free-form query are competing text filters |
-| Select a Smart Folder | Returns to all categories and feeds, forces Unread and Newest, clears tag, and applies the saved query plus its optional result limit |
-| Clear a Smart Folder through Smart Folder navigation | Returns to the same all-category, all-feed, Unread, Newest baseline with no saved query |
+| Enter a free-form search | Clears the tag and exits any Smart Folder; restores ordinary presentation, removing inherited folder presentation tokens unless explicitly changed in the new search |
+| Select a Smart Folder | Captures ordinary presentation on first entry; returns to all categories and feeds, uses Unread with expression overrides, clears tag, and applies explicit expression sorting/grouping and its result limit |
+| Clear a Smart Folder through Smart Folder navigation | Returns to all categories and feeds with Unread and no saved query; restores ordinary sort, grouping, and developing-event preference |
 | Change explicit sort | Normalizes unsupported values to Newest and removes any embedded sort instruction from the query |
 | Change view mode | Changes presentation without changing article membership |
 | Change grouping | Restricts grouping to none, event, or topic; invalidates any older tag request and refreshes overview data |
+
+Leaving a Smart Folder through status, category, feed, tag, filter reset, or manual search restores the ordinary presentation captured before entry. Switching between folders retains that original snapshot. Folder article requests disable settings persistence, and settings reloads preserve the active expression.
 
 Most selection changes close the assistant because the article collection and assistant are alternative content contexts. Callers should not manually reproduce this side effect.
 

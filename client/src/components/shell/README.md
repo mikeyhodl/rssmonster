@@ -94,6 +94,8 @@ Selecting a different status changes the active collection. Selecting the alread
 
 Category, feed, tag, and smart-folder scope can coexist with status where allowed by the shared selection rules. The shell must use the store's selection contracts so incompatible filters are cleared together and the article list never receives a partially updated selection.
 
+Active Smart Folders own sorting and grouping through their expressions. Both toolbars display the resolved values and disable changes with a Smart Folder explanation; other reading controls remain available. Editing the search exits the saved-folder context.
+
 Sorting is selection state, not merely local toolbar state. Changing sort also reconciles any equivalent sort instruction embedded in the search query. Grouping changes can affect overview structure and counts, so they trigger the wider grouping refresh behavior.
 
 ## Desktop behavior

@@ -564,7 +564,7 @@ export default {
             const smartFolder = {
                 localId: `local-${Date.now()}`,
                 name: 'New Smart Folder',
-                query: this.aiEnabled ? 'sort:recommended limit:50' : 'limit:50',
+                query: this.aiEnabled ? 'sort:recommended grouping:none limit:50' : 'sort:desc grouping:none limit:50',
                 limitCount: 50,
                 markAsReadOnScroll: false
             };
@@ -660,7 +660,12 @@ export default {
                         markAsReadOnScroll:
                             effectiveSmartFolderMarkAsReadOnScroll(smartFolder)
                     }));
-                await saveSmartFolders(filteredSmartFolders);
+                const activeFolderId = this.selectionStore.currentSelection.smartFolderId;
+                const activeFolderIndex = filteredSmartFolders.findIndex(folder => folder.id === activeFolderId);
+                const response = await saveSmartFolders(filteredSmartFolders);
+                if (activeFolderId != null && this.selectionStore.currentSelection.smartFolderId === activeFolderId) {
+                    this.selectionStore.setSmartFolder(response.data.smartFolders[activeFolderIndex] ?? null);
+                }
 
                 await this.overviewStore.fetchSmartFolders();
 

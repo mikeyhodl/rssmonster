@@ -59,6 +59,7 @@ export const buildArticleSearchQuery = ({
   briefingShowOnlyDevelopingEventArticles,
   includeDevelopingEvents = false,
   grouping,
+  groupingExplicit = false,
   eventCountFilter,
   firstSeenAgeFilter,
   authorFilter,
@@ -296,7 +297,7 @@ export const buildArticleSearchQuery = ({
   }
 
   // Handles the case where event is value and grouping is event.
-  if (event === null && grouping === 'event') {
+  if ((event === null || groupingExplicit) && grouping === 'event') {
     // Selects the selected event article column based on whether include developing events is available.
     const selectedEventArticleColumn = includeDevelopingEvents
       ? 'COALESCE(grouped_event.developingArticleId, grouped_event.representativeArticleId)'
@@ -323,7 +324,7 @@ export const buildArticleSearchQuery = ({
   }
 
   // Handles the case where event is value and grouping is topic.
-  if (event === null && grouping === 'topic') {
+  if ((event === null || groupingExplicit) && grouping === 'topic') {
     appendAndCondition(articleQuery.where, {
       id: {
         [Op.in]: Article.sequelize.literal(`(

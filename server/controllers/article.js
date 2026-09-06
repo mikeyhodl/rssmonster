@@ -355,7 +355,7 @@ export const getArticles = async (req, res) => {
       viewMode: req.query.viewMode,
       grouping: req.query.grouping || 'none',
       includeDevelopingEvents: req.query.includeDevelopingEvents === 'true',
-      persistSettings: newerThanArticleId === null,
+      persistSettings: newerThanArticleId === null && req.query.persistSettings !== 'false',
       countOnly: newerThanArticleId !== null,
       unreadOnly: newerThanArticleId !== null,
       includeSnapshot: newerThanArticleId === null,

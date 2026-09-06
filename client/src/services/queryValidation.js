@@ -25,6 +25,7 @@ export const expressionPatterns = [
     { name: 'author', regex: /^author:(.+)$/i },
     { name: 'language', regex: /^language:[a-z]{2,3}$/i },
     { name: 'sort', regex: /^sort:(desc|asc|trust|topStories|recommended|quality|attention)$/i },
+    { name: 'grouping', regex: /^grouping:(none|event|topic)$/i },
     { name: 'limit', regex: /^limit:\s*(\d+)$/i },
     { name: 'quality', regex: /^quality:(<=|>=|<|>|=)?\s*(\d+\.?\d*|\.\d+)$/i },
     { name: 'freshness', regex: /^freshness:(<=|>=|<|>|=)?\s*(\d+\.?\d*|\.\d+)$/i },
@@ -40,7 +41,7 @@ export const expressionPatterns = [
 /**
  * Known keywords for filter expressions.
  */
-export const knownKeywords = ['favorite', 'star', 'unread', 'read', 'clicked', 'seen', 'event', 'island', 'briefing', 'developing', 'eventCount', 'hot', 'tag', 'title', 'author', 'language', 'sort', 'limit', 'quality', 'freshness', 'firstSeen'];
+export const knownKeywords = ['favorite', 'star', 'unread', 'read', 'clicked', 'seen', 'event', 'island', 'briefing', 'developing', 'eventCount', 'hot', 'tag', 'title', 'author', 'language', 'sort', 'grouping', 'limit', 'quality', 'freshness', 'firstSeen'];
 
 export const normalizeSortValueForApi = sort => {
     const normalized = String(sort).toLowerCase();
@@ -58,12 +59,12 @@ export const normalizeQuerySortAliasesForApi = query => (
 /**
  * Pattern to detect wrong syntax (using = instead of :)
  */
-const wrongSyntaxPattern = /\b(favorite|star|unread|read|clicked|seen|event|island|briefing|developing|eventCount|hot|tag|title|author|language|sort|limit|quality|freshness|firstSeen)=/i;
+const wrongSyntaxPattern = /\b(favorite|star|unread|read|clicked|seen|event|island|briefing|developing|eventCount|hot|tag|title|author|language|sort|grouping|limit|quality|freshness|firstSeen)=/i;
 
 /**
  * Pattern to detect merged tokens (no space between expressions)
  */
-const mergedTokenPattern = /(\d+\.?\d*|true|false)(favorite|star|unread|read|clicked|seen|event|island|briefing|developing|eventCount|hot|tag|title|author|language|sort|limit|quality|freshness|firstSeen|@)/i;
+const mergedTokenPattern = /(\d+\.?\d*|true|false)(favorite|star|unread|read|clicked|seen|event|island|briefing|developing|eventCount|hot|tag|title|author|language|sort|grouping|limit|quality|freshness|firstSeen|@)/i;
 
 // Checks that an ISO-shaped date names the same real UTC calendar day.
 const isValidCalendarDate = value => {

@@ -215,13 +215,13 @@ describe('data store remaining actions and getters', () => {
       grouping: 'none',
       includeDevelopingEvents: false,
       smartFolderId: 3,
-      search: 'science limit:15'
+      search: 'science sort:desc grouping:none limit:15'
     });
     expect(store.activeSmartFolderMarkAsReadOnScroll).toBe(true);
     expect(store.effectiveMarkAsReadOnScroll).toBe(true);
 
     store.setSmartFolder({ id: 4, query: 'history', limitCount: 0 });
-    expect(store.currentSelection.search).toBe('history');
+    expect(store.currentSelection.search).toBe('history sort:desc grouping:none');
     expect(store.effectiveMarkAsReadOnScroll).toBe(false);
     store.setSmartFolder(null);
     expect(store.currentSelection).toMatchObject({

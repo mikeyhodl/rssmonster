@@ -10,7 +10,7 @@ const mountEditor = (overrides = {}) => mount(SmartFolderEditor, {
       id: 1,
       name: 'Configured',
       query: 'read:true favorite:true firstSeen:12h title:"Daily Brief" '
-        + 'quality:>=0.80 eventCount:>=4 sort:asc limit:75 "free phrase"',
+        + 'quality:>=0.80 eventCount:>=4 sort:asc grouping:none limit:75 "free phrase"',
       limitCount: 75
     },
     aiEnabled: true,
@@ -52,7 +52,7 @@ describe('SmartFolderEditor', () => {
 
     expect(wrapper.vm.generatedSmartFolderQuery).toBe(
       'read:true favorite:true firstSeen:12h title:"Daily Brief" '
-      + '"free phrase" quality:>=0.80 eventCount:>=4 sort:asc limit:75'
+      + '"free phrase" quality:>=0.80 eventCount:>=4 sort:asc grouping:none limit:75'
     );
     expect(wrapper.vm.generatedQueryInvalid).toBe(false);
   });
@@ -72,7 +72,7 @@ describe('SmartFolderEditor', () => {
 
     expect(scrollingCheckbox.element.disabled).toBe(false);
     expect(scrollingCheckbox.element.checked).toBe(true);
-    expect(wrapper.vm.generatedSmartFolderQuery).toBe('unread:true limit:50');
+    expect(wrapper.vm.generatedSmartFolderQuery).toBe('unread:true sort:desc grouping:none limit:50');
 
     await unreadCheckbox.setValue(false);
 

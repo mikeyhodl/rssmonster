@@ -1,3 +1,5 @@
+import { tokenizeSmartFolderExpression } from '../../../services/smartFolderPresentation.js';
+
 // Creates the complete default configuration used by the Smart Folder editor.
 export function createEmptySmartFolderConfig() {
     return {
@@ -36,14 +38,15 @@ export function createEmptySmartFolderConfig() {
             minimumCount: 2
         },
         sort: {
-            field: ''
-        }
+            field: 'published-desc'
+        },
+        grouping: 'none'
     };
 }
 
 // Splits a stored query while preserving the editor's supported quoted field values.
 export function tokenizeSmartFolderQuery(query) {
-    return String(query || '').match(/(?:[A-Za-z]+:)?"[^"]*"|\S+/g) || [];
+    return tokenizeSmartFolderExpression(query);
 }
 
 // Reports the effective unread filter using the server parser's last-token-wins behavior.
@@ -154,11 +157,13 @@ export function parseSmartFolderQuery(query, initialConfig = createEmptySmartFol
         else if (lower === 'developing:false') config.events.isNotDeveloping = true;
         else if (/^eventcount:/i.test(cleaned)) applyEventCountToken(config, cleaned);
         else if (/^sort:/i.test(cleaned)) applySortToken(config, cleaned);
+        else if (/^grouping:(none|event|topic)$/i.test(cleaned)) config.grouping = cleaned.split(':')[1].toLowerCase();
         else if (/^limit:/i.test(cleaned)) config.limitCount = Number(cleaned.split(':')[1]) || 50;
         else freeText.push(stripSmartFolderQuotes(cleaned));
     });
 
     config.content.text = freeText.join(' ');
+    if (config.events.isDeveloping) config.grouping = 'event';
     return config;
 }
 
@@ -200,7 +205,7 @@ export function buildSmartFolderQuery(config) {
     if (config.events.isNotDeveloping) parts.push('developing:false');
     if (config.events.useMinimumCount) parts.push(`eventCount:>=${config.events.minimumCount}`);
 
-    if (config.sort.field === 'published-desc') {
+    if (!config.sort.field || config.sort.field === 'published-desc') {
         parts.push('sort:desc');
     } else if (config.sort.field === 'published-asc') {
         parts.push('sort:asc');
@@ -208,6 +213,7 @@ export function buildSmartFolderQuery(config) {
         parts.push(`sort:${config.sort.field}`);
     }
 
+    parts.push(`grouping:${config.events.isDeveloping ? 'event' : config.grouping || 'none'}`);
     parts.push(`limit:${config.limitCount}`);
     return parts.join(' ');
 }

@@ -3,10 +3,23 @@ import {
   ArticleExpressionValidationError,
   MAX_ARTICLE_SEARCH_LENGTH,
   parseArticleQuery,
+  normalizeSmartFolderExpression,
   validateArticleExpression
 } from '../../services/articleSearch/articleQueryParser.service.js';
 
 describe('articleQueryParser.service', () => {
+  it('parses explicit grouping and rejects unsupported grouping in saved expressions', () => {
+    expect(validateArticleExpression('sort:recommended grouping:none grouping:TOPIC').filters.grouping).toBe('topic');
+    expect(() => validateArticleExpression('grouping:invalid')).toThrow(ArticleExpressionValidationError);
+  });
+
+  it('completes legacy Smart Folder expressions without modifying quoted filter values', () => {
+    const query = normalizeSmartFolderExpression('title:"sort:asc grouping:topic"');
+    expect(query).toBe('title:"sort:asc grouping:topic" sort:desc grouping:none');
+    expect(normalizeSmartFolderExpression(query)).toBe(query);
+    expect(normalizeSmartFolderExpression('developing:true sort:quality grouping:topic'))
+      .toBe('developing:true sort:quality grouping:topic grouping:event');
+  });
   it('parses mixed filters and quoted text', () => {
     const result = parseArticleQuery({ search: 'favorite:true quality:>0.7 @today "AI agents"' });
 

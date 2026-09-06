@@ -280,18 +280,27 @@
             <fieldset class="smart-folder-panel">
                 <legend>
                     Sorting
-                    <BootstrapIcon icon="info-circle-fill" title="Choose how matching articles are ordered, or leave sorting unchanged." />
+                    <BootstrapIcon icon="info-circle-fill" title="This Smart Folder controls how its matching articles are sorted and grouped." />
                 </legend>
 
                 <label class="smart-folder-field">
                     <span>Sort by</span>
                     <select v-model="draftConfig.sort.field" class="app-form-select">
-                        <option value="">None</option>
                         <option value="published-desc">Published date (newest)</option>
                         <option value="published-asc">Published date (oldest)</option>
                         <option v-if="aiEnabled" value="topStories">Top Stories</option>
                         <option v-if="aiEnabled" value="recommended">Recommended</option>
                         <option v-if="aiEnabled" value="quality">Quality</option>
+                        <option v-if="aiEnabled && draftConfig.sort.field === 'attention'" value="attention">Attention (legacy)</option>
+                    </select>
+                </label>
+
+                <label v-if="aiEnabled" class="smart-folder-field">
+                    <span>Group by</span>
+                    <select v-model="draftConfig.grouping" class="app-form-select" :disabled="draftConfig.events.isDeveloping">
+                        <option value="none">All articles</option>
+                        <option value="event">Events</option>
+                        <option value="topic">Topics</option>
                     </select>
                 </label>
 
@@ -438,6 +447,7 @@ export default {
             }
 
             if (changedKey === 'isDeveloping' && this.draftConfig.events.isDeveloping) {
+                this.draftConfig.grouping = 'event';
                 this.draftConfig.events.isEvent = false;
                 this.draftConfig.events.isNotEvent = false;
                 this.draftConfig.events.isNotDeveloping = false;

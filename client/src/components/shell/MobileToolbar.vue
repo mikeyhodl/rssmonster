@@ -772,10 +772,11 @@ export default {
     },
     // This function disables presentation controls whose values are owned by Briefing settings.
     briefingPresentationControlsDisabled() {
-      return this.currentStatus === 'briefing';
+      return this.currentStatus === 'briefing' || this.currentSelection.smartFolderId != null;
     },
     // This function explains why Briefing presentation controls cannot be changed here.
     briefingPresentationDisabledTitle() {
+      if (this.currentSelection.smartFolderId != null) return 'Sorting and grouping are managed by this Smart Folder.';
       return 'Briefing sorting and grouping are managed in Briefing settings.';
     },
     // This function returns the configured status label with a fallback for unknown values.
@@ -791,7 +792,10 @@ export default {
     },
     // This function exposes sort options supported by the active mobile capabilities.
     visibleSortOptions() {
-      return getAvailableArticleOptions(ARTICLE_SORT_OPTIONS, {
+      const options = this.currentSelection.smartFolderId != null && this.currentSelection.sort === 'attention'
+        ? [...ARTICLE_SORT_OPTIONS, { value: 'attention', label: 'Attention', requiresAI: true }]
+        : ARTICLE_SORT_OPTIONS;
+      return getAvailableArticleOptions(options, {
         aiEnabled: this.isAIEnabled,
         mobile: true
       });
