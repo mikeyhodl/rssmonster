@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocked = vi.hoisted(() => ({
   discover: vi.fn(),
+  htmlXpathAcquire: vi.fn(),
   parse: vi.fn()
 }));
 
@@ -13,6 +14,10 @@ vi.mock('../../services/feeds/parser.js', () => ({
   default: { acquireFeedSource: mocked.parse }
 }));
 
+vi.mock('../../services/feeds/htmlXpath/acquireHtmlXpathFeed.js', () => ({
+  acquireHtmlXpathFeed: mocked.htmlXpathAcquire
+}));
+
 const { acquireFeed } = await import('../../services/feeds/feedAcquisition.js');
 const {
   MALFORMED_BASE_BACKOFF_MS,
@@ -22,10 +27,52 @@ const {
 
 beforeEach(() => {
   mocked.discover.mockReset();
+  mocked.htmlXpathAcquire.mockReset();
   mocked.parse.mockReset();
 });
 
 describe('feed acquisition outcomes', () => {
+  it('uses saved HTML/XPath acquisition without native feed discovery', async () => {
+    const feed = {
+      id: 42,
+      feedType: 'html_xpath',
+      sourceConfig: { item: '//article', itemTitle: './/h2' }
+    };
+    mocked.htmlXpathAcquire.mockResolvedValue({
+      type: 'changed',
+      url: 'https://example.com/news',
+      attempts: 1,
+      parsedFeed: {
+        format: 'html_xpath',
+        title: 'Example news',
+        entries: [{ title: 'First item' }]
+      }
+    });
+
+    await expect(acquireFeed({
+      url: 'https://example.com/news',
+      feed
+    })).resolves.toMatchObject({
+      type: 'changed',
+      parsedFeed: {
+        format: 'html_xpath',
+        entries: [{ title: 'First item' }]
+      },
+      discovery: {
+        attempts: 1,
+        candidateCount: 1,
+        recovered: false
+      }
+    });
+    expect(mocked.htmlXpathAcquire).toHaveBeenCalledWith({
+      url: 'https://example.com/news',
+      feed,
+      execution: { deadlineAt: null, signal: null }
+    });
+    expect(mocked.discover).not.toHaveBeenCalled();
+    expect(mocked.parse).not.toHaveBeenCalled();
+  });
+
   it('passes the complete crawl execution object through discovery unchanged', async () => {
     const execution = {
       signal: new AbortController().signal,

@@ -110,6 +110,35 @@ const discoveryAliasCandidates = ({
   return candidates;
 };
 
+// Distinguishes a healthy webpage response from transport and malformed-feed failures.
+const htmlPageDiscoveryError = (observedOutcomes, parseFailures) => {
+  const primaryOutcome = observedOutcomes[0];
+  const primaryContentType = String(
+    primaryOutcome?.response?.headers?.['content-type'] || ''
+  );
+  const primaryWasNonFeed = parseFailures.some(({ diagnostic, provenance }) =>
+    provenance?.role === 'primary' && (
+      diagnostic?.code === 'INVALID_FEED' ||
+      /text\/html|application\/xhtml\+xml/i.test(primaryContentType)
+    )
+  );
+  if (
+    primaryWasNonFeed &&
+    isSuccessfulFetchOutcome(primaryOutcome) &&
+    String(primaryOutcome.bodyText || '').trim()
+  ) {
+    return new FeedManagementError(
+      'NON_FEED_CONTENT',
+      'The URL returned HTML but not a valid RSS or Atom feed',
+      { pageUrl: primaryOutcome.response?.url || null }
+    );
+  }
+  return new FeedManagementError(
+    'DISCOVERY_FAILED',
+    'Unable to discover a valid RSS or Atom feed'
+  );
+};
+
 // Builds nullable feed fields from the latest publisher-self validation result.
 const publisherSelfState = validation => validation
   ? {
@@ -445,7 +474,11 @@ const resolveCategory = async ({
 };
 
 // This function discovers and normalizes feed metadata through the guarded fetch flow.
-export const discoverFeedSubscription = async ({ userId, inputUrl }) => {
+export const discoverFeedSubscription = async ({
+  userId,
+  inputUrl,
+  requireDirectFeed = false
+}) => {
   // Normalizes the query before performing discover feed subscription.
   const query = normalizeFeedUrl(inputUrl);
   const inputAliases = discoveryAliasCandidates({
@@ -476,6 +509,7 @@ export const discoverFeedSubscription = async ({ userId, inputUrl }) => {
 
   let discoveryResult;
   const observedOutcomes = [];
+  const parseFailures = [];
   try {
     discoveryResult = await discoverRssLink.discoverRssLink(
       query,
@@ -484,14 +518,19 @@ export const discoverFeedSubscription = async ({ userId, inputUrl }) => {
         includeParsedFeed: true,
         userId,
         // Retains redirect evidence from the input request and accepted feed.
-        onFetchOutcome: outcome => observedOutcomes.push(outcome)
+        onFetchOutcome: outcome => observedOutcomes.push(outcome),
+        onParseFailure: (diagnostic, provenance) => {
+          parseFailures.push({ diagnostic, provenance });
+        }
       }
     );
   } catch {
-    throw new FeedManagementError(
-      'DISCOVERY_FAILED',
-      'Unable to discover a valid RSS or Atom feed'
-    );
+    throw htmlPageDiscoveryError(observedOutcomes, parseFailures);
+  }
+
+  if (requireDirectFeed) {
+    const directInputError = htmlPageDiscoveryError(observedOutcomes, parseFailures);
+    if (directInputError.code === 'NON_FEED_CONTENT') throw directInputError;
   }
 
   // Rejects processing when cloudflare is available.
@@ -509,10 +548,7 @@ export const discoverFeedSubscription = async ({ userId, inputUrl }) => {
     : discoveryResult?.url;
   // Rejects processing when discovered url is unavailable.
   if (!discoveredUrl) {
-    throw new FeedManagementError(
-      'DISCOVERY_FAILED',
-      'Unable to discover a valid RSS or Atom feed'
-    );
+    throw htmlPageDiscoveryError(observedOutcomes, parseFailures);
   }
 
   // Normalizes the feed url before performing discover feed subscription.
@@ -737,7 +773,9 @@ export const addFeedSubscription = async ({
   crawlSince = '7d',
   allowExisting = false,
   updateExisting = false,
-  skipDiscovery = false
+  skipDiscovery = false,
+  feedType = null,
+  sourceConfig = null
 }) => {
   // Handles the case where category id is not undefined and category id is not value.
   if (categoryId !== undefined && categoryId !== null) {
@@ -841,7 +879,8 @@ export const addFeedSubscription = async ({
         categoryId: category.id,
         feedName,
         feedDesc: description ?? discovery.feedDesc,
-        feedType: discovery.feedType,
+        feedType: feedType || discovery.feedType,
+        sourceConfig,
         url: discovery.feedUrl,
         favicon: discovery.favicon,
         status,

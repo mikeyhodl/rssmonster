@@ -93,6 +93,7 @@ describe('coordinated Pinia session reset', () => {
     uiStore.$patch({
       chatAssistantOpen: true,
       fatalError: { type: 'offline' },
+      htmlXpathDraft: { url: 'https://private.example/' },
       mobileSearchOpen: true,
       searchQuery: 'private draft',
       showModal: 'Settings',
@@ -174,6 +175,7 @@ describe('coordinated Pinia session reset', () => {
     expect(uiStore).toMatchObject({
       chatAssistantOpen: false,
       fatalError: null,
+      htmlXpathDraft: null,
       mobileSearchOpen: false,
       searchQuery: '',
       showModal: '',

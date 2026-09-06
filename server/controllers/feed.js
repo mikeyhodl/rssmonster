@@ -17,6 +17,8 @@ import {
 } from '../services/feeds/feedManagement.js';
 import { deriveFeedOverviewHealth } from '../services/feeds/feedOverviewHealth.js';
 import { compileItemFilter } from '../services/crawl/filtering/itemFilter.js';
+import { testHtmlXpathSource } from '../services/feeds/htmlXpath/testHtmlXpathSource.js';
+import { normalizeHtmlXpathConfig } from '../services/feeds/htmlXpath/config.js';
 
 const UPDATE_INTERVAL_MINUTES = [null, 0, 5, 15, 30, 60, 120, 360, 720, 1440];
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
@@ -85,6 +87,13 @@ const sendFeedManagementError = (res, error) => {
         'This feed is protected by Cloudflare bot detection and cannot be validated automatically.',
       cloudflare: true,
       feedUrl: error.details.feedUrl
+    });
+  }
+  if (error.code === 'NON_FEED_CONTENT') {
+    return res.status(422).json({
+      code: error.code,
+      error_msg: error.message,
+      pageUrl: error.details.pageUrl
     });
   }
   if (error.code === 'CATEGORY_NOT_FOUND') {
@@ -397,6 +406,19 @@ const newFeed = async (req, res, _next) => {
     }
 
     // Map crawlSince selector (e.g., '7d', '1m', '3m', '1y', 'all') to a Date or null
+    const isHtmlXpath = req.body.feedType === 'html_xpath';
+    let sourceConfig = null;
+    if (isHtmlXpath) {
+      try {
+        sourceConfig = normalizeHtmlXpathConfig(req.body.sourceConfig);
+      } catch (error) {
+        return res.status(400).json({
+          code: error.code || 'HTML_XPATH_INVALID_CONFIG',
+          error: error.message,
+          ...(error.field ? { field: error.field } : {})
+        });
+      }
+    }
     const result = await addFeedSubscription({
       userId,
       inputUrl: req.body.url,
@@ -404,7 +426,10 @@ const newFeed = async (req, res, _next) => {
       title: req.body.feedName,
       description: req.body.feedDesc,
       status: req.body.status,
-      crawlSince: req.body.crawlSince
+      crawlSince: req.body.crawlSince,
+      skipDiscovery: isHtmlXpath,
+      feedType: isHtmlXpath ? 'html_xpath' : null,
+      sourceConfig
     });
     return res.status(201).json({ feed: result.feed });
   } catch (err) {
@@ -457,7 +482,8 @@ const validateFeed = async (req, res, _next) => {
 
     const discovery = await discoverFeedSubscription({
       userId,
-      inputUrl: req.body.url
+      inputUrl: req.body.url,
+      requireDirectFeed: true
     });
 
     //check if feed already exists
@@ -489,6 +515,58 @@ const validateFeed = async (req, res, _next) => {
   } catch (err) {
     console.error('Error in validateFeed:', err);
     return sendFeedManagementError(res, err);
+  }
+};
+
+// Tests one HTML/XPath configuration without persisting subscription or crawl state.
+const testHtmlXpathFeed = async (req, res, _next) => {
+  try {
+    const userId = req.userData?.userId;
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized: missing userId' });
+    }
+    if (req.body?.sourceType !== 'html_xpath') {
+      return res.status(400).json({
+        code: 'HTML_XPATH_INVALID_CONFIG',
+        error: 'sourceType must be html_xpath'
+      });
+    }
+
+    const preview = await testHtmlXpathSource({
+      url: req.body.url,
+      config: req.body.sourceConfig
+    });
+    return res.status(200).json(preview);
+  } catch (error) {
+    const outcomeType = error?.fetchOutcome?.type;
+    let status = 500;
+    if (
+      error?.code === 'INVALID_URL' ||
+      ['HTML_XPATH_INVALID_CONFIG', 'HTML_XPATH_INVALID_EXPRESSION'].includes(error?.code)
+    ) status = 400;
+    else if (
+      ['HTML_XPATH_NO_ITEMS', 'HTML_XPATH_ITEM_EXTRACTION', 'HTML_XPATH_INVALID_HTML'].includes(error?.code)
+    ) status = 422;
+    else if (
+      error?.code === 'HTML_XPATH_TOO_MANY_ITEMS' ||
+      error?.code === 'FEED_INPUT_LIMIT_EXCEEDED' ||
+      outcomeType === 'too_large'
+    ) status = 413;
+    else if (outcomeType === 'security_rejected') status = 403;
+    else if (outcomeType === 'rate_limited') status = 429;
+    else if (outcomeType === 'timed_out' || error?.name === 'TimeoutError') status = 504;
+    else if (error?.code === 'HTML_XPATH_EMPTY_BODY' || error?.code === 'HTML_XPATH_FETCH_FAILED') {
+      status = 502;
+    }
+
+    if (status === 500) console.error('Error testing HTML/XPath feed:', error);
+    return res.status(status).json({
+      code: error?.code || 'HTML_XPATH_TEST_FAILED',
+      error: status === 500
+        ? 'HTML/XPath preview failed unexpectedly'
+        : error.message,
+      ...(error?.field ? { field: error.field } : {})
+    });
   }
 };
 
@@ -710,6 +788,7 @@ export default {
   newFeed,
   deleteFeed,
   validateFeed,
+  testHtmlXpathFeed,
   rediscoverFeedRss,
   muteFeed,
   startRefresh,

@@ -32,6 +32,16 @@ export const validateFeed = (url, categoryId) =>
   api.post('/feeds/validate', { url, categoryId });
 
 /**
+ * Test an HTML/XPath source without persisting it.
+ */
+export const testHtmlXpathSource = ({ url, sourceConfig }) =>
+  api.post('/feeds/test-scraper', {
+    url,
+    sourceType: 'html_xpath',
+    sourceConfig
+  }, { timeout: 30000 });
+
+/**
  * Mute feed until a given ISO date
  */
 export const muteFeed = (feedId, mutedUntil) =>
@@ -40,8 +50,25 @@ export const muteFeed = (feedId, mutedUntil) =>
 /**
  * Create a new feed
  */
-export const createFeed = ({ categoryId, feedName, feedDesc, feedType, url, status, crawlSince }) =>
-  api.post('/feeds', { categoryId, feedName, feedDesc, feedType, url, status, crawlSince });
+export const createFeed = ({
+  categoryId,
+  feedName,
+  feedDesc,
+  feedType,
+  url,
+  status,
+  crawlSince,
+  sourceConfig
+}) => api.post('/feeds', {
+  categoryId,
+  feedName,
+  feedDesc,
+  feedType,
+  url,
+  status,
+  crawlSince,
+  ...(sourceConfig ? { sourceConfig } : {})
+});
 
 /**
  * Update a feed

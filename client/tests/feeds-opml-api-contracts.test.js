@@ -11,6 +11,7 @@ import {
   rediscoverRss,
   retryFeed,
   startFeedRefresh,
+  testHtmlXpathSource,
   updateFeed,
   validateFeed
 } from '../src/api/feeds.js';
@@ -62,6 +63,19 @@ describe('feeds API contracts', () => {
     });
   });
 
+  // Verifies scraper previews use the explicit source contract and extended timeout.
+  it('builds an HTML/XPath preview request', () => {
+    const sourceConfig = { item: '//article', itemTitle: './/h2' };
+
+    testHtmlXpathSource({ url: 'https://example.com/news', sourceConfig });
+
+    expect(post).toHaveBeenCalledWith('/feeds/test-scraper', {
+      url: 'https://example.com/news',
+      sourceType: 'html_xpath',
+      sourceConfig
+    }, { timeout: 30000 });
+  });
+
   // Verifies observability snapshots and selected crawl details use nested feed routes.
   it('builds feed observability requests', () => {
     fetchFeedObservability(7);
@@ -83,6 +97,24 @@ describe('feeds API contracts', () => {
       url: 'https://example.com/feed.xml',
       status: 'active',
       crawlSince: '2026-01-01'
+    };
+
+    createFeed(feed);
+
+    expect(post).toHaveBeenCalledWith('/feeds', feed);
+  });
+
+  it('includes tested source rules when creating an HTML/XPath feed', () => {
+    const sourceConfig = { item: '//article', itemTitle: './/h2' };
+    const feed = {
+      categoryId: 3,
+      feedName: 'Example News',
+      feedDesc: 'Publisher updates',
+      feedType: 'html_xpath',
+      url: 'https://example.com/news',
+      status: 'active',
+      crawlSince: '7d',
+      sourceConfig
     };
 
     createFeed(feed);

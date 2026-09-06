@@ -167,6 +167,83 @@ describe('feed management helpers', () => {
     });
   });
 
+  it('identifies a successfully fetched HTML page as non-feed content', async () => {
+    mocked.discoverRssLink.mockImplementation(async (_url, _feed, options) => {
+      options.onFetchOutcome({
+        type: 'changed',
+        bodyText: '<html><title>News</title></html>',
+        response: {
+          url: 'https://example.com/news',
+          headers: { 'content-type': 'text/html; charset=utf-8' }
+        }
+      });
+      options.onParseFailure(
+        { code: 'INVALID_FEED', message: 'Response body is not a valid feed' },
+        { role: 'primary', kind: 'primary' }
+      );
+      return undefined;
+    });
+
+    await expect(discoverFeedSubscription({
+      userId: 42,
+      inputUrl: 'https://example.com/news'
+    })).rejects.toMatchObject({
+      code: 'NON_FEED_CONTENT',
+      details: { pageUrl: 'https://example.com/news' }
+    });
+  });
+
+  it('uses HTML fallback when the entered page only advertises a separate feed URL', async () => {
+    mocked.discoverRssLink.mockImplementation(async (_url, _feed, options) => {
+      options.onFetchOutcome({
+        type: 'changed',
+        bodyText: '<html><link rel="alternate" href="/feed.xml"></html>',
+        response: {
+          url: 'https://rapha.land/',
+          headers: { 'content-type': 'text/html; charset=utf-8' }
+        }
+      });
+      options.onParseFailure(
+        { code: 'MALFORMED_FEED_BODY', message: 'Response body is not a valid feed' },
+        { role: 'primary', kind: 'primary' }
+      );
+      return {
+        url: 'https://rapha.land/feed.xml',
+        parsedFeed: {
+          title: 'Raphael Amorim',
+          description: null,
+          format: 'rss',
+          faviconUrl: null
+        }
+      };
+    });
+
+    await expect(discoverFeedSubscription({
+      userId: 42,
+      inputUrl: 'https://rapha.land/',
+      requireDirectFeed: true
+    })).rejects.toMatchObject({
+      code: 'NON_FEED_CONTENT',
+      details: { pageUrl: 'https://rapha.land/' }
+    });
+  });
+
+  it('does not classify an empty successful response as scrapeable content', async () => {
+    mocked.discoverRssLink.mockImplementation(async (_url, _feed, options) => {
+      options.onFetchOutcome({
+        type: 'changed',
+        bodyText: '',
+        response: { url: 'https://example.com/empty' }
+      });
+      return undefined;
+    });
+
+    await expect(discoverFeedSubscription({
+      userId: 42,
+      inputUrl: 'https://example.com/empty'
+    })).rejects.toMatchObject({ code: 'DISCOVERY_FAILED' });
+  });
+
   it('parses legacy string discovery results and checks canonical duplicates', async () => {
     const canonicalUrl = 'https://example.com/feed.xml';
     const canonicalFeed = { id: 7, url: canonicalUrl };

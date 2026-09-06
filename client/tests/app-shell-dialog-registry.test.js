@@ -6,6 +6,8 @@ import appShellSource from '../src/AppShell.vue?raw';
 const supportedDialogs = [
   ['NewCategory', 'NewCategory'],
   ['NewFeed', 'NewFeed'],
+  ['HtmlXpathFeed', 'HtmlXpathFeed'],
+  ['HtmlXpathPreview', 'HtmlXpathPreview'],
   ['DeleteCategory', 'DeleteCategory'],
   ['DeleteFeed', 'DeleteFeed'],
   ['RenameCategory', 'RenameCategory'],

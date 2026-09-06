@@ -337,6 +337,8 @@ const ChatAssistant = defineAsyncComponent(() =>  import("./components/assistant
 export const DIALOG_COMPONENTS = Object.freeze({
   NewCategory: defineAsyncComponent(() => import("./components/dialogs/categories/NewCategory.vue")),
   NewFeed: defineAsyncComponent(() => import("./components/dialogs/feeds/NewFeed.vue")),
+  HtmlXpathFeed: defineAsyncComponent(() => import("./components/dialogs/feeds/HtmlXpathFeed.vue")),
+  HtmlXpathPreview: defineAsyncComponent(() => import("./components/dialogs/feeds/HtmlXpathPreview.vue")),
   DeleteCategory: defineAsyncComponent(() => import("./components/dialogs/categories/DeleteCategory.vue")),
   DeleteFeed: defineAsyncComponent(() => import("./components/dialogs/feeds/DeleteFeed.vue")),
   RenameCategory: defineAsyncComponent(() => import("./components/dialogs/categories/RenameCategory.vue")),

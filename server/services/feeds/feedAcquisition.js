@@ -2,6 +2,7 @@
 
 import discoverRssLink from './discoverRssLink.js';
 import parseFeed from './parser.js';
+import { acquireHtmlXpathFeed } from './htmlXpath/acquireHtmlXpathFeed.js';
 import {
   FETCH_OUTCOMES,
   createConditionalHeaders,
@@ -133,6 +134,22 @@ export const acquireFeed = async ({
   };
 
   try {
+    if (feed?.feedType === 'html_xpath') {
+      const outcome = await acquireHtmlXpathFeed({
+        url: inputUrl,
+        feed,
+        execution
+      });
+      return withDiscoveryMetadata({
+        outcome,
+        inputUrl,
+        resolvedUrl: outcome.url || inputUrl,
+        attempts: Number(outcome.attempts ?? 0),
+        candidateCount: outcome.attempts === 0 ? 0 : 1,
+        primaryOutcome: outcome
+      });
+    }
+
     const discoveryResult = await discoverRssLink.discoverRssLink(
       inputUrl,
       feed,

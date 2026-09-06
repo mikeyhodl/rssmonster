@@ -3,6 +3,7 @@ import feedController from '../controllers/feed.js';
 import feedObservabilityController from '../controllers/feedObservability.js';
 import userMiddleware from "../middleware/users.js";
 import { requireInferenceEnabled } from '../middleware/inferenceAvailability.js';
+import { htmlXpathPreviewRateLimiter } from '../middleware/rateLimit.js';
 
 export const router = express.Router();
 
@@ -11,6 +12,12 @@ router.get('/', userMiddleware.isLoggedIn, feedController.getFeeds);
 router.post('/refresh', userMiddleware.isLoggedIn, feedController.startRefresh);
 router.get('/refresh/:jobId/events', userMiddleware.isLoggedIn, feedController.streamRefreshEvents);
 router.post('/recalculate-trust', userMiddleware.isLoggedIn, feedController.recalculateFeedTrust);
+router.post(
+  '/test-scraper',
+  userMiddleware.isLoggedIn,
+  htmlXpathPreviewRateLimiter,
+  feedController.testHtmlXpathFeed
+);
 router.get('/:feedId/observability', userMiddleware.isLoggedIn, feedObservabilityController.getFeedObservability);
 router.get('/:feedId/crawls/:crawlResultId', userMiddleware.isLoggedIn, feedObservabilityController.getFeedCrawlDetail);
 router.post('/:feedId/retry', userMiddleware.isLoggedIn, feedController.retryFeed);

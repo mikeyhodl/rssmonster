@@ -5,6 +5,7 @@ const DEFAULT_API_LIMIT = 600;
 const DEFAULT_MCP_LIMIT = 100;
 const DEFAULT_PASSWORD_RESET_WINDOW_MS = 60 * 60 * 1000;
 const DEFAULT_PASSWORD_RESET_LIMIT = 5;
+const DEFAULT_HTML_XPATH_PREVIEW_LIMIT = 20;
 
 // This function reads a positive integer from the environment or uses its default.
 const getPositiveInteger = (name, defaultValue) => {
@@ -85,3 +86,12 @@ export const createPasswordResetRateLimiter = ({
 });
 
 export const passwordResetRateLimiter = createPasswordResetRateLimiter();
+
+export const htmlXpathPreviewRateLimiter = createRateLimiter({
+  windowMs: apiWindowMs,
+  limit: getPositiveInteger(
+    'HTML_XPATH_PREVIEW_RATE_LIMIT_MAX',
+    DEFAULT_HTML_XPATH_PREVIEW_LIMIT
+  ),
+  identifier: 'html-xpath-preview'
+});

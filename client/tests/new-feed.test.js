@@ -28,7 +28,10 @@ const createDeferred = () => {
 };
 
 // Mounts the feed modal with observable store reconciliation methods.
-const mountNewFeed = (categories = [{ id: 3, name: 'Technology' }]) => {
+const mountNewFeed = (
+  categories = [{ id: 3, name: 'Technology' }],
+  ui = {}
+) => {
   const store = createFocusedStores({
     auth: { token: 'token' },
     overview: {
@@ -36,7 +39,8 @@ const mountNewFeed = (categories = [{ id: 3, name: 'Technology' }]) => {
       addFeed: vi.fn()
     },
     ui: {
-      setShowModal: vi.fn()
+      setShowModal: vi.fn(),
+      ...ui
     }
   });
 
@@ -88,10 +92,7 @@ describe('NewFeed', () => {
   it('preserves native form submission semantics', async () => {
     validateFeed.mockResolvedValue({ data: {} });
     mountNewFeed();
-    await wrapper.setData({
-      url: 'https://example.com',
-      selectedCategory: 3
-    });
+    await wrapper.setData({ url: 'https://example.com' });
 
     const form = wrapper.get('#new-feed-form');
     const urlInput = wrapper.get('#feed-url');
@@ -177,6 +178,19 @@ describe('NewFeed', () => {
     expect(wrapper.text()).toContain('Save changes');
   });
 
+  it('clears previously validated metadata when the URL is edited', async () => {
+    mountNewFeed();
+    await wrapper.setData({
+      url: 'https://old.example/feed.xml',
+      feed: { feedName: 'Old feed', feedDesc: 'Old description' }
+    });
+
+    await wrapper.get('#feed-url').setValue('https://new.example');
+
+    expect(wrapper.vm.feed).toEqual({});
+    expect(wrapper.find('#inputFeedName').exists()).toBe(false);
+  });
+
   // Verifies repeated validation submissions share one pending request.
   it('prevents duplicate validation submissions', async () => {
     const deferred = createDeferred();
@@ -198,11 +212,20 @@ describe('NewFeed', () => {
     await firstRequest;
   });
 
-  // Verifies ordinary validation failures remain retryable without offering a force-add action.
-  it('reports an ordinary validation failure', async () => {
-    const error = new Error('invalid feed');
+  // Verifies ordinary discovery failures immediately start the bounded scraper analysis.
+  it('starts the scraper preview for an ordinary validation failure', async () => {
+    const error = {
+      response: {
+        status: 422,
+        data: {
+          code: 'NON_FEED_CONTENT',
+          error_msg: 'The URL returned HTML but not a valid RSS or Atom feed',
+          pageUrl: 'https://example.com/final'
+        }
+      }
+    };
     validateFeed.mockRejectedValue(error);
-    mountNewFeed();
+    const { store } = mountNewFeed();
     await wrapper.setData({ url: 'https://example.com', selectedCategory: 3 });
 
     await wrapper.get('form').trigger('submit');
@@ -211,8 +234,124 @@ describe('NewFeed', () => {
     expect(wrapper.vm.ajaxRequest).toBe(false);
     expect(wrapper.vm.isCloudflare).toBe(false);
     expect(wrapper.vm.cloudflareUrl).toBeNull();
-    expect(wrapper.text()).toContain('Could not validate this feed');
+    expect(wrapper.text()).not.toContain('Could not validate this feed');
+    expect(store.uiStore.htmlXpathDraft).toEqual({
+      url: 'https://example.com/final',
+      categoryId: 3,
+      crawlSince: '7d',
+      autoAnalyze: true
+    });
+    expect(store.uiStore.setShowModal).toHaveBeenCalledWith('HtmlXpathFeed');
     expect(console.error).toHaveBeenCalledWith('Error validating feed URL https://example.com:', error);
+  });
+
+  it('shows an error when validation fails after receiving a server error body', async () => {
+    validateFeed.mockRejectedValue({
+      response: {
+        status: 502,
+        data: { error_msg: 'Feed url is invalid. Are you sure the RSS feed is correct?' }
+      }
+    });
+    const { store } = mountNewFeed();
+    await wrapper.setData({ url: 'https://example.com', selectedCategory: 3 });
+
+    await wrapper.get('form').trigger('submit');
+    await flushPromises();
+
+    expect(wrapper.text()).toContain('host may be unavailable');
+    expect(store.uiStore.setShowModal).not.toHaveBeenCalledWith('HtmlXpathFeed');
+  });
+
+  // Verifies a timeout remains an error because no page is available to configure for scraping.
+  it('reports a validation timeout without offering the scraper fallback', async () => {
+    const error = Object.assign(new Error('timeout of 15000ms exceeded'), {
+      code: 'ECONNABORTED'
+    });
+    validateFeed.mockRejectedValue(error);
+    mountNewFeed();
+    await wrapper.setData({ url: 'https://example.com', selectedCategory: 3 });
+
+    await wrapper.get('form').trigger('submit');
+    await flushPromises();
+
+    expect(wrapper.text()).toContain('Could not validate this feed');
+    expect(wrapper.text()).not.toContain('Use HTML + XPath (Web scraping)');
+  });
+
+  // Verifies a bodyless server failure remains retryable instead of implying scrape eligibility.
+  it('reports a bodyless validation failure without offering the scraper fallback', async () => {
+    const error = { response: { status: 502, data: '' } };
+    validateFeed.mockRejectedValue(error);
+    mountNewFeed();
+    await wrapper.setData({ url: 'https://example.com', selectedCategory: 3 });
+
+    await wrapper.get('form').trigger('submit');
+    await flushPromises();
+
+    expect(wrapper.text()).toContain('Could not validate this feed');
+    expect(wrapper.text()).not.toContain('Use HTML + XPath (Web scraping)');
+  });
+
+  // Verifies the fallback action retains the same automatic-analysis transition.
+  it('opens the HTML and XPath dialog from the validation fallback', async () => {
+    validateFeed.mockRejectedValue({
+      response: {
+        status: 422,
+        data: {
+          code: 'NON_FEED_CONTENT',
+          error_msg: 'The URL returned HTML but not a valid RSS or Atom feed'
+        }
+      }
+    });
+    const { store } = mountNewFeed();
+    await wrapper.setData({ url: 'https://example.com', selectedCategory: 3 });
+
+    await wrapper.get('form').trigger('submit');
+    await flushPromises();
+
+    wrapper.vm.openHtmlXpathFallback();
+
+    expect(store.uiStore.htmlXpathDraft).toEqual({
+      url: 'https://example.com',
+      categoryId: 3,
+      crawlSince: '7d',
+      autoAnalyze: true
+    });
+    expect(store.uiStore.setShowModal).toHaveBeenCalledWith('HtmlXpathFeed');
+  });
+
+  it('restores accepted scraper metadata into the Add Feed fields', () => {
+    const sourceConfig = { item: '//article', itemTitle: './/h2' };
+    const { store } = mountNewFeed(undefined, {
+      htmlXpathDraft: {
+        url: 'https://example.com/news',
+        categoryId: 3,
+        crawlSince: '1m',
+        sourceConfig,
+        accepted: true,
+        preview: {
+          feed: {
+            title: 'Example News',
+            description: 'Publisher updates',
+            effectiveUrl: 'https://example.com/news'
+          }
+        }
+      }
+    });
+
+    expect(wrapper.vm.url).toBe('https://example.com/news');
+    expect(wrapper.vm.selectedCategory).toBe(3);
+    expect(wrapper.vm.crawlSince).toBe('1m');
+    expect(wrapper.vm.feed).toEqual({
+      feedName: 'Example News',
+      feedDesc: 'Publisher updates',
+      feedType: 'html_xpath',
+      url: 'https://example.com/news',
+      sourceConfig
+    });
+    expect(wrapper.get('#inputFeedName').element.value).toBe('Example News');
+    expect(wrapper.get('#inputFeedDescription').element.value).toBe('Publisher updates');
+    expect(store.uiStore.htmlXpathDraft).toBeNull();
   });
 
   // Verifies bot-protected validation failures retain the canonical URL for manual creation.
@@ -233,6 +372,7 @@ describe('NewFeed', () => {
 
     expect(wrapper.vm.cloudflareUrl).toBe('https://example.com/protected.xml');
     expect(wrapper.text()).toContain('Add feed anyway');
+    expect(wrapper.text()).not.toContain('Use HTML + XPath (Web scraping)');
   });
 
   // Verifies manual creation derives a useful name and reconciles the persisted feed.
@@ -335,6 +475,39 @@ describe('NewFeed', () => {
       crawlSince: '3m'
     });
     expect(wrapper.vm.feed).toEqual(persistedFeed);
+    expect(store.overviewStore.addFeed).toHaveBeenCalledWith(3, persistedFeed);
+    expect(store.uiStore.setShowModal).toHaveBeenCalledWith('');
+  });
+
+  it('saves accepted HTML/XPath metadata with the tested source rules', async () => {
+    const persistedFeed = { id: 11, feedName: 'Saved webpage', feedType: 'html_xpath' };
+    const sourceConfig = { item: '//article', itemTitle: './/h2' };
+    createFeed.mockResolvedValue({ status: 201, data: { feed: persistedFeed } });
+    const { store } = mountNewFeed();
+    await wrapper.setData({
+      selectedCategory: 3,
+      crawlSince: '7d',
+      feed: {
+        feedName: 'Webpage feed',
+        feedDesc: 'Publisher updates',
+        feedType: 'html_xpath',
+        url: 'https://example.com/news',
+        sourceConfig
+      }
+    });
+
+    await wrapper.vm.newFeed();
+
+    expect(createFeed).toHaveBeenCalledWith({
+      categoryId: 3,
+      feedName: 'Webpage feed',
+      feedDesc: 'Publisher updates',
+      feedType: 'html_xpath',
+      url: 'https://example.com/news',
+      status: 'active',
+      crawlSince: '7d',
+      sourceConfig
+    });
     expect(store.overviewStore.addFeed).toHaveBeenCalledWith(3, persistedFeed);
     expect(store.uiStore.setShowModal).toHaveBeenCalledWith('');
   });

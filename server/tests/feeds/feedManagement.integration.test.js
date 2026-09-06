@@ -217,6 +217,99 @@ describe('shared feed-management integration', () => {
     });
   });
 
+  it('returns a distinct validation response for a healthy non-feed webpage', async () => {
+    const user = trackUser(await createGreaderUser());
+    const category = await createCategory(user);
+    mocked.discoverRssLink.mockImplementation(async (input, _feed, options) => {
+      options.onFetchOutcome({
+        type: 'changed',
+        bodyText: '<html><title>Publisher news</title></html>',
+        response: {
+          url: input,
+          headers: { 'content-type': 'text/html; charset=utf-8' }
+        }
+      });
+      options.onParseFailure(
+        { code: 'INVALID_FEED', message: 'Response body is not a valid feed' },
+        { role: 'primary', kind: 'primary' }
+      );
+      return undefined;
+    });
+
+    const response = await request(app)
+      .post('/api/feeds/validate')
+      .set('Authorization', regularAuthHeaderFor(user))
+      .send({
+        categoryId: category.id,
+        url: 'https://publisher.example.test/news'
+      });
+
+    expect(response.status).toBe(422);
+    expect(response.body).toEqual({
+      code: 'NON_FEED_CONTENT',
+      error_msg: 'The URL returned HTML but not a valid RSS or Atom feed',
+      pageUrl: 'https://publisher.example.test/news'
+    });
+  });
+
+  it('creates an accepted HTML/XPath source without repeating native discovery', async () => {
+    const user = trackUser(await createGreaderUser());
+    const category = await createCategory(user);
+    const sourceConfig = {
+      feedTitle: '//title',
+      item: '//article',
+      itemTitle: './/h2',
+      itemUri: './/a/@href'
+    };
+
+    const response = await request(app)
+      .post('/api/feeds')
+      .set('Authorization', regularAuthHeaderFor(user))
+      .send({
+        categoryId: category.id,
+        url: 'https://publisher.example.test/news',
+        feedName: 'Publisher news',
+        feedDesc: 'Publisher updates',
+        feedType: 'html_xpath',
+        sourceConfig,
+        status: 'active',
+        crawlSince: '7d'
+      });
+
+    expect(response.status).toBe(201);
+    expect(response.body.feed).toMatchObject({
+      categoryId: category.id,
+      url: 'https://publisher.example.test/news',
+      feedName: 'Publisher news',
+      feedDesc: 'Publisher updates',
+      feedType: 'html_xpath',
+      sourceConfig
+    });
+    expect(mocked.discoverRssLink).not.toHaveBeenCalled();
+  });
+
+  it('rejects an HTML/XPath save without tested source rules', async () => {
+    const user = trackUser(await createGreaderUser());
+    const category = await createCategory(user);
+
+    const response = await request(app)
+      .post('/api/feeds')
+      .set('Authorization', regularAuthHeaderFor(user))
+      .send({
+        categoryId: category.id,
+        url: 'https://publisher.example.test/news',
+        feedName: 'Publisher news',
+        feedType: 'html_xpath',
+        status: 'active'
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toMatchObject({
+      code: 'HTML_XPATH_INVALID_CONFIG'
+    });
+    expect(await Feed.count({ where: { userId: user.id } })).toBe(0);
+  });
+
   it('records every accepted subscription redirect with stable endpoint provenance', async () => {
     const user = trackUser(await createGreaderUser());
     const category = await createCategory(user);

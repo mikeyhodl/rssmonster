@@ -127,6 +127,59 @@ describe('crawl run article statistics', () => {
     });
   });
 
+  it('processes HTML/XPath entries through the normal article pipeline', async () => {
+    const { user, feed } = await createUserFeed('htmlxpathcrawl');
+    await feed.update({
+      feedType: 'html_xpath',
+      sourceConfig: {
+        item: '//article',
+        itemTitle: './/h2',
+        itemUri: './/a/@href'
+      }
+    });
+    const entry = {
+      title: 'Extracted headline',
+      url: 'https://example.com/articles/1',
+      externalId: 'article-1'
+    };
+    mocked.acquireFeed.mockImplementation(async ({ feed: selectedFeed }) => ({
+      type: 'changed',
+      url: selectedFeed.url,
+      feed: selectedFeed,
+      bodyHash: 'html-page-hash',
+      parsedFeed: {
+        format: 'html_xpath',
+        title: 'Extracted news',
+        faviconUrl: null,
+        publishedAt: null,
+        entries: [entry]
+      }
+    }));
+    mocked.processArticle.mockResolvedValue({
+      newArticles: 1,
+      updatedArticles: 0,
+      errors: 0
+    });
+
+    await crawlController.performCrawl(user.id);
+
+    expect(mocked.processArticle).toHaveBeenCalledTimes(1);
+    const processArguments = mocked.processArticle.mock.calls[0];
+    expect(processArguments[0]).toMatchObject({
+      id: feed.id,
+      feedType: 'html_xpath'
+    });
+    expect(processArguments[1]).toBe(entry);
+    expect(processArguments[7]).toBe('Extracted news');
+    expect(processArguments[8]).toBe('html_xpath');
+    await feed.reload();
+    expect(feed).toMatchObject({
+      feedType: 'html_xpath',
+      contentHash: 'html-page-hash',
+      consecutiveFailures: 0
+    });
+  });
+
   it('runs the unchanged production pipeline for only the explicitly selected feed', async () => {
     const { user, category, feed } = await createUserFeed('manualsinglefeed');
     await feed.update({ status: 'error' });

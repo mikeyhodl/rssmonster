@@ -37,6 +37,12 @@ export default (sequelize) => {
         type: DataTypes.STRING(16),
         allowNull: true
       },
+      // Stores type-specific source rules; currently used by HTML/XPath feeds.
+      sourceConfig: {
+        type: DataTypes.JSON,
+        allowNull: true,
+        defaultValue: null
+      },
       // Stores the subscription URL fetched for new entries.
       url: {
         type: DataTypes.STRING.BINARY,

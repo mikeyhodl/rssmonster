@@ -35,6 +35,7 @@
                                 placeholder="Enter feed or website URL..."
                                 autocomplete="url"
                                 class="app-form-control"
+                                @input="resetValidatedFeed"
                             >
                             <p class="feed-form-help">Examples: https://example.com/feed, https://example.com</p>
                         </div>
@@ -99,6 +100,14 @@
                     <button type="button" class="app-button app-button--warning app-button--compact" :disabled="isBusy" :aria-busy="forceAdding ? 'true' : 'false'" @click="forceAdd">
                         <BootstrapIcon icon="shield-exclamation" aria-hidden="true" />
                         {{ forceAdding ? 'Adding…' : 'Add feed anyway' }}
+                    </button>
+                </div>
+
+                <div v-if="showHtmlXpathFallback" class="feed-html-xpath-fallback">
+                    <p>This website does not expose a supported feed. You can try following it by extracting articles from its HTML.</p>
+                    <button type="button" class="app-button app-button--outline-secondary app-button--compact" :disabled="isBusy" @click="openHtmlXpathFallback">
+                        <BootstrapIcon icon="code-slash" aria-hidden="true" />
+                        Use HTML + XPath (Web scraping)
                     </button>
                 </div>
 
@@ -287,7 +296,19 @@
     color: var(--color-warning);
 }
 
-.feed-cloudflare-warning p {
+.feed-html-xpath-fallback {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0 0 1rem;
+    padding: 0.75rem;
+    border: 1px solid var(--settings-info-border);
+    border-radius: 0.375rem;
+    background: var(--settings-info-bg);
+    color: var(--settings-info-text);
+}
+
+.feed-cloudflare-warning p,
+.feed-html-xpath-fallback p {
     margin: 0;
     font-size: 14px;
     line-height: 1.45;
@@ -330,6 +351,12 @@
     color: var(--color-warning);
 }
 
+:global(:root[data-theme='dark']) .feed-html-xpath-fallback {
+    background: var(--settings-info-bg);
+    border-color: var(--settings-info-border);
+    color: var(--settings-info-text);
+}
+
 @media (max-width: 879px) {
     .feed-form-section {
         gap: 0.625rem;
@@ -349,6 +376,14 @@ import { validateFeed, createFeed } from '../../../api/feeds';
 import { notifyActionError } from '../../../services/actionNotifications.js';
 import BaseDialog from '../BaseDialog.vue';
 
+// Keeps request-specific validation errors out of the scraper fallback path.
+const isActionableValidationError = error => {
+    const data = error?.response?.data;
+    return error?.response?.status === 409
+        || data?.error_msg === 'Feed already exists.'
+        || data?.error_msg === 'Category is invalid.';
+};
+
 export default {
     name: 'NewFeed',
     components: {
@@ -362,6 +397,7 @@ export default {
           saving: false,
           error_msg: "",
           isCloudflare: false,
+          showHtmlXpathFallback: false,
           cloudflareUrl: null,
           url: null,
           category: {},
@@ -406,7 +442,57 @@ export default {
             return Boolean(this.normalizedUrl);
         }
     },
+    watch: {
+        // Keeps the model aligned with the first category that the native select displays.
+        'overviewStore.categories': {
+            immediate: true,
+            handler(categories) {
+                if (!categories.length) {
+                    this.selectedCategory = null;
+                    return;
+                }
+                if (!categories.some(category => category.id === this.selectedCategory)) {
+                    this.selectedCategory = categories[0].id;
+                }
+            }
+        }
+    },
+    created() {
+        const draft = this.uiStore.htmlXpathDraft;
+        if (!draft) return;
+
+        this.url = draft.url || null;
+        if (this.overviewStore.categories.some(category => category.id === draft.categoryId)) {
+            this.selectedCategory = draft.categoryId;
+        }
+        this.crawlSince = draft.crawlSince || '7d';
+        if (draft.accepted && draft.preview) {
+            const effectiveUrl = draft.preview.feed?.effectiveUrl || draft.url;
+            let fallbackDescription = 'Articles extracted from this webpage.';
+            try {
+                fallbackDescription = `Articles extracted from ${new URL(effectiveUrl).hostname}.`;
+            } catch {
+                // The URL was already validated by the server; retain the neutral fallback.
+            }
+            this.feed = {
+                feedName: draft.preview.feed?.title || 'Webpage feed',
+                feedDesc: draft.preview.feed?.description || fallbackDescription,
+                feedType: 'html_xpath',
+                url: effectiveUrl,
+                sourceConfig: draft.sourceConfig
+            };
+        }
+        this.uiStore.setHtmlXpathDraft(null);
+    },
     methods: {
+        // Invalidates metadata from an earlier URL as soon as the user edits the input.
+        resetValidatedFeed() {
+            this.feed = {};
+            this.error_msg = '';
+            this.isCloudflare = false;
+            this.showHtmlXpathFallback = false;
+            this.cloudflareUrl = null;
+        },
         // Closes the dialog only when no feed request is pending.
         closeDialog() {
             if (this.isBusy) {
@@ -414,6 +500,24 @@ export default {
             }
 
             this.uiStore.setShowModal('');
+        },
+        // Opens the initial HTML/XPath configuration surface after feed discovery fails.
+        openHtmlXpathFallback() {
+            if (this.isBusy || !this.showHtmlXpathFallback) {
+                return;
+            }
+
+            this.startHtmlXpathAnalysis();
+        },
+        // Starts a one-time analysis whose successful result is shown in the preview dialog.
+        startHtmlXpathAnalysis(pageUrl = this.normalizedUrl) {
+            this.uiStore.setHtmlXpathDraft({
+                url: pageUrl,
+                categoryId: this.selectedCategory,
+                crawlSince: this.crawlSince,
+                autoAnalyze: true
+            });
+            this.uiStore.setShowModal('HtmlXpathFeed');
         },
         // Discovers feed metadata for the submitted URL.
         async checkWebsite() {
@@ -423,6 +527,7 @@ export default {
 
             //set ajaxRequest to true so the please wait shows up the screen
             this.ajaxRequest = true;
+            this.showHtmlXpathFallback = false;
 
             try {
                 const result = await validateFeed(this.normalizedUrl, this.selectedCategory);
@@ -436,10 +541,18 @@ export default {
                     this.isCloudflare = true;
                     this.cloudflareUrl = data.feedUrl || this.normalizedUrl;
                     this.error_msg = 'This site could not be validated automatically.';
+                } else if (data?.code === 'NON_FEED_CONTENT') {
+                    this.isCloudflare = false;
+                    this.showHtmlXpathFallback = true;
+                    this.cloudflareUrl = null;
+                    this.error_msg = '';
+                    this.startHtmlXpathAnalysis(data.pageUrl || this.normalizedUrl);
                 } else {
                     this.isCloudflare = false;
                     this.cloudflareUrl = null;
-                    this.error_msg = 'Could not validate this feed. Check the URL and try again.';
+                    this.error_msg = isActionableValidationError(error)
+                        ? data.error_msg
+                        : 'Could not validate this feed. The URL may be invalid or the host may be unavailable.';
                 }
                 console.error(`Error validating feed URL ${this.url}:`, error);
             } finally {
@@ -498,7 +611,10 @@ export default {
                     feedType: this.feed.feedType,
                     url: this.feed.url,
                     status: 'active',
-                    crawlSince: this.crawlSince
+                    crawlSince: this.crawlSince,
+                    ...(this.feed.feedType === 'html_xpath'
+                        ? { sourceConfig: this.feed.sourceConfig }
+                        : {})
                 });
 
                 //overwrite results with results from the database

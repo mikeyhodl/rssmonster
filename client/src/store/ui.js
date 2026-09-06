@@ -3,6 +3,7 @@ import { acceptHMRUpdate, defineStore } from 'pinia';
 // This function creates application presentation state for one user session.
 const initialUiState = () => ({
   showModal: '',
+  htmlXpathDraft: null,
   chatAssistantOpen: false,
   mobileSearchOpen: false,
   searchQuery: '',
@@ -28,6 +29,11 @@ export const useUiStore = defineStore('ui', {
     // This action controls whether a modal is currently visible.
     setShowModal(value) {
       this.showModal = value;
+    },
+
+    // This action carries an ephemeral scraper preview draft between dialogs.
+    setHtmlXpathDraft(value) {
+      this.htmlXpathDraft = value;
     },
 
     // This action controls whether the chat assistant is open.
