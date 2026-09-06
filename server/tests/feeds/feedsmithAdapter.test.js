@@ -4,6 +4,51 @@ import { parseFeedSource } from '../../services/feeds/feedsmith/parseFeed.js';
 
 describe('Feedsmith adapter', () => {
   it.each([
+    ['icons/current.png', 'https://feeds.example.com/news/icons/current.png'],
+    ['/favicon.ico', 'https://feeds.example.com/favicon.ico'],
+    ['//cdn.example.com/icon.png', 'https://cdn.example.com/icon.png']
+  ])('resolves feed image %s against the fetched URL', (url, expected) => {
+    const feed = parseFeedSource(`
+      <rss version="2.0"><channel><title>Icons</title><link>https://site.example/</link>
+        <image><url>${url}</url><title>Icon</title><link>https://site.example/</link></image>
+      </channel></rss>
+    `, { feedUrl: 'https://feeds.example.com/news/feed.xml' });
+
+    expect(feed.faviconUrl).toBe(expected);
+  });
+
+  it('resolves Atom icons using the feed XML base', () => {
+    const feed = parseFeedSource(`
+      <feed xmlns="http://www.w3.org/2005/Atom" xml:base="../assets/">
+        <title>Icons</title><id>icons</id><icon>icon.png</icon><logo>logo.png</logo>
+      </feed>
+    `, { feedUrl: 'https://feeds.example.com/news/feed.xml' });
+
+    expect(feed.faviconUrl).toBe('https://feeds.example.com/assets/icon.png');
+  });
+
+  it.each(['javascript:alert(1)', 'data:image/png;base64,AAAA', 'https://[invalid',
+    `https://example.com/${'x'.repeat(255)}`])(
+    'falls back from unusable favicon %s to a valid icon', favicon => {
+      const feed = parseFeedSource(JSON.stringify({
+        version: 'https://jsonfeed.org/version/1.1',
+        title: 'Icons', favicon, icon: 'https://example.com/icon.png', items: []
+      }));
+
+      expect(feed.faviconUrl).toBe('https://example.com/icon.png');
+    }
+  );
+
+  it('uses the publisher site for relative images when no fetched URL is available', () => {
+    const feed = parseFeedSource(JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1', title: 'Icons',
+      home_page_url: 'https://example.com/news/', favicon: 'icon.png', items: []
+    }));
+
+    expect(feed.faviconUrl).toBe('https://example.com/news/icon.png');
+  });
+
+  it.each([
     ['/articles/one', 'https://feeds.example.com/articles/one'],
     ['../articles/two', 'https://feeds.example.com/articles/two'],
     ['//cdn.example.com/articles/three', 'https://cdn.example.com/articles/three']

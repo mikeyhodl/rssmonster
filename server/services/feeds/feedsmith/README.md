@@ -32,3 +32,11 @@ Each canonical entry contains:
 
 Code outside this directory must consume these canonical fields and must not inspect Feedsmith
 namespaces or container shapes directly.
+
+Favicons use the first usable HTTP(S) URL from `favicon`, `icon`, `logo`, then
+`image`. Relative URLs resolve against the feed's XML base or fetched URL, with
+the publisher site as a fallback when fetch provenance is unavailable. Candidates
+must fit the stored URL column. Successful changed-feed crawls replace the stored
+icon when one is supplied and retain it when no usable candidate exists. Unchanged
+responses retain the icon without reparsing. Publisher HTML icon discovery is not
+performed.

@@ -996,7 +996,8 @@ const runCrawl = async (userId = null, options = {}) => {
       // Update feed metadata to use latest info from feed
       const updateData = {
         feedType: parsedFeed.format || null,
-        favicon: parsedFeed.faviconUrl,
+        // Missing or rejected publisher metadata must not erase the last known icon.
+        ...(parsedFeed.faviconUrl ? { favicon: parsedFeed.faviconUrl } : {}),
         status: activeFeed.status
       };
       throwIfAborted(signal);

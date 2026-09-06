@@ -4,6 +4,7 @@ import {
   getFeedInputLimits
 } from './feedInputLimits.js';
 import { resolveSafeHttpUrl } from './resolveArticleLink.js';
+import { FEED_PERSISTENCE_LIMITS } from '../feedPersistenceMetadata.js';
 
 // This function reads a URL from common Feedsmith scalar and object shapes.
 const readUrl = value => {
@@ -40,6 +41,12 @@ export default function normalizeFeed(parsedFeed, { feedUrl = null } = {}) {
   // Resolves the safe feed and site bases required by entry link normalization.
   const safeFeedUrl = resolveSafeHttpUrl(feedUrl);
   const safeSiteUrl = resolveSafeHttpUrl(siteLink, safeFeedUrl);
+  const resourceBaseUrl = resolveSafeHttpUrl(sourceFeed.xmlBase, safeFeedUrl) ||
+    safeFeedUrl || safeSiteUrl;
+  // Skip unusable candidates so a broken preferred icon does not hide a valid fallback.
+  const faviconUrl = [sourceFeed.favicon, sourceFeed.icon, sourceFeed.logo, sourceFeed.image]
+    .map(value => resolveSafeHttpUrl(readUrl(value), resourceBaseUrl))
+    .find(url => url && url.length <= FEED_PERSISTENCE_LIMITS.faviconUrlCharacters) || null;
   const linkContext = {
     feedUrl: safeFeedUrl,
     feedBaseUrl: sourceFeed.xmlBase || null,
@@ -51,10 +58,7 @@ export default function normalizeFeed(parsedFeed, { feedUrl = null } = {}) {
     format,
     title: sourceFeed.title || null,
     description: sourceFeed.description || null,
-    faviconUrl: readUrl(sourceFeed.favicon) ||
-      readUrl(sourceFeed.icon) ||
-      readUrl(sourceFeed.logo) ||
-      readUrl(sourceFeed.image),
+    faviconUrl,
     publishedAt: resolveFeedPublishedDate(sourceFeed),
     selfUrl: readUrl(parsedFeed.self) ||
       selfLink ||

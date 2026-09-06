@@ -104,6 +104,47 @@ describe('crawl feed-lease lifecycle integration', () => {
     ownedUserIds = [];
   });
 
+  it('stores successive favicon locations even when there are no articles', async () => {
+    const { user, feeds: [feed] } = await createFixture(1);
+    await feed.update({ favicon: 'https://example.test/old.ico' });
+
+    for (const faviconUrl of ['https://cdn.example.test/new.png', 'https://cdn.example.test/latest.ico']) {
+      // Model separate scheduled attempts despite the database's second-resolution timestamps.
+      const previousAttempt = new Date(Date.now() - 60_000);
+      await feed.update({
+        nextFetchAt: previousAttempt,
+        lastAttemptAt: previousAttempt,
+        lastFetched: previousAttempt
+      });
+      mocked.acquireFeed.mockResolvedValue({
+        ...successfulOutcome(feed),
+        parsedFeed: { format: 'rss', faviconUrl, entries: [] }
+      });
+
+      const result = await crawlController.performCrawl(user.id, { parallel: false });
+
+      expect(result).toMatchObject({ processed: 1, errors: 0 });
+      await feed.reload();
+      expect(feed.favicon).toBe(faviconUrl);
+    }
+  });
+
+  it.each([null, `https://example.test/${'i'.repeat(255)}`])(
+    'preserves the stored favicon when new metadata is missing or oversized (%s)', async faviconUrl => {
+      const { user, feeds: [feed] } = await createFixture(1);
+      await feed.update({ favicon: 'https://example.test/known.ico' });
+      mocked.acquireFeed.mockResolvedValue({
+        ...successfulOutcome(feed),
+        parsedFeed: { format: 'rss', faviconUrl, entries: [] }
+      });
+
+      await crawlController.performCrawl(user.id, { parallel: false });
+
+      await feed.reload();
+      expect(feed.favicon).toBe('https://example.test/known.ico');
+    }
+  );
+
   it('passes the complete deadline and lease contract into acquisition', async () => {
     const { user } = await createFixture(1);
     let observedExecution = null;
