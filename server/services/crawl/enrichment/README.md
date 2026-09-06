@@ -12,6 +12,13 @@ support discard/filter, read, favorite, clicked, advertisement, quality, and tag
 preserve deterministic action ordering;
 handle invalid regular expressions safely.
 
+Action expressions accept plain JavaScript patterns (case-sensitive by default) or
+`/pattern/flags`, such as `/keyword|phrase/i`. A leading slash and trailing
+slash plus letters select the latter syntax; escape a leading slash as `\/`
+when a plain URL-path pattern would otherwise be ambiguous. The save API and
+crawler share the same compiler. Invalid expressions are rejected before saving;
+invalid legacy rules are logged and skipped during crawling.
+
 # Expected output:
 
 shouldDiscard

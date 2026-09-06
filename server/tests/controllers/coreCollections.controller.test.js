@@ -5,6 +5,7 @@ const mocked = vi.hoisted(() => ({
   actionBulkCreate: vi.fn(),
   actionDestroy: vi.fn(),
   actionFindAll: vi.fn(),
+  transaction: vi.fn(),
   articleDestroy: vi.fn(),
   articleFindAll: vi.fn(),
   articleLiteral: vi.fn(sql => ({ sql })),
@@ -18,6 +19,7 @@ const mocked = vi.hoisted(() => ({
 
 vi.mock('../../models/index.js', () => ({
   default: {
+    sequelize: { transaction: mocked.transaction },
     Action: {
       bulkCreate: mocked.actionBulkCreate,
       destroy: mocked.actionDestroy,
@@ -82,6 +84,7 @@ const resetControllerMocks = () => {
 describe('action controller', () => {
   beforeEach(() => {
     resetControllerMocks();
+    mocked.transaction.mockImplementation(callback => callback({ id: 'action-transaction' }));
   });
 
   it('returns only actions owned by the authenticated user', async () => {
@@ -112,7 +115,7 @@ describe('action controller', () => {
     expect(res.status).toHaveBeenCalledWith(401);
   });
 
-  it('replaces actions while filtering empty entries and applying defaults', async () => {
+  it('replaces owned actions in one transaction while applying defaults', async () => {
     const created = [{ id: 7, name: 'Tag security' }];
     mocked.actionDestroy.mockResolvedValue(2);
     mocked.actionBulkCreate.mockResolvedValue(created);
@@ -122,10 +125,9 @@ describe('action controller', () => {
       createRequest({
         body: {
           actions: [
-            null,
-            {},
             {
               name: 'Tag security',
+              userId: 99,
               actionType: 'tag',
               regularExpression: 'security'
             },
@@ -141,7 +143,8 @@ describe('action controller', () => {
     );
 
     expect(mocked.actionDestroy).toHaveBeenCalledWith({
-      where: { userId: 42 }
+      where: { userId: 42 },
+      transaction: { id: 'action-transaction' }
     });
     expect(mocked.actionBulkCreate).toHaveBeenCalledWith([
       {
@@ -158,7 +161,7 @@ describe('action controller', () => {
         regularExpression: '',
         tagValue: 'ignored'
       }
-    ]);
+    ], { transaction: { id: 'action-transaction' } });
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith({ total: 1, actions: created });
   });
@@ -168,13 +171,80 @@ describe('action controller', () => {
     const res = createResponse();
 
     await actionController.createAction(
-      createRequest({ body: { actions: 'invalid' } }),
+      createRequest({ body: { actions: [] } }),
       res,
       vi.fn()
     );
 
     expect(mocked.actionBulkCreate).not.toHaveBeenCalled();
+    expect(mocked.actionDestroy).toHaveBeenCalledWith({
+      where: { userId: 42 },
+      transaction: { id: 'action-transaction' }
+    });
     expect(res.json).toHaveBeenCalledWith({ total: 0, actions: [] });
+  });
+
+  it.each([
+    undefined, null, 'invalid', {}, [null], [{}], [[]], ['invalid'],
+    [{ name: 123 }], [{ name: 'Rule', regularExpression: {} }],
+    [{ name: 'Rule', actionType: false }], [{ name: 'Rule', tagValue: [] }],
+    [{ name: 'x'.repeat(256) }],
+    [{ name: 'Valid' }, { name: 'Invalid', tagValue: 'x'.repeat(256) }]
+  ].map(actions => [actions]))('rejects malformed actions without changing saved rules: %j', async actions => {
+    const res = createResponse();
+    const next = vi.fn();
+
+    await actionController.createAction(createRequest({ body: { actions } }), res, next);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(mocked.transaction).not.toHaveBeenCalled();
+    expect(mocked.actionDestroy).not.toHaveBeenCalled();
+    expect(mocked.actionBulkCreate).not.toHaveBeenCalled();
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  it.each(['[', '/[/i', '/keyword/z', '/keyword/ii'])('rejects invalid expression %s before replacing any rules', async regularExpression => {
+    const res = createResponse();
+    await actionController.createAction(createRequest({ body: { actions: [
+      { name: 'Valid', actionType: 'read', regularExpression: 'valid' },
+      { name: 'Invalid', actionType: 'read', regularExpression }
+    ] } }), res, vi.fn());
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      error: 'Action 2: invalid regular expression or flags. Use a plain pattern or /pattern/flags.'
+    });
+    expect(mocked.transaction).not.toHaveBeenCalled();
+    expect(mocked.actionDestroy).not.toHaveBeenCalled();
+    expect(mocked.actionBulkCreate).not.toHaveBeenCalled();
+  });
+
+  it.each(['keyword|phrase', '/keyword|phrase/i', '/releases/version-2$'])('saves valid expression %s unchanged', async regularExpression => {
+    mocked.actionBulkCreate.mockResolvedValue([]);
+    const res = createResponse();
+    await actionController.createAction(createRequest({ body: { actions: [
+      { name: 'Match', actionType: 'read', regularExpression }
+    ] } }), res, vi.fn());
+
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(mocked.actionBulkCreate.mock.calls[0][0][0].regularExpression).toBe(regularExpression);
+  });
+
+  it('propagates failed replacement inserts through the transaction without reporting success', async () => {
+    const error = new Error('insert failed');
+    mocked.actionBulkCreate.mockRejectedValue(error);
+    const res = createResponse();
+    const next = vi.fn();
+
+    await actionController.createAction(
+      createRequest({ body: { actions: [{ name: 'Rule', actionType: 'read' }] } }),
+      res,
+      next
+    );
+
+    await expect(mocked.transaction.mock.results[0].value).rejects.toBe(error);
+    expect(next).toHaveBeenCalledWith(error);
+    expect(res.status).not.toHaveBeenCalled();
   });
 
   it('rejects action replacement without a user ID', async () => {

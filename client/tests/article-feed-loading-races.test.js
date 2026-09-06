@@ -84,6 +84,41 @@ beforeEach(() => {
 });
 
 describe('ArticleFeed loading races', () => {
+  it.each(['desc', 'recommended'])('shows an initial %s load failure and recovers through retry', async sort => {
+    const request = sort === 'desc' ? fetchArticlePage : fetchArticleIds;
+    request.mockRejectedValueOnce(new Error('HTTP 500'));
+    const context = createLoadingContext({ currentSelection: { status: 'unread', sort } });
+
+    expect(await ArticleFeed.methods.fetchArticleIds.call(context, context.selectionStore.currentSelection)).toBe(false);
+    expect(context.hasLoadedContent).toBe(false);
+    expect(context.isLoading).toBe(false);
+    expect(context.paginationError).toBe('Could not load articles. Please try again.');
+
+    request.mockRejectedValueOnce(new Error('Still unavailable'));
+    expect(await context.retryPagination()).toBe(false);
+    expect(context.hasLoadedContent).toBe(false);
+    expect(context.paginationError).toBe('Could not reload the article list.');
+
+    request.mockResolvedValueOnce({ data: { itemIds: [], firstPage: [] } });
+    expect(await context.retryPagination()).toBe(true);
+    expect(context.hasLoadedContent).toBe(true);
+    expect(context.paginationError).toBeNull();
+    expect(context.articles).toEqual([]);
+  });
+
+  it('ignores an initial load failure from an obsolete selection', async () => {
+    const previousRequest = deferred();
+    fetchArticlePage.mockReturnValueOnce(previousRequest.promise);
+    const context = createLoadingContext();
+    const loading = ArticleFeed.methods.fetchArticleIds.call(context, context.selectionStore.currentSelection);
+    await flushPromises();
+    context.activeRequestId++;
+    previousRequest.reject(new Error('Old request failed'));
+
+    expect(await loading).toBeNull();
+    expect(context.paginationError).toBeNull();
+  });
+
   it('installs an initial cursor page without materializing the complete result manifest', async () => {
     fetchArticlePage.mockResolvedValueOnce({
       data: {

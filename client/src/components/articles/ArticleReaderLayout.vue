@@ -181,7 +181,7 @@
           @refresh="$emit('forceReload')"
         />
       </div>
-      <div v-else class="reader-loading-state" role="status" aria-label="Loading articles">
+      <div v-else-if="!collectionProgress.paginationError" class="reader-loading-state" role="status" aria-label="Loading articles">
         <div class="reader-loading-state__items" aria-hidden="true">
           <div v-for="index in 4" :key="index" class="reader-loading-skeleton">
             <span class="reader-loading-skeleton__title"></span>

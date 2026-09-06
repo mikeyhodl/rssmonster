@@ -11,6 +11,7 @@
    - tag (assign tag)
 ====================================================== */
 import { logFeedDebug } from '../../feeds/feedLogging.js';
+import { compileActionRegex } from '../../../utils/actionRegex.js';
 
 const ACTION_SEARCH_FIELDS = [
   'contentHtml',
@@ -53,7 +54,7 @@ function applyActions(actions, article = {}) {
 
     let regex;
     try {
-      regex = new RegExp(action.regularExpression);
+      regex = compileActionRegex(action.regularExpression);
     } catch {
       console.error(`Error testing regex for action "${action.name}"`);
       continue;

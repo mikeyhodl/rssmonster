@@ -621,8 +621,6 @@ describe('SettingsActions high-impact decision coverage', () => {
     expect(context.$emit).toHaveBeenCalledWith('saved');
     expect(context.$emit).toHaveBeenCalledWith('close');
     expect(context.saving).toBe(false);
-    context.closeActionsModal();
-    expect(context.showActionsModal).toBe(false);
   });
 
   it('rejects invalid load payloads and guarded editing operations', async () => {

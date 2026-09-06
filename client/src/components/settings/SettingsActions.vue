@@ -500,14 +500,14 @@ export default {
         this.$emit('close');
       } catch (err) {
         console.error('Error saving article actions:', err);
-        notifyActionError('Could not save article actions. Please try again.', err);
+        const validationMessage = err?.response?.status === 400
+          && typeof err.response.data?.error === 'string'
+          ? err.response.data.error
+          : 'Could not save article actions. Please try again.';
+        notifyActionError(validationMessage, err);
       } finally {
         this.saving = false;
       }
-    },
-    // This function closes the legacy nested actions modal state.
-    closeActionsModal() {
-      this.showActionsModal = false;
     }
   }
 };

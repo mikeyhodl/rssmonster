@@ -173,7 +173,7 @@ export const articleFeedPaginationMethods = {
     } catch (error) {
       if (requestId !== this.activeRequestId) return null;
       console.warn('Article fetch failed', error?.message);
-      this.hasLoadedContent = true;
+      this.paginationError = 'Could not load articles. Please try again.';
       return false;
     } finally {
       if (requestId === this.activeRequestId) this.isLoading = false;

@@ -148,6 +148,22 @@ describe('recoverable action errors', () => {
     expect(console.error).toHaveBeenCalledWith('Error saving article actions:', error);
   });
 
+  it('shows action regex validation errors while retaining the editable rules', async () => {
+    const message = 'Action 1: invalid regular expression or flags. Use a plain pattern or /pattern/flags.';
+    saveActions.mockRejectedValueOnce({ response: { status: 400, data: { error: message } } });
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    const notification = captureActionError();
+    const actions = [{ name: 'Invalid', actionType: 'read', regularExpression: '/[/i' }];
+    const context = { actions, loaded: true, saving: false, $emit: vi.fn() };
+
+    await SettingsActions.methods.save.call(context);
+
+    await expect(notification).resolves.toEqual({ message });
+    expect(context.actions).toEqual(actions);
+    expect(context.saving).toBe(false);
+    expect(context.$emit).not.toHaveBeenCalled();
+  });
+
   it('blocks action saves until the authoritative load succeeds', async () => {
     let resolveLoad;
     const pendingLoad = new Promise(resolve => {

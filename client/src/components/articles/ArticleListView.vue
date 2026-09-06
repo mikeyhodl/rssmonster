@@ -75,7 +75,7 @@
         @refresh="$emit('forceReload')"
       />
     </div>
-    <div id="no-more" v-else>
+    <div id="no-more" v-else-if="!collectionProgress.paginationError">
       <ArticleLoadingState />
     </div>
   </div>

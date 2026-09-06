@@ -20,6 +20,28 @@ const article = {
 
 describe('applyActions searchable article fields', () => {
   it.each([
+    '/release announcement/i',
+    '/RELEASE|PHRASE/i',
+    '/example\\.com\\/releases/i',
+    '/[a-z/]+\\/version-2$/i',
+    '\\/releases/version-2$'
+  ])('matches supported action syntax %s', expression => {
+    expect(applyActions([tagAction(expression)], article).tags).toEqual(['matched']);
+  });
+
+  it('keeps plain patterns case-sensitive and preserves significant whitespace', () => {
+    expect(applyActions([tagAction('RELEASE')], article).tags).toEqual([]);
+    expect(applyActions([tagAction(' release ')], { title: 'release' }).tags).toEqual([]);
+  });
+
+  it.each(['g', 'y'])('resets %s matching between fields and articles', flags => {
+    const actions = [tagAction(`/release/${flags}`)];
+    const input = { title: 'no match', contentText: 'release' };
+    expect(applyActions(actions, input).tags).toEqual(['matched']);
+    expect(applyActions(actions, input).tags).toEqual(['matched']);
+  });
+
+  it.each([
     ['title', 'release announcement'],
     ['content HTML', 'Rendered publisher body'],
     ['content text', '^Rendered publisher body$'],
@@ -91,10 +113,10 @@ describe('applyActions searchable article fields', () => {
     });
   });
 
-  it('logs and skips malformed regular expressions', () => {
+  it.each(['[', '/[/i', '/release/z', '/release/ii'])('logs and skips malformed regular expression %s', expression => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-    expect(applyActions([tagAction('[')], article).tags).toEqual([]);
+    expect(applyActions([tagAction(expression)], article).tags).toEqual([]);
     expect(consoleError).toHaveBeenCalledWith(
       'Error testing regex for action "Matching rule"'
     );
