@@ -6,6 +6,13 @@
   <div class="sidebar-scroll">
     <div class="sidebar-primary-actions">
       <SidebarActionButton
+        icon="plus-square-fill"
+        label="Add new feed"
+        variant="sidebar-button sidebar-button-add-feed"
+        @select="uiStore.setShowModal('NewFeed')"
+      />
+
+      <SidebarActionButton
         icon="arrow-repeat"
         label="Refresh feeds"
         variant="sidebar-button sidebar-button-refresh"
@@ -17,13 +24,6 @@
         v-if="refreshProgress.visible"
         class="sidebar-refresh-progress-panel"
         :progress="refreshProgress"
-      />
-
-      <SidebarActionButton
-        icon="plus-square-fill"
-        label="Add new feed"
-        variant="sidebar-button sidebar-button-add-feed"
-        @select="uiStore.setShowModal('NewFeed')"
       />
 
       <SidebarActionButton
