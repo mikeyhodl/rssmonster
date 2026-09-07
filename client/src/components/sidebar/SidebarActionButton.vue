@@ -115,6 +115,11 @@ export default {
   transition: background-color var(--motion-duration-fast) var(--motion-easing-standard), border-color var(--motion-duration-fast) var(--motion-easing-standard), color var(--motion-duration-fast) var(--motion-easing-standard);
 }
 
+.sidebar-button-refresh,
+.sidebar-button-add-feed {
+  margin-bottom: var(--space-1);
+}
+
 .sidebar-button-refresh {
   --action-color: var(--sidebar-action-refresh-text);
   --action-focus: var(--sidebar-action-refresh-focus);
