@@ -61,6 +61,7 @@ const createFixture = async () => {
     contentOriginal: '<script>window.rawFeverScript = true</script><p>Raw Fever body</p>',
     contentHtml: '<p>Sanitized Fever body</p>',
     publishedAt: new Date('2026-05-01T10:00:00Z'),
+    createdAt: new Date('2026-05-01T10:00:00Z'),
     hotlinks: 2
   });
   const unlinkedArticle = await Article.create({
@@ -70,7 +71,8 @@ const createFixture = async () => {
     url: 'https://example.com/cold',
     title: 'Cold Article',
     description: 'Not linked',
-    publishedAt: new Date('2026-05-01T11:00:00Z')
+    publishedAt: new Date('2026-05-01T11:00:00Z'),
+    createdAt: new Date('2026-05-01T11:00:00Z')
   });
 
   await Hotlink.create({
@@ -474,6 +476,32 @@ describe('Fever API compatibility', () => {
     expect(JSON.stringify(res.body)).not.toContain('rawFeverScript');
   });
 
+  it.each([
+    [null, '<p>Safe description</p>', '<p>Safe description</p>'],
+    ['', '<p>Safe description</p>', '<p>Safe description</p>'],
+    [null, null, ''],
+    ['', '', '']
+  ])('uses safe description HTML when contentHtml is %j and descriptionHtml is %j', async (
+    contentHtml, descriptionHtml, expectedHtml
+  ) => {
+    const { apiKey, linkedArticle } = await createFixture();
+    await linkedArticle.update({
+      contentHtml,
+      descriptionHtml,
+      description: '<script>window.rawFeverDescription = true</script>'
+    });
+
+    const res = await request(app)
+      .post('/api/fever')
+      .query({ api_key: apiKey, items: '', with_ids: String(linkedArticle.id) });
+
+    expect(res.status).toBe(200);
+    expect(res.body.items).toEqual([
+      expect.objectContaining({ id: linkedArticle.id, html: expectedHtml })
+    ]);
+    expect(JSON.stringify(res.body)).not.toContain('rawFeverDescription');
+  });
+
   it('uses feed crawl times for refresh timestamps', async () => {
     const { apiKey, user, feed } = await createFixture();
     const lastFetched = new Date('2026-05-02T12:34:56Z');
@@ -859,6 +887,33 @@ describe('Fever API compatibility', () => {
     }
   });
 
+  it.each(['feed', 'group', 'all'])('preserves late-arriving articles when marking %s read', async scope => {
+    const { apiKey, feed, linkedArticle, unlinkedArticle } = await createFixture();
+    const cutoff = linkedArticle.createdAt;
+    await unlinkedArticle.update({
+      publishedAt: new Date('2026-04-01T00:00:00Z')
+    });
+
+    const res = await request(app)
+      .post('/api/fever')
+      .type('form')
+      .send({
+        api_key: apiKey,
+        mark: scope === 'feed' ? 'feed' : 'group',
+        as: 'read',
+        id: scope === 'feed' ? feed.id : scope === 'group' ? feed.categoryId : 0,
+        before: String(cutoff.getTime() / 1000)
+      });
+
+    await Promise.all([linkedArticle.reload(), unlinkedArticle.reload()]);
+
+    expect(res.status).toBe(200);
+    expect(linkedArticle.status).toBe('read');
+    expect(unlinkedArticle.status).toBe('unread');
+    expect(res.body.unread_item_ids.split(',')).toContain(String(unlinkedArticle.id));
+    expect(res.body.unread_item_ids.split(',')).not.toContain(String(linkedArticle.id));
+  });
+
   it('enforces feed and group ownership while respecting before cutoffs', async () => {
     const owned = await createFixture();
     const other = await createFixture();
@@ -1031,6 +1086,44 @@ describe('Fever API compatibility', () => {
     expect(res.body.unread_item_ids.split(',')).not.toContain(
       String(unlinkedArticle.id)
     );
+  });
+
+  it.each(['feed', 'group', 'all'])('preserves historical read timestamps when marking %s read', async scope => {
+    const { apiKey, feed, linkedArticle, unlinkedArticle } = await createFixture();
+    const oldReadAt = new Date('2020-01-01T00:00:00Z');
+    await unlinkedArticle.update({ status: 'read', readAt: oldReadAt });
+
+    const readResponse = await request(app)
+      .post('/api/fever')
+      .type('form')
+      .send({
+        api_key: apiKey,
+        mark: scope === 'feed' ? 'feed' : 'group',
+        as: 'read',
+        id: scope === 'feed' ? feed.id : scope === 'group' ? feed.categoryId : 0,
+        before: String(Math.floor(Date.now() / 1000))
+      });
+
+    await Promise.all([linkedArticle.reload(), unlinkedArticle.reload()]);
+
+    expect(readResponse.status).toBe(200);
+    expect(linkedArticle.status).toBe('read');
+    expect(linkedArticle.readAt).toBeInstanceOf(Date);
+    expect(unlinkedArticle.readAt.getTime()).toBe(oldReadAt.getTime());
+
+    const unreadResponse = await request(app)
+      .post('/api/fever')
+      .type('form')
+      .send({ api_key: apiKey, unread_recently_read: '1' });
+
+    await Promise.all([linkedArticle.reload(), unlinkedArticle.reload()]);
+
+    expect(unreadResponse.status).toBe(200);
+    expect(linkedArticle.status).toBe('unread');
+    expect(linkedArticle.readAt).toBeNull();
+    expect(unlinkedArticle.status).toBe('read');
+    expect(unlinkedArticle.readAt.getTime()).toBe(oldReadAt.getTime());
+    expect(unreadResponse.body.unread_item_ids).toBe(String(linkedArticle.id));
   });
 
   it('returns favicons only for feeds owned by the authenticated user', async () => {

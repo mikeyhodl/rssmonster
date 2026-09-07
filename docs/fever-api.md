@@ -134,7 +134,7 @@ client while RSSMonster retains its internal duplicate relationships.
 Add `items` to retrieve article records. Each item contains its article and
 feed IDs, title, author, URL, publication timestamp, read and saved flags, and
 sanitized article HTML. When sanitized HTML is unavailable, RSSMonster falls
-back to the stored description.
+back to the sanitized description HTML.
 
 Responses contain at most 50 items. The supported selectors are:
 
@@ -214,10 +214,11 @@ mark=feed&as=read&id=<feed-id>&before=<unix-timestamp>
 mark=group&as=read&id=<group-id>&before=<unix-timestamp>
 ```
 
-Only canonical articles owned by the authenticated user and published at or
-before the cutoff are changed. RSSMonster accepts the `before` value in Unix
+Only unread canonical articles owned by the authenticated user and ingested at or
+before the cutoff are changed. Articles ingested later remain unread even if
+their publication date is older. RSSMonster accepts the `before` value in Unix
 seconds or milliseconds. If it is missing or invalid, the current time is
-used.
+used. Articles already read retain their original reading timestamps.
 
 Group ID `0` means all feeds. Group ID `-1` represents Fever's Sparks super
 group, but RSSMonster currently has no Sparks feeds, so that mutation performs
