@@ -22,6 +22,8 @@ server.
   command reference, including supported arguments and usage guidance.
 - [Email Configuration]({% link email-configuration.md %}) explains how to enable SMTP,
   configure credentials and TLS, and verify connectivity from the admin UI.
+- [Progressive Web App and Notifications]({% link web-app-and-notifications.md %}) covers
+  app installation and the VAPID configuration needed for browser Push.
 
 Run administrative commands from the `server` directory unless a command says
 otherwise. Before running a command that changes stored data, back up the
@@ -40,6 +42,26 @@ account becomes the administrator. See [First Login]({% link first-login.md %}).
 retry, and official sources. [Account and Email]({% link account.md %}) covers self-service
 password and email changes. [Web App and Notifications]({% link web-app-and-notifications.md %})
 documents VAPID configuration for browser Push.
+
+## Push notification settings
+
+Web Push is configured through deployment environment variables. The in-app
+Settings workspace does not provide fields for entering Push keys.
+
+Set `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, and `VAPID_SUBJECT` for the web
+process and each crawl worker that sends notifications. Use the same stable
+key pair across those processes and keep the private key secret. Serve the app
+over HTTPS so browsers can use its installation and notification capabilities.
+
+The supplied Compose profiles pass these variables to the web service; add them
+to the crawl worker's environment as well for scheduled-crawl notifications.
+See [Configure Web Push on the server]({% link web-app-and-notifications.md %}#configure-web-push-on-the-server)
+for key generation, `.env` examples, the worker override, and restart instructions.
+
+After server configuration, each user enables alerts in the mobile or compact
+**Options → Notifications** controls and grants browser permission. On
+iOS/iPadOS, users must first install and launch the Home Screen app. Web Push
+works independently from SMTP and Daily Briefing email delivery.
 
 ## Article cleanup
 

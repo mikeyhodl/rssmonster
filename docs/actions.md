@@ -1,17 +1,65 @@
 ---
 layout: page
 title: Actions
-parent: Using RSSMonster
-nav_order: 12
+parent: How RSSMonster Works
+nav_order: 11
 ---
 
 # Actions
 
 Actions apply repeatable rules to incoming articles during crawling. For example,
 a rule can bookmark release announcements or tag articles mentioning a project.
-Open **Settings → Actions**, select **Add Action**, enter a name, choose a type,
-and enter a regular expression. For a tag action, also enter the tag value.
-Select **Save Changes** to persist the list.
+Each rule combines a text-matching condition with an action to perform when that
+condition matches. Rules apply across your subscribed feeds and do not require
+AI processing.
+
+![Actions settings showing rules that assign tags to incoming articles]({{ '/assets/actions.png' | relative_url }})
+
+## Create an action
+
+1. Open **Settings → Actions**.
+2. Select **Add Action**.
+3. Enter a descriptive **Name** so you can recognize the rule later.
+4. Choose the **Type**, such as **Assign tag** or **Set favorite**.
+5. Enter a **Regular Expression** to identify matching articles.
+6. For **Assign tag**, also enter the **Tag value** to add.
+7. Select **Save Changes** to save your rules.
+
+You can edit the fields of an existing rule or use its trash button to remove
+it. Select **Save Changes** after editing or removing rules as well.
+
+## Example: assign a tag to incoming articles
+
+To collect articles mentioning Verstappen under one tag, add a rule with:
+
+- **Name:** Verstappen news
+- **Type:** Assign tag
+- **Tag value:** `verstappen`
+- **Regular Expression:** `/verstappen/i`
+
+When an incoming article contains “Verstappen” in any checked field, RSSMonster
+adds the `verstappen` tag. The `i` flag makes the match case-insensitive, so
+“VERSTAPPEN” also matches. The tag is added alongside the article's other tags.
+
+Select the tag on an article or in the sidebar to find related articles, or
+search for `tag:verstappen`. See [Tags]({% link tag.md %}) for more ways to organize
+and find tagged articles.
+
+## Example: mark matching articles as favorites
+
+To save incoming articles mentioning Nintendo or Zelda, add another rule with:
+
+- **Name:** Save Nintendo and Zelda news
+- **Type:** Set favorite
+- **Regular Expression:** `/nintendo|zelda/i`
+
+The `|` means “or,” so either word is enough to match. RSSMonster automatically
+bookmarks matching articles, making them available in **Favorites** in the
+sidebar. Setting a favorite does not itself mark the article as read. See
+[Bookmarks]({% link bookmarks.md %}) for more about favorites.
+
+To both tag and favorite the same articles, create two actions with the same
+regular expression: one with **Assign tag**, and one with **Set favorite**.
 
 ## Available actions
 

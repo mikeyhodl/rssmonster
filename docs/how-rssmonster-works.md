@@ -22,9 +22,6 @@ Feeds and articles
                                       |          |
                                       +----------+--> Interest Islands
 
-Search expressions --------------------------------> Smart Folders
-        |
-        +------------------------------------------> Generated Feeds --> RSS clients
 ```
 
 ## Worker and Pipeline Architecture
@@ -89,19 +86,20 @@ for queue states, concurrency, observability, shutdown, and operator recovery.
 
 ## Key Concepts
 
-### Smart Folders
+### Actions
 
-[Smart Folders]({% link smart-folders.md %}) are saved, dynamic views powered by the same
-expressions used by RSSMonster search. New articles appear automatically when
-they match a folder's query, without moving or copying the articles from their
-feeds.
+[Actions]({% link actions.md %}) apply your rules to incoming articles during a
+crawl. When an article matches a regular expression, RSSMonster can assign a
+tag, mark it as a favorite or read, override a score, or hide it from normal
+queries. For example, automatically tag articles mentioning Verstappen or save
+Nintendo and Zelda news to Favorites. These rules do not require AI processing.
 
-### Generated Feeds
+### Official Feeds
 
-[Generated Feeds]({% link generated-feeds.md %}) apply those same saved expressions when
-an external RSS client requests a private tokenized URL. They dynamically
-render up to 50 current matching articles without copying or materializing a
-second collection of articles.
+[Official Feeds]({% link official-feeds.md %}) identify articles whose URLs match
+organization domains you configure in **Settings → Official Sources**. During
+crawling, matching articles receive an official-source indicator and the
+organization name, helping you recognize direct announcements and updates.
 
 ### FeedTrust
 
@@ -138,6 +136,13 @@ relationships and reading signals such as clicks, bookmarks, and explicit
 feedback. An Interest Island answers: **what does this user consistently care
 about?**
 
+### Daily Briefing
+
+[Daily Briefing]({% link daily-briefing.md %}) combines a recent article collection
+with a short overview of current event stories. Use **Tune your briefing** to
+change the lookback period, unread and interest filters, developing coverage,
+and minimum number of sources.
+
 ### Scoring and Ranking
 
 [Scoring and Ranking]({% link scoring.md %}) explains how article quality, FeedTrust,
@@ -152,8 +157,6 @@ When semantic processing is enabled, article embeddings help associate reports
 with Events, connect Events to Topics, and relate that content to a user's
 Interest Islands. Optional generated summaries, scores, inferred tags, and
 presentation labels can arrive afterward without changing that semantic order.
-Smart Folders provide a separate, deterministic way to build focused views
-using search rules.
 
 Start with [Concepts]({% link concepts.md %}) for the broader philosophy and terminology.
 For implementation-level details about the semantic pipeline, service

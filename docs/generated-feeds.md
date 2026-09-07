@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Generated Feeds
-parent: How RSSMonster Works
-nav_order: 2
+parent: Using RSSMonster
+nav_order: 12
 ---
 
 # Generated Feeds

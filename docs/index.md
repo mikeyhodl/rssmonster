@@ -11,7 +11,7 @@ sources. Read chronologically, organize subscriptions, and save useful articles.
 With optional AI processing, you can also explore related coverage, follow
 ongoing stories, and rank articles by quality or personal interest.
 
-![RSSMonster reading interface](assets/screenshot04.png)
+![RSSMonster reading interface](assets/screenshot01.png)
 
 ## Start reading
 
@@ -37,6 +37,7 @@ to suit your reading session and screen. [Bookmarks]({% link bookmarks.md %}),
 - **[Smart Folders]({% link smart-folders.md %}):** save a search as a reusable view.
 - **[Tags]({% link tag.md %}):** organize articles using publisher, feed, generated, or rule-based labels.
 - **[Actions]({% link actions.md %}):** automatically bookmark, mark read, tag, score, or hide incoming articles.
+- **[Official Feeds]({% link official-feeds.md %}):** recognize articles from organization domains you configure.
 - **[Feed item filters]({% link feed-item-filters.md %}):** decide which future entries a subscription accepts.
 - **[HTML + XPath feeds]({% link html-xpath-feeds.md %}):** follow sites without a usable syndication feed.
 - **[Generated feeds]({% link generated-feeds.md %}):** publish a saved selection at a revocable, token-protected RSS URL.
