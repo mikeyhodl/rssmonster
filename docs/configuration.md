@@ -159,6 +159,19 @@ After changing databases or creating a new database, apply the canonical
 migrations from the `server` directory with `npm run db`. Docker images apply
 pending migrations automatically at startup.
 
+### MySQL sort memory
+
+For large article collections with observed sort-memory bottlenecks, consider
+this MySQL server setting in `my.cnf`:
+
+```ini
+[mysqld]
+sort_buffer_size = 4M
+```
+
+This is an optional tuning example, not a prerequisite or a supplied Compose
+setting. Evaluate query behavior and memory use before changing it.
+
 ## Application and Authentication
 
 | Variable | Default | Description |
@@ -328,6 +341,44 @@ RSSMONSTER_INTERNAL_HOST_ALLOWLIST=feeds.internal.example 10.20.30.40:8080
 
 Keep exceptions narrow. An allowlisted destination becomes reachable by the
 server's feed-fetching code.
+
+### Direct HTTPS and Certbot
+
+For a manual installation that terminates TLS in Node, obtain a certificate
+with Certbot on the host:
+
+```bash
+certbot certonly --standalone -d yourdomain.com --agree-tos -q
+```
+
+The standalone challenge needs its validation port available. Place
+`fullchain.pem` and `privkey.pem` in `server/cert/`, readable by the server
+account, and protect the private key. Set this in `server/.env`:
+
+```env
+ENABLE_HTTPS=true
+```
+
+Run the application from `server`: certificate paths are relative to its working
+directory. `PORT` still controls the listener (default `3000`); enabling HTTPS
+does not automatically change it to `443`. Rebuild the client with the actual
+public HTTPS origin in `VITE_APP_HOSTNAME` and restart the server.
+
+For a host with Certbot installed, a weekly renewal schedule can be
+used as a starting point in the operator's crontab:
+
+```cron
+0 0 * * 0 certbot renew --quiet
+```
+
+Configure a renewal deploy hook to copy the renewed `fullchain.pem` and
+`privkey.pem` from `/etc/letsencrypt/live/yourdomain.com/` into
+`/path/to/rssmonster/server/cert/`, preserve restrictive key permissions, and
+restart the web service through its service manager. Node reads certificates at
+startup, so copying renewed files alone does not activate them. Adapt the hook
+to the service account and process manager; do not copy the entire certificate
+directory indiscriminately. Reverse-proxy TLS deployments should use the
+proxy's certificate renewal and reload mechanism instead.
 
 ## Rate Limiting
 

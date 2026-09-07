@@ -28,11 +28,35 @@ just by searching your archive.
 
 ## Enable the assistant
 
-Configure the inference service and its provider credentials as described in
-[Model Usage]({% link model-usage.md %}). On the server, both `INFERENCE_AI_ENABLED=true`
-and `INFERENCE_ASSISTANT_ENABLED=true` are required. Restart affected processes
-after changing configuration. Docker also needs these values passed through the
-appropriate service environment.
+Configure model providers using [Model Usage]({% link model-usage.md %}), then enable
+chat in `server/.env`:
+
+```env
+INFERENCE_AI_ENABLED=true
+INFERENCE_ASSISTANT_ENABLED=true
+INFERENCE_AGENT_TIMEOUT_MS=300000
+```
+
+The assistant adapter currently supports OpenAI only. Put its credentials in
+`inference/.env`:
+
+```env
+OPENAI_API_KEY=your-openai-api-key
+ASSISTANT_PROVIDER=openai
+ASSISTANT_MODEL=gpt-4o-mini
+```
+
+Local embeddings, classification, summaries, scoring, Smart Folder recommendations,
+and feed rediscovery do not require this key when configured with Qwen and
+ModernBERT. Chat is an independent optional capability; enabling it does not
+schedule background summaries, inferred tags, or article scoring.
+
+For the comprehensive MySQL Compose profile, put the assistant values and
+`INFERENCE_ASSISTANT_ENABLED=true` in the repository-root `.env`; that profile
+already forwards each value to the responsible service. Recreate it with
+`docker compose -f docker-compose.mysql.yml up -d`. For source installations,
+restart inference and the server. The client learns chat availability from the
+server, so these server-side flags do not require a client rebuild.
 
 Provider credentials belong in inference configuration. RSSMonster executes
 user-scoped tools locally; inference performs model calls. When using an external
@@ -47,7 +71,8 @@ configuration. Timeouts and capability circuit breakers are described in
 
 The Model Context Protocol transport is mounted at `/mcp`, outside `/api`.
 It accepts authenticated `GET` and `POST` requests using a JWT bearer token and
-exposes the shared RSSMonster tools. `/api/agent` is the built-in assistant endpoint;
+exposes the shared RSSMonster tools. Obtain a JWT through `/api/auth/login`
+and send it as `Authorization: Bearer <token>`. `/api/agent` is the built-in assistant endpoint;
 there is no `/api/mcp` route. MCP authentication and tools do not themselves
 require enabling the built-in assistant's model provider.
 

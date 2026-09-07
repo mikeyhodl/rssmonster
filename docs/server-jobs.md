@@ -85,6 +85,39 @@ a bounded or missing-data scope. Rebuild commands recalculate a much broader
 scope. Reset removes derived state and should only be used when that loss is
 intentional.
 
+### Historical rebuild and taxonomy workflow
+
+Historical rebuilding is for explicit recovery after bulk imports, algorithm
+changes, or inconsistent assignments; it is not an installation prerequisite.
+Back up the database and choose a recent repair when that is sufficient. For a
+full historical pass:
+
+```bash
+npm run semantic:all
+# Limit the rebuild to one user when appropriate.
+npm run semantic:all -- --userId=3
+```
+
+This revisits historical Event assignments, Topics, Interest Islands, and
+interest scores. It preserves valid existing Event assignments and reuses
+stored vectors; it does not embed every old article. Normal post-crawl Event
+processing targets newly created, canonical, unfiltered articles. See
+[Events]({% link events.md %}#historical-processing) and the separate
+[model-switch rebuild]({% link model-usage.md %}#reset-and-rebuild-an-existing-environment).
+
+Taxonomy-vector generation is **not required for a normal SQLite installation
+or Docker Quick Start**. When explicitly needed, run:
+
+```bash
+npm run taxonomy:vectors
+```
+
+This command already synchronizes the seed definition before generating vectors
+through the running inference service, using either OpenAI or Qwen. Do not
+follow it with `npm run seed:island-taxonomy` as a routine second step; the seed
+command is a separate operation for creating the taxonomy without generating
+vectors. Keep taxonomy and article vectors in the same embedding model space.
+
 ## Scoring, Seeding, and Repairs
 
 | Command | Purpose |

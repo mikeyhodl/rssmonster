@@ -47,19 +47,25 @@ server waits at least the configured cooldown—and honors a longer `Retry-After
 response—before allowing exactly one recovery probe. It does not retry timed-out
 or potentially accepted requests.
 
-Enable the AI interface exposed to the client and allow longer streamed agent
-requests with:
+Enable inference-backed processing separately from the assistant:
 
 ```env
 INFERENCE_AI_ENABLED=true
-INFERENCE_ASSISTANT_ENABLED=true
-INFERENCE_AGENT_TIMEOUT_MS=300000
+INFERENCE_ASSISTANT_ENABLED=false
+SKIP_ARTICLE_CLASSIFICATION_ANALYSIS=false
+SKIP_ARTICLE_EMBEDDINGS=false
+SKIP_SEMANTIC_LABELING=false
 ```
 
-The server contains no OpenAI key, provider, or model name. It uses
-`INFERENCE_ASSISTANT_ENABLED` only as a capability flag; embeddings, article
+`INFERENCE_AI_ENABLED=false` prevents every server and worker inference request,
+even when feature-specific skip flags are false. Background article analysis and
+generated labels also need the AI worker; see [How RSSMonster Works]({% link how-rssmonster-works.md %}).
+
+The server contains no OpenAI key, provider, or model name. Embeddings, article
 classification, the assistant, Smart Folder recommendations, and feed
-rediscovery all call the inference service.
+rediscovery all call inference. Keep `INFERENCE_ASSISTANT_ENABLED=false` for
+local processing without chat. Enable it only after configuring the provider
+and credentials described in [Assistant and MCP]({% link assistant.md %}).
 
 ## Inference Configuration
 
@@ -81,10 +87,12 @@ ARTICLE_SCORING_PROVIDER=modernbert
 MODERNBERT_MODEL=onnx-community/ModernBERT-base-nli-ONNX
 MODERNBERT_DTYPE=q8
 MODERNBERT_QUEUE_MAX_PENDING=4
-OPENAI_API_KEY=your-openai-api-key
-ASSISTANT_PROVIDER=openai
-ASSISTANT_MODEL=gpt-4o-mini
+INFERENCE_MODEL_CACHE_DIR=.cache/models
 ```
+
+This example runs embeddings, generation, and scoring locally without an
+OpenAI key. The optional assistant currently uses OpenAI; configure its
+credentials separately using [Assistant and MCP]({% link assistant.md %}).
 
 Set `EMBEDDING_PROVIDER=openai` or `EMBEDDING_PROVIDER=qwen`, then add the
 provider-specific settings described in the child pages. Independently set

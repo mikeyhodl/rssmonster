@@ -5,7 +5,9 @@ nav_order: 2
 has_children: true
 ---
 
-Welcome! This guide will walk you through installing and setting up RSSMonster. Choose your preferred method and you'll be up and running in minutes.
+Choose the SQLite profile for lightweight personal reading, or the MySQL profile
+for local inference and background analysis. First-time model downloads can take
+several minutes; later starts reuse the cache.
 
 For a complete reference to database, crawler, security, AI, and client
 settings, see the [configuration guide]({% link configuration.md %}).
@@ -14,14 +16,14 @@ settings, see the [configuration guide]({% link configuration.md %}).
 
 ## Prerequisites
 
-Before you begin, make sure you have:
+For a manual/source installation, make sure you have:
 
 - **Node.js** 22.19.0 or higher
 - **npm** (comes bundled with Node.js)
 - **Git** for cloning the repository
 
-For the recommended Docker installation, you only need Docker Engine or Docker
-Desktop with Docker Compose. The default deployment uses SQLite, so it does not
+For the recommended Docker installation, use Git to clone the repository and
+Docker Engine or Docker Desktop with Docker Compose. The default deployment uses SQLite, so it does not
 require a separate database or model service. The comprehensive profile adds
 MySQL and local inference for larger or higher-concurrency installations.
 
@@ -129,7 +131,7 @@ starts RSSMonster, a dedicated crawl worker, `rssmonster-ai-worker`, MySQL 8.4,
 and an inference service
 configured with:
 
-- Qwen3 Embedding for semantic vectors;
+- Qwen3 Embedding for 1024-dimensional semantic vectors;
 - Qwen3.5 for classification text generation, Smart Folder recommendations,
   and feed rediscovery; and
 - ModernBERT for local article scoring.
@@ -160,7 +162,9 @@ docker compose -f docker-compose.mysql.yml up -d --build
 On first startup, the inference service downloads its models into the persistent
 `inference-model-cache` volume. RSSMonster and both workers wait for MySQL and
 inference to become healthy before starting. MySQL data is stored in the
-`mysql-data` volume.
+`mysql-data` volume. Downloads can take several minutes depending on the host
+and network; later starts reuse the downloaded models. See [Inference]({% link inference.md %})
+for readiness diagnostics and [Backup and Restore]({% link backup-restore.md %}) before upgrades.
 
 Check the complete deployment or follow its startup logs with:
 
@@ -220,6 +224,10 @@ cp client/.env.example client/.env
 cp inference/.env.example inference/.env
 ```
 
+Set distinct, stable `JWT_SECRET` and `FEVER_CREDENTIAL_SECRET` values in
+`server/.env`; generate them as described in the Docker secrets step above.
+Keep secret-bearing files private and out of Git.
+
 For a simple local installation, configure SQLite in `server/.env`:
 
 ```env
@@ -250,6 +258,11 @@ DB_PORT=3306
 VITE_APP_HOSTNAME=http://localhost:3000
 ```
 
+For optional inference, configure the server capability flags and select providers
+using [Model Usage]({% link model-usage.md %}#server-configuration). Core reading does not
+require inference. Local Qwen/ModernBERT processing needs no OpenAI key; the
+optional assistant has separate requirements in [Assistant and MCP]({% link assistant.md %}).
+
 ### Step 4: Initialize Database
 
 Run the canonical database migrations. The same migration baseline supports
@@ -271,7 +284,7 @@ Project seeders are optional. If you explicitly need them, run:
 **Development mode** (with hot reload):
 
 ```bash
-# Terminal 1: Start inference
+# Terminal 1: Start inference, if configured
 cd inference
 npm run dev
 
@@ -287,20 +300,9 @@ npm run dev
 Inference listens on `http://127.0.0.1:3001`, the server on
 `http://localhost:3000`, and the client on `http://localhost:8080`.
 
-**Production mode:**
-
-```bash
-# Build the client
-cd client
-npm run build
-
-# Move built files to server
-mv dist ../server/
-
-# Start the server
-cd ../server
-npm run start
-```
+For debugger setup, optional workers, tests, and the contribution workflow, see
+[Contributing]({% link contributing.md %}). For a host deployment, follow
+[Manual production deployment](#manual-production-deployment).
 
 ---
 
@@ -368,29 +370,14 @@ will trigger duplicate scheduled crawls alongside the worker.
 
 ### Enable AI Assistant
 
-Enable the capability in `server/.env`:
-
-```env
-INFERENCE_AI_ENABLED=true
-INFERENCE_ASSISTANT_ENABLED=true
-INFERENCE_AGENT_TIMEOUT_MS=300000
-```
-
-Put `OPENAI_API_KEY`, `ASSISTANT_PROVIDER`, and `ASSISTANT_MODEL` in
-`inference/.env`; see [Model Usage]({% link model-usage.md %}). Keep
-`INFERENCE_ASSISTANT_ENABLED` only in `server/.env`. Restart inference and the
-server. The client shows chat when the server reports the enabled capability.
-
-The assistant supports natural-language article discovery and source-based
-answers. Background summaries, generated tags, and semantic recommendations
-have their own processing requirements; enabling chat alone does not run those
-jobs. See [Assistant and MCP]({% link assistant.md %}).
-
-[Learn more about AI configuration →]({% link configuration.md %}#inference-and-openai-features)
+Follow [Assistant and MCP]({% link assistant.md %}) for the complete server and inference
+configuration. Chat is optional and does not itself run background article
+analysis or semantic jobs.
 
 ### Calculate Feed Trust Scores
 
-Run this periodically (weekly recommended) to update feed rankings:
+Recalculate after significant changes in reading patterns or when reviewing
+source value. From the repository root:
 
 ```bash
 cd server
@@ -417,43 +404,56 @@ script; use the documented commands appropriate to the intended operation.
 
 ## Production Deployment
 
-Use `docker compose up -d` for the quick SQLite profile. For the comprehensive
-MySQL and local-inference profile, use
-`docker compose -f docker-compose.mysql.yml up -d --build`.
+For Docker, follow the profile-specific startup instructions above and the
+[image pinning]({% link configuration.md %}#pinning-the-docker-image),
+[reverse proxy]({% link configuration.md %}#proxy-and-network-security), and
+[backup]({% link backup-restore.md %}) guides before exposing or upgrading the service.
 
-### Update Environment Variables
+### Manual production deployment
 
-**Client (`client/.env`):**
-```env
-VITE_APP_HOSTNAME=https://your-production-domain.com
+Complete the source configuration above. Set `NODE_ENV=production`, stable
+application secrets, and your database connection in `server/.env`. For SQLite,
+use an absolute persistent path such as
+`DB_STORAGE=/var/lib/rssmonster/rssmonster.sqlite`; for MySQL, use the
+[documented connection settings]({% link configuration.md %}#mysql).
+
+Set `VITE_APP_HOSTNAME=https://your-production-domain.com` in `client/.env`
+before building. Client environment changes require a rebuild.
+
+From the repository root, install the locked dependencies and apply migrations
+only after backing up any existing database:
+
+```bash
+cd server
+npm ci
+npm run db
+cd ../client
+npm ci
+npm run build
 ```
 
-**Server (`server/.env`):**
-```env
-NODE_ENV=production
+Replace only the previous client build, then copy the new build into the server:
+
+```bash
+# Run from client; server/dist contains generated frontend assets.
+rm -rf ../server/dist
+cp -R dist ../server/dist
+cd ../server
+npm start
 ```
+
+Use a service manager for long-running production processes. The web process
+alone does not schedule crawling or consume optional analysis jobs. Follow
+[Crawling]({% link crawling.md %}) for worker supervision and
+[Inference]({% link inference.md %}#pm2-production-setup) for the supplied four-process
+PM2 topology and model service. Keep inference on a private network.
 
 ### Enable HTTPS
 
-For production, use Let's Encrypt:
-
-```bash
-# Get certificate
-certbot certonly --standalone -d yourdomain.com --agree-tos -q
-
-# Add to server/.env
-ENABLE_HTTPS=true
-
-# Place certificates in server/cert/
-# - fullchain.pem
-# - privkey.pem
-```
-
-Set up a weekly cron to renew:
-
-```bash
-0 0 * * 0 certbot renew --quiet && cp /etc/letsencrypt/live/yourdomain.com/* /path/to/rssmonster/server/cert/
-```
+Configure TLS at your reverse proxy using the
+[proxy guidance]({% link configuration.md %}#proxy-and-network-security), or follow
+[direct HTTPS and Certbot setup]({% link configuration.md %}#direct-https-and-certbot)
+when the Node server terminates TLS itself.
 
 ---
 

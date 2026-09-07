@@ -75,4 +75,7 @@ for crawling, processing jobs, email, maintenance, and backups. Read
 or [Concepts]({% link concepts.md %}) for the distinctions behind the interface.
 The [FAQ]({% link faq.md %}) answers common questions about filtering and ranking.
 
+For development setup, validation, and pull requests, read
+[Contributing]({% link contributing.md %}).
+
 RSSMonster is open source under the MIT license.

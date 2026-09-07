@@ -14,7 +14,8 @@ during service startup and reused, and inference requests are serialized in-proc
 
 ## Configuration
 
-Configure the RSSMonster server to reach inference. A longer timeout is useful
+Enable the server capability flags in [Model Usage]({% link model-usage.md %}#server-configuration)
+and configure its inference connection. A longer timeout is useful
 on low-power hardware and during the first model load:
 
 ```env
@@ -35,9 +36,7 @@ EMBEDDING_PROVIDER=qwen
 GENERATION_PROVIDER=qwen
 GENERATION_MODEL=onnx-community/Qwen3.5-0.8B-ONNX
 GENERATION_DTYPE=q4
-ASSISTANT_PROVIDER=openai
-ASSISTANT_MODEL=gpt-4o-mini
-ARTICLE_SCORING_PROVIDER=openai
+ARTICLE_SCORING_PROVIDER=modernbert
 EMBEDDING_MODEL=onnx-community/Qwen3-Embedding-0.6B-ONNX
 EMBEDDING_DIMENSIONS=1024
 EMBEDDING_MAX_BATCH_SIZE=8
@@ -46,9 +45,9 @@ EMBEDDING_QUEUE_MAX_PENDING=4
 
 Qwen can provide embeddings separately from Qwen3.5 generation. With the
 configuration above, Qwen3.5 generates article summaries, tags, Smart Folder
-recommendations, and feed rediscovery results. The assistant remains on OpenAI
-and therefore still requires `OPENAI_API_KEY`; the server never needs that
-credential.
+recommendations, and feed rediscovery results. ModernBERT scores article quality
+locally. These capabilities require no OpenAI key. The optional assistant remains OpenAI-only; follow
+[Assistant and MCP]({% link assistant.md %}) to enable it separately.
 
 Qwen embedding inference runs one batch at a time and accepts four pending
 batches by default. Set `EMBEDDING_QUEUE_MAX_PENDING` to a positive integer to
@@ -62,7 +61,8 @@ paths are resolved from the `inference` project directory. Cached model files
 are not committed to Git and are reused after restarts. Deleting the cache
 causes the model to be downloaded again on its next use.
 
-The service begins listening only after every configured local model is loaded. With
+The HTTP listener opens before models finish loading. `/health` reports liveness,
+while `/ready` returns `503` until the configured models are ready. With
 `INFERENCE_DEBUG=true` (automatically enabled by `npm run dev`), the console
 reports `loaded:true`, readiness for crawling, and content-safe request and
 completion messages for embedding, generation, and other inference capabilities.
