@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 import db from '../../models/index.js';
 import { canonicalArticleWhere } from '../duplicates/articleDuplicates.js';
+import { findFeedByUrlAlias } from '../feeds/feedUrlAliases.js';
 import {
   getGreaderParameterValues,
   normalizeGreaderParameterValues
@@ -125,12 +126,21 @@ const scalarParameter = (req, name) => {
 const resolveFeedTarget = async (reference, userId) => {
   // Derives the decoded through safe decode uricomponent while resolving feed target.
   const decoded = safeDecodeURIComponent(reference);
-  // Selects the where based on whether decoded matches the expected format.
-  const where = /^\d+$/.test(decoded)
+  const isNumericReference = /^\d+$/.test(decoded);
+  const where = isNumericReference
     ? { id: Number(decoded), userId }
     : { url: decoded, userId };
+  let feed;
+  if (!isNumericReference) {
+    try {
+      feed = (await findFeedByUrlAlias({ userId, url: decoded }))?.feed;
+    } catch (error) {
+      // Non-URL references retain the existing exact-match/not-found behavior.
+      if (!(error instanceof TypeError)) throw error;
+    }
+  }
   // Loads the feed needed while resolving feed target.
-  const feed = await Feed.findOne({ where, attributes: ['id', 'url'] });
+  feed ||= await Feed.findOne({ where, attributes: ['id', 'url'] });
 
   // Selects the result based on whether feed is available.
   return {
@@ -155,7 +165,7 @@ const resolveCategoryTarget = async (encodedName, userId) => {
 
   // Selects the result based on whether category is available.
   return {
-    id: `${LABEL_PREFIX}${encodeURIComponent(name)}`,
+    id: `${LABEL_PREFIX}${name}`,
     condition: category
       ? {
           feedId: {

@@ -99,7 +99,7 @@ describe('Google Reader API compatibility', () => {
     expect(res.status).toBe(401);
   });
 
-  it('serializes stream contents with current article fields and encoded category labels', async () => {
+  it('serializes stream contents with current article fields and plain category labels', async () => {
     const { user, feed } = await createFixture();
 
     const res = await request(app)
@@ -112,7 +112,46 @@ describe('Google Reader API compatibility', () => {
     expect(res.body.items[0].summary.content).toBe('<p>Sanitized article body</p>');
     expect(JSON.stringify(res.body)).not.toContain('rawPublisherScript');
     expect(res.body.items[0].origin.streamId).toBe(`feed/${encodeURIComponent(feed.url)}`);
-    expect(res.body.items[0].categories).toContain('user/-/label/Tech%20%2F%20News');
+    expect(res.body.items[0].categories).toContain('user/-/label/Tech / News');
+  });
+
+  it('preserves plain folder IDs across JSON responses and encoded requests', async () => {
+    const { user, category, article } = await createFixture();
+    await category.update({ name: 'Café / News & Updates' });
+    const labelId = `user/-/label/${category.name}`;
+    const get = (path, query = {}) => request(app)
+      .get(`/api/greader/reader/api/0/${path}`)
+      .query({ output: 'json', ...query })
+      .set('Authorization', greaderAuthHeaderFor(user));
+
+    const tags = await get('tag/list');
+    const subscriptions = await get('subscription/list');
+    const unread = await get('unread-count');
+    const stream = await get('stream/contents', { s: labelId });
+    const pathStream = await get(`stream/contents/${encodeURIComponent(labelId)}`);
+    const contents = await request(app)
+      .post('/api/greader/reader/api/0/stream/items/contents')
+      .type('form')
+      .send({ i: article.id })
+      .set('Authorization', greaderAuthHeaderFor(user));
+
+    for (const response of [tags, subscriptions, unread, stream, pathStream, contents]) {
+      expect(response.status).toBe(200);
+    }
+    expect(tags.body.tags).toContainEqual({ id: labelId, type: 'folder' });
+    expect(subscriptions.body.subscriptions[0].categories).toEqual([
+      { id: labelId, label: category.name }
+    ]);
+    expect(unread.body.unreadcounts).toContainEqual(
+      expect.objectContaining({ id: labelId, count: 1 })
+    );
+    for (const response of [stream, pathStream]) {
+      expect(response.body.id).toBe(labelId);
+    }
+    for (const response of [stream, pathStream, contents]) {
+      expect(response.body.items).toHaveLength(1);
+      expect(response.body.items[0].categories).toContain(labelId);
+    }
   });
 
   it('uses the same feed stream IDs for subscriptions and unread counts', async () => {
@@ -179,7 +218,7 @@ describe('Google Reader API compatibility', () => {
     expect(res.body.unreadcounts).toEqual(expect.arrayContaining([
       expect.objectContaining({ id: 'user/-/state/com.google/reading-list', count: 2 }),
       expect.objectContaining({ id: `feed/${encodeURIComponent(feed.url)}`, count: 2 }),
-      expect.objectContaining({ id: 'user/-/label/Tech%20%2F%20News', count: 2 })
+      expect.objectContaining({ id: 'user/-/label/Tech / News', count: 2 })
     ]));
 
     await article.reload();
@@ -215,7 +254,7 @@ describe('Google Reader API compatibility', () => {
           newestItemTimestampUsec: '0'
         },
         {
-          id: `user/-/label/${encodeURIComponent(fallbackCategory.name)}`,
+          id: `user/-/label/${fallbackCategory.name}`,
           count: 0,
           newestItemTimestampUsec: '0'
         }

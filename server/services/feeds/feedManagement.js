@@ -626,7 +626,7 @@ export const updateFeedSubscription = async ({
   updates = {},
   categoryId,
   categoryName,
-  removeCategory = false,
+  removeCategoryName,
   transaction: externalTransaction,
   clock = () => new Date()
 }) => {
@@ -726,13 +726,20 @@ export const updateFeedSubscription = async ({
         userId,
         transaction
       );
-    // Handles the case where remove category is available.
-    } else if (removeCategory) {
-      targetCategory = await getOrCreateNamedCategory(
-        DEFAULT_FEED_CATEGORY_NAME,
-        userId,
-        transaction
-      );
+    } else if (removeCategoryName) {
+      // Check the locked feed's current category so stale removals cannot undo a move.
+      const currentCategory = await Category.findOne({
+        where: { id: feed.categoryId, userId, name: removeCategoryName },
+        transaction,
+        lock: transaction.LOCK.UPDATE
+      });
+      if (currentCategory) {
+        targetCategory = await getOrCreateNamedCategory(
+          DEFAULT_FEED_CATEGORY_NAME,
+          userId,
+          transaction
+        );
+      }
     }
 
     // Selects the result based on whether target category is available.

@@ -88,8 +88,6 @@ const safeDecodeURIComponent = (value = '') => {
   }
 };
 
-const encodeLabelName = (name = '') => encodeURIComponent(name);
-
 const decodeLabelStream = (streamId = '') => {
   if (!streamId.startsWith(LABEL_PREFIX)) {
     return null;
@@ -266,7 +264,7 @@ export const getTagList = async (req, res) => {
     
     for (const cat of categories) {
       tags.push({
-        id: `${LABEL_PREFIX}${encodeLabelName(cat.name)}`,
+        id: `${LABEL_PREFIX}${cat.name}`,
         type: 'folder'
       });
     }
@@ -308,7 +306,7 @@ export const getSubscriptionList = async (req, res) => {
         id: feedStreamId(feed),
         title: feed.feedName || feed.url,
         categories: category ? [{
-          id: `${LABEL_PREFIX}${encodeLabelName(category.name)}`,
+          id: `${LABEL_PREFIX}${category.name}`,
           label: category.name
         }] : [],
         url: feed.url,
@@ -382,7 +380,7 @@ export const editSubscription = async (req, res) => {
         updates: title ? { feedName: title } : {},
         categoryName,
         // Added category wins deterministically when both a and r are present.
-        removeCategory: !categoryName && Boolean(removedCategoryName)
+        removeCategoryName: removedCategoryName
       });
     }
 
@@ -496,7 +494,7 @@ export const getUnreadCount = async (req, res) => {
     const categoryCounts = new Map(categories.map(category => [
       Number(category.id),
       {
-        id: `${LABEL_PREFIX}${encodeLabelName(category.name)}`,
+        id: `${LABEL_PREFIX}${category.name}`,
         count: 0,
         newestItemTimestampUsec: '0'
       }

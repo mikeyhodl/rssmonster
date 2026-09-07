@@ -77,7 +77,7 @@ checks proxy/header transport, not account credentials.
 | `/reader/api/0/subscription/export` | GET | Supported OPML export |
 | `/reader/api/0/unread-count` | GET | Supported |
 | `/reader/api/0/stream/contents[/<stream>]` | GET | Supported |
-| `/reader/api/0/stream/items/ids` | GET | Supported |
+| `/reader/api/0/stream/items/ids` | GET | Partial: repeated `s` targets always merge; per-stream limits with `merge=false` are unsupported |
 | `/reader/api/0/stream/items/contents` | GET, POST | Supported |
 | `/reader/api/0/edit-tag` | POST | Read and starred states supported |
 | `/reader/api/0/mark-all-as-read` | POST | Supported |
@@ -110,7 +110,11 @@ still be recorded during release smoke testing.
 - Feed: `feed/<percent-encoded subscription URL>`
 - Compatibility input also normalizes duplicated `feed/feed/<reference>`
   prefixes for feed streams and subscription operations.
-- Feed category: `user/-/label/<percent-encoded category name>`
+- Feed streams and mark-all-as-read accept historical URL aliases owned by the
+  authenticated user after a feed URL changes; responses use the current URL.
+- Feed category: `user/-/label/<category name>`. JSON responses preserve the
+  literal name, including spaces and Unicode; encode the stream ID when sending
+  it in a URL or form parameter.
 - Serialized item IDs: 16-character lowercase hexadecimal IDs in
   `tag:google.com,2005:reader/item/<hex>` form.
 - Item lookup accepts strict positive decimal IDs, exactly 16 hexadecimal
@@ -127,6 +131,17 @@ still be recorded during release smoke testing.
 
 ## Unsupported behavior and deliberate limits
 
+- Per-stream batching on `stream/items/ids` is unsupported. The `merge`
+  parameter is ignored: omitted `merge`, `merge=false`, and `merge=true` all
+  combine repeated `s` targets before sorting and applying one global `n`
+  limit (capped at 10,000). A continuation advances through that combined
+  result, not through each stream independently. For example,
+  `s=feed/1&s=feed/2&n=1&merge=false` returns at most one item ID overall,
+  even when both feeds have eligible items. The
+  [Reader contract](https://raw.githubusercontent.com/mihaip/google-reader-api/master/wiki/ApiStreamItemsIds.wiki)
+  instead defaults `merge` to `false` and applies `n` separately to each stream.
+  Clients needing a limit per stream must make separate requests for each `s`
+  and retain each response's continuation separately.
 - Arbitrary Google Reader article-label mutation is unsupported. RSSMonster's
   `Tag` rows contain crawl-derived, feed-derived, rule-derived, and manual
   metadata under one per-article name uniqueness rule. Treating those rows as

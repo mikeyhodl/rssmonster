@@ -53,7 +53,7 @@ describe('Google Reader article serializer', () => {
         'user/-/state/com.google/reading-list',
         'user/-/state/com.google/read',
         'user/-/state/com.google/starred',
-        'user/-/label/Caf%C3%A9%20%2F%20News'
+        'user/-/label/Café / News'
       ],
       origin: {
         streamId: 'feed/https%3A%2F%2Fpublisher.example%2Ffeed.xml',
@@ -111,7 +111,7 @@ describe('Google Reader article serializer', () => {
     expect(serialized.categories).toEqual([
       'user/-/state/com.google/reading-list',
       'user/-/state/com.google/starred',
-      'user/-/label/Caf%C3%A9%20%2F%20News'
+      'user/-/label/Café / News'
     ]);
   });
 });

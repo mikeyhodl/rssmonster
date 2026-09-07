@@ -12,6 +12,7 @@ import { Op } from 'sequelize';
 import db from '../../models/index.js';
 import { createGreaderAuthToken } from '../../utils/apiCredentials.js';
 import { MAX_STREAM_ITEM_ID_COUNT } from '../../services/greader/streamQuery.js';
+import { persistDiscoveredFeedUrl } from '../../services/feeds/feedUrlAliases.js';
 import {
   LABEL_PREFIX,
   READ_STREAM,
@@ -472,6 +473,65 @@ describe('Google Reader API compatibility foundation', () => {
       ]);
     });
 
+    it('[compatible] reads and marks a feed through its historical URL after promotion', async () => {
+      const fixture = await createFixture();
+      const oldStreamId = `feed/${encodeURIComponent(fixture.primaryFeed.url)}`;
+      const newUrl = 'https://alpha.example.test/new-feed.xml';
+      await persistDiscoveredFeedUrl({ feed: fixture.primaryFeed, discoveredUrl: newUrl });
+
+      const contents = await getStream(fixture.user, oldStreamId);
+      expect(contents.status).toBe(200);
+      expect(contents.body.id).toBe(`feed/${encodeURIComponent(newUrl)}`);
+      expect(responseItemIds(contents)).toEqual([
+        toGreaderItemId(fixture.sameTimestampRead.id),
+        toGreaderItemId(fixture.oldUnread.id)
+      ]);
+      expect(contents.body.items[0].origin.streamId).toBe(contents.body.id);
+
+      const ids = await request(app)
+        .get('/api/greader/reader/api/0/stream/items/ids')
+        .query({ s: oldStreamId, xt: READ_STREAM })
+        .set('Authorization', greaderAuthHeaderFor(fixture.user));
+      expect(ids.status).toBe(200);
+      expect(ids.body.itemRefs).toEqual([{ id: String(fixture.oldUnread.id) }]);
+
+      const mutation = await request(app)
+        .post('/api/greader/reader/api/0/mark-all-as-read')
+        .type('form')
+        .send({ s: oldStreamId, T: greaderActionTokenFor(fixture.user) })
+        .set('Authorization', greaderAuthHeaderFor(fixture.user));
+      expect(mutation.status).toBe(200);
+      await fixture.oldUnread.reload();
+      await fixture.newUnread.reload();
+      expect(fixture.oldUnread.status).toBe('read');
+      expect(fixture.oldUnread.readAt).not.toBeNull();
+      expect(fixture.newUnread.status).toBe('unread');
+    });
+
+    it('[compatible] does not read or mutate another user\'s historical feed stream', async () => {
+      const fixture = await createFixture();
+      const otherUser = await createUser();
+      const oldStreamId = `feed/${encodeURIComponent(fixture.primaryFeed.url)}`;
+      await persistDiscoveredFeedUrl({
+        feed: fixture.primaryFeed,
+        discoveredUrl: 'https://alpha.example.test/private-feed.xml'
+      });
+
+      const contents = await getStream(otherUser, oldStreamId);
+      expect(contents.status).toBe(200);
+      expect(contents.body.items).toEqual([]);
+
+      const mutation = await request(app)
+        .post('/api/greader/reader/api/0/mark-all-as-read')
+        .type('form')
+        .send({ s: oldStreamId, T: greaderActionTokenFor(otherUser) })
+        .set('Authorization', greaderAuthHeaderFor(otherUser));
+      expect(mutation.status).toBe(200);
+      await fixture.oldUnread.reload();
+      expect(fixture.oldUnread.status).toBe('unread');
+      expect(fixture.oldUnread.readAt).toBeNull();
+    });
+
     it('[compatible] normalizes a doubled feed prefix in a feed stream', async () => {
       const fixture = await createFixture();
       const response = await getStream(
@@ -488,9 +548,9 @@ describe('Google Reader API compatibility foundation', () => {
 
     it('[current] returns a category label stream', async () => {
       const fixture = await createFixture();
-      const streamId = `${LABEL_PREFIX}${encodeURIComponent(fixture.primaryCategory.name)}`;
+      const streamId = `${LABEL_PREFIX}${fixture.primaryCategory.name}`;
 
-      const response = await getStream(fixture.user, streamId);
+      const response = await getStream(fixture.user, encodeURIComponent(streamId));
 
       expect(response.status).toBe(200);
       expect(response.body.id).toBe(streamId);
@@ -1569,6 +1629,42 @@ describe('Google Reader API compatibility foundation', () => {
       expect(category.name).toBe('Uncategorized');
     });
 
+    it('[compatible] preserves a category move committed after the subscription lookup', async () => {
+      const fixture = await createFixture();
+      const transaction = sequelize.transaction.bind(sequelize);
+      const transactionSpy = vi.spyOn(sequelize, 'transaction')
+        .mockImplementationOnce(async (...args) => {
+          // Another client moves the feed after the controller lookup, before the update locks it.
+          await fixture.primaryFeed.update({ categoryId: fixture.secondaryCategory.id });
+          return transaction(...args);
+        });
+
+      try {
+        const response = await request(app)
+          .post('/api/greader/reader/api/0/subscription/edit')
+          .type('form')
+          .send({
+            s: `feed/${fixture.primaryFeed.id}`,
+            ac: 'edit',
+            r: `${LABEL_PREFIX}${fixture.primaryCategory.name}`,
+            t: 'Updated title',
+            T: greaderActionTokenFor(fixture.user)
+          })
+          .set('Authorization', greaderAuthHeaderFor(fixture.user));
+
+        expect(response.status).toBe(200);
+        expect(response.text).toBe('OK');
+        await fixture.primaryFeed.reload();
+        expect(fixture.primaryFeed.categoryId).toBe(fixture.secondaryCategory.id);
+        expect(fixture.primaryFeed.feedName).toBe('Updated title');
+        expect(await Category.count({
+          where: { userId: fixture.user.id, name: 'Uncategorized' }
+        })).toBe(0);
+      } finally {
+        transactionSpy.mockRestore();
+      }
+    });
+
     it('[current] quick-adds a new feed and reports an existing feed', async () => {
       const fixture = await createFixture();
       const newUrl = 'https://quick.example.test/feed.xml';
@@ -1762,7 +1858,7 @@ describe('Google Reader API compatibility foundation', () => {
         categories: [
           READING_LIST_STREAM,
           STARRED_STREAM,
-          `${LABEL_PREFIX}${encodeURIComponent(fixture.secondaryCategory.name)}`
+          `${LABEL_PREFIX}${fixture.secondaryCategory.name}`
         ],
         origin: {
           streamId: `feed/${encodeURIComponent(fixture.secondaryFeed.url)}`,

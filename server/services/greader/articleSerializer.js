@@ -37,7 +37,7 @@ const serializeCategories = article => {
     ...(article.status === 'read' ? [READ_STREAM] : []),
     ...(isFavorite(article.favoriteInd) ? [STARRED_STREAM] : []),
     ...(categoryName
-      ? [`${LABEL_PREFIX}${encodeURIComponent(categoryName)}`]
+      ? [`${LABEL_PREFIX}${categoryName}`]
       : [])
   ])];
 };
