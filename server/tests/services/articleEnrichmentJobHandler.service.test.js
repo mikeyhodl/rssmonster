@@ -23,6 +23,7 @@ import {
   getProcessingJobHandler,
   recordRecoveredProcessingJobLease
 } from '../../services/jobs/processingJobHandlers.js';
+import { requeueDeadProcessingJobs } from '../../services/jobs/processingJobOperator.js';
 import { recoverExpiredProcessingJobs } from '../../services/jobs/processingJobQueue.js';
 
 const { Article, Category, Feed, ProcessingFailure, ProcessingJob, Tag, User } = db;
@@ -133,6 +134,53 @@ describe('article_enrichment processing-job handler', () => {
     });
     return { article, job, providerTags };
   };
+
+  it('retries failed article analysis with a fresh attempt budget and persists inference', async () => {
+    const { article, job } = await createTarget({
+      articleOverrides: { aiAnalysisStatus: 'failed' },
+      jobOverrides: { status: 'dead', attempts: 5, completedAt: new Date() }
+    });
+    await requeueDeadProcessingJobs({ userId: feed.userId, jobIds: [job.id] });
+    await article.reload();
+    await job.reload();
+    expect(article.aiAnalysisStatus).toBe('pending');
+    expect(job).toMatchObject({ status: 'pending', attempts: 0, leaseOwner: null, completedAt: null });
+    await expect(handleArticleEnrichmentJob(job)).resolves.toMatchObject({ status: 'completed' });
+    await article.reload();
+    expect(article.aiAnalysisStatus).toBe('complete');
+    expect(article.qualityScore).toBe(successfulAnalysis.qualityScore);
+  });
+
+  it('rolls back the article retry when the job cannot be requeued', async () => {
+    const { article, job } = await createTarget({
+      articleOverrides: { aiAnalysisStatus: 'failed' },
+      jobOverrides: { status: 'dead', attempts: 5 }
+    });
+    const update = vi.spyOn(ProcessingJob.prototype, 'update')
+      .mockRejectedValue(new Error('Queue update failed'));
+    try {
+      await expect(requeueDeadProcessingJobs({ userId: feed.userId, jobIds: [job.id] }))
+        .rejects.toThrow('Queue update failed');
+    } finally {
+      update.mockRestore();
+    }
+    expect((await article.reload()).aiAnalysisStatus).toBe('failed');
+    expect((await job.reload()).status).toBe('dead');
+  });
+
+  it('does not reopen a different failed article version when retrying stale work', async () => {
+    const { article, job } = await createTarget({
+      articleOverrides: { aiAnalysisStatus: 'failed' },
+      jobOverrides: { status: 'dead', attempts: 5 }
+    });
+    await article.update({ title: 'A newer version' });
+    await requeueDeadProcessingJobs({ userId: feed.userId, jobIds: [job.id] });
+    expect((await article.reload()).aiAnalysisStatus).toBe('failed');
+    await expect(handleArticleEnrichmentJob(await job.reload())).resolves.toEqual({
+      status: 'obsolete', reason: 'stale_version'
+    });
+    expect(mocked.analyzeArticleContent).not.toHaveBeenCalled();
+  });
 
   it('registers and transactionally persists the combined analysis contract', async () => {
     const logger = { log: vi.fn() };

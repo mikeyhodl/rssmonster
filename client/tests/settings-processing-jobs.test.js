@@ -4,11 +4,13 @@ import { flushPromises, mount } from '@vue/test-utils';
 import SettingsProcessingJobs from '../src/components/settings/SettingsProcessingJobs.vue';
 import {
   clearCompletedProcessingJobs,
+  retryFailedProcessingJobs,
   fetchProcessingJobStatus
 } from '../src/api/settings.js';
 
 vi.mock('../src/api/settings.js', () => ({
   clearCompletedProcessingJobs: vi.fn(),
+  retryFailedProcessingJobs: vi.fn(),
   fetchProcessingJobStatus: vi.fn()
 }));
 
@@ -71,6 +73,56 @@ afterEach(() => {
 });
 
 describe('SettingsProcessingJobs', () => {
+  it('queues failed jobs once, blocks concurrent actions, and refreshes the status', async () => {
+    fetchProcessingJobStatus.mockResolvedValue({ data: statusFixture({ summary: { dead: 3 } }) });
+    let resolveRetry;
+    retryFailedProcessingJobs.mockImplementation(() => new Promise(resolve => { resolveRetry = resolve; }));
+    mountStatus();
+    await flushPromises();
+    await wrapper.get('.processing-retry-button').trigger('click');
+    expect(wrapper.get('.processing-retry-button').attributes('disabled')).toBeDefined();
+    expect(wrapper.get('.processing-clear-button').attributes('disabled')).toBeDefined();
+    expect(wrapper.get('.settings-refresh-button').attributes('disabled')).toBeDefined();
+    await wrapper.vm.retryFailed();
+    expect(retryFailedProcessingJobs).toHaveBeenCalledOnce();
+    fetchProcessingJobStatus.mockResolvedValue({ data: statusFixture() });
+    resolveRetry({ data: { requeuedCount: 3, remainingCount: 0 } });
+    await flushPromises();
+    expect(fetchProcessingJobStatus).toHaveBeenCalledTimes(2);
+    expect(wrapper.text()).toContain('Queued 3 jobs for processing.');
+    expect(wrapper.get('.processing-retry-button').attributes('disabled')).toBeDefined();
+  });
+
+  it('allows recovery when only stranded articles remain', async () => {
+    fetchProcessingJobStatus.mockResolvedValue({ data: statusFixture({ summary: { dead: 0, stranded: 1 }, types: [] }) });
+    retryFailedProcessingJobs.mockResolvedValue({ data: { requeuedCount: 1, recoveredCount: 1, remainingCount: 0 } });
+    mountStatus();
+    await flushPromises();
+    expect(wrapper.text()).toContain('Awaiting recovery');
+    expect(wrapper.text()).toContain('Some article analyses need recovery.');
+    expect(wrapper.text()).not.toContain('No background work waiting');
+    expect(wrapper.get('.processing-retry-button').attributes('disabled')).toBeUndefined();
+    await wrapper.get('.processing-retry-button').trigger('click');
+    await flushPromises();
+    expect(retryFailedProcessingJobs).toHaveBeenCalledOnce();
+    expect(wrapper.text()).toContain('Queued 1 job for processing.');
+  });
+
+  it('keeps retry available after a request fails', async () => {
+    fetchProcessingJobStatus.mockResolvedValue({ data: statusFixture({ summary: { dead: 1 } }) });
+    retryFailedProcessingJobs.mockRejectedValue(new Error('Retry failed'));
+    mountStatus();
+    await flushPromises();
+    await wrapper.get('.processing-retry-button').trigger('click');
+    await flushPromises();
+    expect(wrapper.text()).toContain('Unable to retry failed jobs. Please try again.');
+    expect(wrapper.get('.processing-retry-button').attributes('disabled')).toBeUndefined();
+    retryFailedProcessingJobs.mockResolvedValue({ data: { requeuedCount: 100, remainingCount: 1 } });
+    await wrapper.get('.processing-retry-button').trigger('click');
+    await flushPromises();
+    expect(wrapper.text()).toContain('1 job remains. Select Retry failed jobs again to queue more.');
+  });
+
   it('renders health, prioritized metrics, readable job types, and durations', async () => {
     fetchProcessingJobStatus.mockResolvedValue({ data: statusFixture() });
 

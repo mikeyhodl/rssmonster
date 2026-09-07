@@ -44,6 +44,9 @@ export const fetchCrawlStatistics = (params = {}) =>
 export const fetchProcessingJobStatus = () =>
   api.get('/setting/processing-jobs');
 
+export const retryFailedProcessingJobs = () =>
+  api.post('/setting/processing-jobs/retry');
+
 export const clearCompletedProcessingJobs = () =>
   api.delete('/setting/processing-jobs');
 

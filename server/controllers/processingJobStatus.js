@@ -1,4 +1,5 @@
 import db from '../models/index.js';
+import { requeueFailedProcessingJobs } from '../services/jobs/processingJobOperator.js';
 import { getProcessingJobStatus } from '../services/jobs/getProcessingJobStatus.js';
 
 const { ProcessingJob, Sequelize } = db;
@@ -40,4 +41,15 @@ export const clearCompletedProcessingJobs = async (req, res, _next) => {
   }
 };
 
-export default { clearCompletedProcessingJobs, getProcessingJobsStatus };
+export const retryFailedProcessingJobs = async (req, res, _next) => {
+  try {
+    const userId = req.userData?.userId;
+    if (!userId) return res.status(401).json({ error: 'Unauthorized: missing userId' });
+    return res.status(200).json(await requeueFailedProcessingJobs({ userId }));
+  } catch (error) {
+    console.error('Error in retryFailedProcessingJobs:', error);
+    return res.status(500).json({ error: 'Unable to retry failed processing jobs' });
+  }
+};
+
+export default { clearCompletedProcessingJobs, getProcessingJobsStatus, retryFailedProcessingJobs };

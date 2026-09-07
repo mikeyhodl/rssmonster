@@ -1,5 +1,7 @@
 import db from '../../models/index.js';
 import { Op } from 'sequelize';
+import { countStrandedArticleAnalyses, recoverStrandedArticleAnalyses } from './strandedArticleRecovery.js';
+import { resetArticleEnrichmentForRetry } from './handlers/articleEnrichmentJobHandler.js';
 
 const { ProcessingJob, sequelize } = db;
 export const MAX_DEAD_JOB_LIST_LIMIT = 100;
@@ -93,6 +95,9 @@ export const requeueDeadProcessingJobs = async ({
   });
 
   for (const job of jobs) {
+    if (job.type === 'article_enrichment') {
+      await resetArticleEnrichmentForRetry(job, transaction);
+    }
     await job.update({
       status: 'pending',
       attempts: 0,
@@ -112,5 +117,26 @@ export const requeueDeadProcessingJobs = async ({
     jobs: jobs.map(operatorResult)
   };
 });
+
+// Retries a bounded batch of the signed-in user's failed inference work.
+export const requeueFailedProcessingJobs = async ({ userId }) => {
+  const jobs = await listDeadProcessingJobs({ userId, limit: MAX_DEAD_JOB_REQUEUE_TARGETS });
+  const result = jobs.length
+    ? await requeueDeadProcessingJobs({ userId, jobIds: jobs.map(job => job.id) })
+    : { requeuedCount: 0 };
+  const recoveredCount = await recoverStrandedArticleAnalyses({
+    userId: positiveId(userId, 'userId'),
+    limit: MAX_DEAD_JOB_REQUEUE_TARGETS - result.requeuedCount
+  });
+  const remainingDeadCount = await ProcessingJob.count({
+    where: { userId: positiveId(userId, 'userId'), status: 'dead' }
+  });
+  const remainingStrandedCount = await countStrandedArticleAnalyses({ userId: positiveId(userId, 'userId') });
+  return {
+    requeuedCount: result.requeuedCount + recoveredCount,
+    recoveredCount,
+    remainingCount: remainingDeadCount + remainingStrandedCount
+  };
+};
 
 export default { listDeadProcessingJobs, requeueDeadProcessingJobs };

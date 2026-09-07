@@ -66,6 +66,38 @@ describe('settings processing jobs status', () => {
     expect(unauthenticated.status).toBe(400);
   });
 
+  it('retries a bounded owned batch and ignores caller-supplied owners and active jobs', async () => {
+    const [user, otherUser] = await Promise.all([createUser(), createUser()]);
+    const makeJob = (owner, status) => ({
+      type: 'semantic_label', userId: owner.id, dedupeKey: uniqueName('retry'),
+      payload: {}, status, attempts: 5, availableAt: new Date(),
+      completedAt: new Date(), lastErrorCode: 'INFERENCE_UNAVAILABLE'
+    });
+    await ProcessingJob.bulkCreate(Array.from({ length: 101 }, () => makeJob(user, 'dead')));
+    const retained = await Promise.all([
+      ProcessingJob.create(makeJob(otherUser, 'dead')),
+      ...['pending', 'running', 'succeeded', 'cancelled'].map(status =>
+        ProcessingJob.create(makeJob(user, status)))
+    ]);
+    const response = await request(app).post('/api/setting/processing-jobs/retry')
+      .set('Authorization', authHeaderFor(user))
+      .send({ userId: otherUser.id, jobIds: retained.map(job => job.id) });
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ requeuedCount: 100, recoveredCount: 0, remainingCount: 1 });
+    for (const job of retained) {
+      const status = job.status;
+      expect((await job.reload()).status).toBe(status);
+      expect(job.attempts).toBe(5);
+    }
+    const second = await request(app).post('/api/setting/processing-jobs/retry')
+      .set('Authorization', authHeaderFor(user));
+    expect(second.body).toEqual({ requeuedCount: 1, recoveredCount: 0, remainingCount: 0 });
+    const empty = await request(app).post('/api/setting/processing-jobs/retry')
+      .set('Authorization', authHeaderFor(user));
+    expect(empty.body).toEqual({ requeuedCount: 0, recoveredCount: 0, remainingCount: 0 });
+    expect((await request(app).post('/api/setting/processing-jobs/retry')).status).toBe(400);
+  });
+
   it('clears only the current user succeeded and dead jobs', async () => {
     const [user, otherUser] = await Promise.all([createUser(), createUser()]);
     const availableAt = new Date();

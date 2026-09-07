@@ -623,17 +623,19 @@ describe('ArticleTagsScores', () => {
     expect(wrapper.find('.analysis-state').exists()).toBe(false);
   });
 
-  it('shows failed analysis as unavailable without placeholder scores', async () => {
+  it('hides failed analysis without a status message or placeholder scores', async () => {
     const wrapper = mountArticleTagsScores({
-      aiAnalysisStatus: 'failed',
+      aiAnalysisStatus: 'processing',
       advertisementScore: 0,
       sentimentScore: 50,
       qualityScore: 50
     });
+    expect(wrapper.get('.analysis-state').text()).toBe('Analyzing…');
+    await wrapper.setProps({ aiAnalysisStatus: 'failed' });
     await flushPromises();
 
-    expect(wrapper.get('.analysis-state').text()).toBe('Analysis unavailable');
-    expect(wrapper.get('.analysis-state').attributes('aria-label')).toBe('Article analysis unavailable');
+    expect(wrapper.find('.analysis-state').exists()).toBe(false);
+    expect(wrapper.text()).not.toMatch(/Analyzing|unavailable|failed|error/i);
     expect(wrapper.find('.overall-score').exists()).toBe(false);
   });
 

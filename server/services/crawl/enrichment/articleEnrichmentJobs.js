@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { enqueueProcessingJob } from '../../jobs/processingJobQueue.js';
-import { normalizeTagList } from '../persistence/tags.js';
+import { normalizeTagList, readArticleProviderTags } from '../persistence/tags.js';
 
 export const ARTICLE_ENRICHMENT_JOB_TYPE = 'article_enrichment';
 export const ARTICLE_ANALYSIS_CONTRACT_VERSION = 1;
@@ -29,12 +29,13 @@ const scoreOverrides = actionResult => ({
 export const enqueueArticleEnrichmentJob = async ({
   article,
   userId,
-  providerTags = [],
   actionResult = null,
   transaction
 }) => {
   const articleId = articleValue(article, 'id');
   const expectedContentTextHash = articleValue(article, 'contentTextHash') || null;
+  // Hash the same persisted tags the worker reads, including rule/feed tag precedence.
+  const providerTags = await readArticleProviderTags(articleId, userId, transaction);
   const expectedAnalysisInputHash = buildArticleAnalysisInputHash({ article, providerTags });
 
   return enqueueProcessingJob({

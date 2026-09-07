@@ -148,6 +148,8 @@ AI Processing is an operational view of the current user's optional background q
 
 The section refreshes every 30 seconds only while mounted and also provides an explicit refresh control. Polling stops when the user leaves the section. A refresh failure remains local to this view and preserves the last successful snapshot when one is available.
 
+Retry failed jobs queues up to 100 failed jobs or articles awaiting recovery per click and refreshes the status. Awaiting recovery counts unfinished article analyses without an active job. The button is disabled while a request is running or neither failed jobs nor eligible articles remain. Success feedback reports any remaining jobs that can be retried in the next batch.
+
 Clear records opens an explicit confirmation before permanently deleting the signed-in user's succeeded and dead job history. Pending, retrying, running, and cancelled jobs remain untouched. Successful cleanup refreshes the status view; a failed cleanup keeps the confirmation available for retry.
 
 ### Observability

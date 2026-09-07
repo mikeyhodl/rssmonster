@@ -10,10 +10,10 @@ import {
   ARTICLE_ANALYSIS_CONTRACT_VERSION,
   buildArticleAnalysisInputHash
 } from '../../crawl/enrichment/articleEnrichmentJobs.js';
-import { replaceArticleInferredTags } from '../../crawl/persistence/tags.js';
+import { readArticleProviderTags, replaceArticleInferredTags } from '../../crawl/persistence/tags.js';
 import { getModelValue as rowValue } from '../../../utils/modelValue.js';
 
-const { Article, Feed, Tag, sequelize } = db;
+const { Article, Feed, sequelize } = db;
 const RATE_LIMIT_DELAY_MS = 3000;
 
 const positiveId = (value, field) => {
@@ -40,15 +40,6 @@ export class ArticleEnrichmentJobError extends Error {
 }
 
 const obsolete = reason => ({ status: 'obsolete', reason });
-
-const readProviderTags = async (articleId, userId, transaction) => {
-  const tags = await Tag.findAll({
-    attributes: ['name'],
-    where: { articleId, userId, tagType: 'provider' },
-    transaction
-  });
-  return tags.map(tag => rowValue(tag, 'name'));
-};
 
 const validScore = value => typeof value === 'number' &&
   Number.isFinite(value) &&
@@ -179,7 +170,7 @@ const prepareAnalysisInput = async target => sequelize.transaction(async transac
     transaction
   });
   if (!feed) return obsolete('feed_deleted');
-  const providerTags = await readProviderTags(target.articleId, target.userId, transaction);
+  const providerTags = await readArticleProviderTags(target.articleId, target.userId, transaction);
   if (!versionMatches({ article, providerTags, target })) return obsolete('stale_version');
   if (rowValue(article, 'filteredInd')) {
     await skipArticle(article, transaction);
@@ -234,7 +225,7 @@ const persistAnalysis = async ({ target, analysis, completedAt }) =>
       transaction
     });
     if (!feed) return obsolete('feed_deleted');
-    const providerTags = await readProviderTags(target.articleId, target.userId, transaction);
+    const providerTags = await readArticleProviderTags(target.articleId, target.userId, transaction);
     if (!versionMatches({ article, providerTags, target })) return obsolete('stale_version');
     if (rowValue(article, 'filteredInd')) {
       await skipArticle(article, transaction);
@@ -322,7 +313,7 @@ export const markArticleEnrichmentFailed = async job => {
     if (!article || Number(rowValue(article, 'userId')) !== target.userId) {
       return obsolete('article_unavailable');
     }
-    const providerTags = await readProviderTags(target.articleId, target.userId, transaction);
+    const providerTags = await readArticleProviderTags(target.articleId, target.userId, transaction);
     if (!versionMatches({ article, providerTags, target })) return obsolete('stale_version');
     if (!['pending', 'processing'].includes(rowValue(article, 'aiAnalysisStatus'))) {
       return obsolete('analysis_state_changed');
@@ -333,6 +324,27 @@ export const markArticleEnrichmentFailed = async job => {
     }, { transaction });
     return { status: 'failed', articleId: target.articleId };
   });
+};
+
+// Reopens only the failed article version belonging to the explicitly retried job.
+export const resetArticleEnrichmentForRetry = async (job, transaction) => {
+  let target;
+  try {
+    target = jobTarget(job);
+  } catch (error) {
+    if (error instanceof ArticleEnrichmentJobError) return;
+    throw error;
+  }
+  if (target.obsolete) return;
+  const article = await Article.findOne({
+    where: { id: target.articleId, userId: target.userId },
+    transaction,
+    lock: transaction.LOCK.UPDATE
+  });
+  if (!article || rowValue(article, 'aiAnalysisStatus') !== 'failed') return;
+  const providerTags = await readArticleProviderTags(target.articleId, target.userId, transaction);
+  if (!versionMatches({ article, providerTags, target })) return;
+  await article.update({ aiAnalysisStatus: 'pending', aiAnalysisCompletedAt: null }, { transaction });
 };
 
 export default handleArticleEnrichmentJob;

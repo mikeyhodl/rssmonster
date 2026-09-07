@@ -18,6 +18,11 @@ router.get(
   userMiddleware.isLoggedIn,
   processingJobStatusController.getProcessingJobsStatus
 );
+router.post(
+  '/processing-jobs/retry',
+  userMiddleware.isLoggedIn,
+  processingJobStatusController.retryFailedProcessingJobs
+);
 router.delete(
   '/processing-jobs',
   userMiddleware.isLoggedIn,

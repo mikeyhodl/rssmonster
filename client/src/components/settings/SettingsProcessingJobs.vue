@@ -50,6 +50,10 @@
       <section class="processing-secondary settings-panel" aria-labelledby="processing-details-title">
         <h4 id="processing-details-title">Current activity</h4>
         <dl>
+          <div v-if="summary.stranded">
+            <dt>Awaiting recovery</dt>
+            <dd>{{ formatNumber(summary.stranded) }}</dd>
+          </div>
           <div>
             <dt>Retrying</dt>
             <dd>{{ formatNumber(summary.retrying) }}</dd>
@@ -70,7 +74,7 @@
       </section>
 
       <div v-if="!activeTypes.length" class="app-notice app-notice--info" role="status">
-        No background work waiting
+        {{ summary.stranded ? 'Some article analyses need recovery. Select Retry failed jobs to queue them.' : 'No background work waiting' }}
       </div>
 
       <section v-else class="settings-data-panel processing-types" aria-labelledby="processing-types-title">
@@ -108,6 +112,9 @@
       <div v-if="error" class="app-notice app-notice--warning" role="alert">
         {{ error }} Showing the last available status.
       </div>
+
+      <div v-if="retrySuccess" class="app-notice processing-retry-success" role="status">{{ retrySuccess }}</div>
+      <div v-if="retryError" class="app-notice app-notice--warning" role="alert">{{ retryError }}</div>
 
       <div v-if="clearSuccess" class="app-notice processing-clear-success" role="status">
         {{ clearSuccess }}
@@ -164,11 +171,23 @@
         v-if="processingStatus"
         type="button"
         class="app-button app-button--outline-danger processing-clear-button"
-        :disabled="loading || refreshing || clearing"
+        :disabled="loading || refreshing || clearing || retrying"
         @click="requestClear"
       >
         <BootstrapIcon icon="trash-fill" aria-hidden="true" />
         Clear records
+      </button>
+      <button
+        v-if="processingStatus"
+        type="button"
+        class="app-button app-button--primary processing-retry-button"
+        :disabled="loading || refreshing || clearing || retrying || showClearConfirmation || !(summary.dead || summary.stranded)"
+        :aria-busy="retrying ? 'true' : 'false'"
+        title="Queue up to 100 failed jobs or articles awaiting recovery"
+        @click="retryFailed"
+      >
+        <BootstrapIcon icon="arrow-repeat" aria-hidden="true" />
+        {{ retrying ? 'Queueing...' : 'Retry failed jobs' }}
       </button>
       <span v-if="lastUpdatedAt" class="processing-last-updated">
         Updated {{ formatTime(lastUpdatedAt) }}
@@ -176,7 +195,7 @@
       <button
         type="button"
         class="settings-refresh-button app-button app-button--primary"
-        :disabled="loading || refreshing || clearing"
+        :disabled="loading || refreshing || clearing || retrying"
         :aria-busy="refreshing ? 'true' : 'false'"
         aria-label="Refresh AI processing status"
         @click="reload"
@@ -380,7 +399,7 @@
   font-size: 12px;
 }
 
-.processing-clear-button {
+.processing-retry-button {
   margin-right: auto;
 }
 
@@ -393,11 +412,18 @@
   border-color: var(--settings-danger-border);
 }
 
-.processing-clear-success {
+.processing-clear-success,
+.processing-retry-success {
   margin-bottom: 16px;
   color: var(--settings-success-text);
   background: var(--settings-success-bg);
   border-color: var(--border-success);
+}
+
+.processing-retry-success {
+  padding: 10px 12px;
+  border-radius: var(--radius-control);
+  font-size: 14px;
 }
 
 .processing-clear-icon {
@@ -529,6 +555,7 @@
 <script>
 import {
   clearCompletedProcessingJobs,
+  retryFailedProcessingJobs,
   fetchProcessingJobStatus
 } from '../../api/settings.js';
 import SettingsMetric from './SettingsMetric.vue';
@@ -540,6 +567,7 @@ const EMPTY_SUMMARY = Object.freeze({
   running: 0,
   retrying: 0,
   dead: 0,
+  stranded: 0,
   completedToday: 0,
   oldestPendingAgeSeconds: null,
   averageProcessingLatencyMs: null
@@ -583,6 +611,9 @@ export default {
   },
   data() {
     return {
+      retrying: false,
+      retryError: null,
+      retrySuccess: null,
       clearError: null,
       clearing: false,
       clearSuccess: null,
@@ -646,6 +677,34 @@ export default {
     if (this.pollIntervalId !== null) window.clearInterval(this.pollIntervalId);
   },
   methods: {
+    async retryFailed() {
+      if (this.retrying || this.clearing || this.loading || this.refreshing ||
+          this.showClearConfirmation || !(this.summary.dead || this.summary.stranded)) return;
+      this.retrying = true;
+      this.retryError = null;
+      this.retrySuccess = null;
+      this.clearSuccess = null;
+      try {
+        const response = await retryFailedProcessingJobs();
+        const count = Number(response.data?.requeuedCount) || 0;
+        const remaining = Number(response.data?.remainingCount) || 0;
+        this.retrySuccess = count === 1
+          ? 'Queued 1 job for processing.'
+          : `Queued ${this.formatNumber(count)} jobs for processing.`;
+        if (remaining) {
+          this.retrySuccess += remaining === 1
+            ? ' 1 job remains.'
+            : ` ${this.formatNumber(remaining)} jobs remain.`;
+          this.retrySuccess += ' Select Retry failed jobs again to queue more.';
+        }
+        await this.reload({ allowDuringRetry: true });
+      } catch (error) {
+        console.error('Error retrying failed processing jobs:', error);
+        this.retryError = 'Unable to retry failed jobs. Please try again.';
+      } finally {
+        this.retrying = false;
+      }
+    },
     requestClear() {
       this.clearError = null;
       this.clearSuccess = null;
@@ -676,8 +735,9 @@ export default {
         this.clearing = false;
       }
     },
-    async reload({ allowDuringClear = false } = {}) {
-      if (this.loading || this.refreshing || (this.clearing && !allowDuringClear)) return;
+    async reload({ allowDuringClear = false, allowDuringRetry = false } = {}) {
+      if (this.loading || this.refreshing || (this.clearing && !allowDuringClear) ||
+          (this.retrying && !allowDuringRetry)) return;
 
       const initialLoad = !this.processingStatus;
       this.loading = initialLoad;

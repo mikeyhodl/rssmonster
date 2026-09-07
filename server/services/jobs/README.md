@@ -14,7 +14,15 @@ snapshots without reading payloads. `processingJobOperator.js` provides bounded,
 dead-job inspection and explicit requeue operations. Handlers must reload and revalidate owned
 targets, use version guards before writes, remain idempotent, and never trust content in payloads.
 The authenticated Settings cleanup deletes only owned `succeeded` and `dead` history; active and
-cancelled jobs are retained.
+cancelled jobs are retained. Settings retry requeues up to 100 owned dead jobs per request,
+resetting the attempt budget and errors. Matching failed article versions return to pending in
+the same transaction; stale jobs cannot reset newer article state. Active jobs are never reset.
+The same retry action also recovers owned, unfiltered pending/processing articles without a pending
+or running article-enrichment job, including articles whose old jobs succeeded without inference
+or whose job history was cleared. Recovery uses current persisted tags/content and retained action
+score overrides, only for analysis-enabled feeds. Dead retries and recovery share the 100-item
+request limit. Article locking and an active-job recheck prevent concurrent recovery duplicates.
+Status exposes these eligible articles separately as `summary.stranded`.
 
 Optional processing must not move embeddings or deterministic semantic graph work out of the
 crawl path. New job types belong in the handler registry and need focused lifecycle, ownership,

@@ -206,3 +206,13 @@ export const replaceArticleInferredTags = async ({
     tagType: 'inferred'
   }, { transaction })));
 };
+
+// Reads the persisted provider inputs after tag provenance precedence has been applied.
+export const readArticleProviderTags = async (articleId, userId, transaction) => {
+  const tags = await Tag.findAll({
+    attributes: ['name'],
+    where: { articleId, userId, tagType: 'provider' },
+    transaction
+  });
+  return tags.map(tag => tagValue(tag, 'name'));
+};

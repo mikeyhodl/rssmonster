@@ -1,7 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocked = vi.hoisted(() => ({
-  enqueueProcessingJob: vi.fn()
+  enqueueProcessingJob: vi.fn(),
+  findTags: vi.fn()
+}));
+
+vi.mock('../../models/index.js', () => ({
+  default: { Tag: { findAll: mocked.findTags } }
 }));
 
 vi.mock('../../services/jobs/processingJobQueue.js', () => ({
@@ -10,6 +15,7 @@ vi.mock('../../services/jobs/processingJobQueue.js', () => ({
 
 import {
   ARTICLE_ANALYSIS_CONTRACT_VERSION,
+  buildArticleAnalysisInputHash,
   enqueueArticleEnrichmentJob
 } from '../../services/crawl/enrichment/articleEnrichmentJobs.js';
 
@@ -24,6 +30,7 @@ const article = overrides => ({
 
 describe('article enrichment job producer', () => {
   beforeEach(() => {
+    mocked.findTags.mockReset().mockResolvedValue([]);
     mocked.enqueueProcessingJob.mockReset();
     mocked.enqueueProcessingJob.mockResolvedValue({ created: true });
   });
@@ -58,6 +65,26 @@ describe('article enrichment job producer', () => {
     }, { transaction, reactivateTerminal: true });
     expect(JSON.stringify(mocked.enqueueProcessingJob.mock.calls[0])).not.toContain('Article title');
     expect(JSON.stringify(mocked.enqueueProcessingJob.mock.calls[0])).not.toContain('Article description');
+  });
+
+  it('hashes owned persisted provider tags in the article transaction', async () => {
+    const transaction = { id: 'article-transaction' };
+    mocked.findTags.mockResolvedValue([{ name: 'security' }]);
+
+    await enqueueArticleEnrichmentJob({
+      article: article(),
+      userId: 42,
+      providerTags: ['Security', 'OpenAI'],
+      transaction
+    });
+
+    expect(mocked.findTags).toHaveBeenCalledWith({
+      attributes: ['name'],
+      where: { articleId: 123, userId: 42, tagType: 'provider' },
+      transaction
+    });
+    expect(mocked.enqueueProcessingJob.mock.calls[0][0].payload.expectedAnalysisInputHash)
+      .toBe(buildArticleAnalysisInputHash({ article: article(), providerTags: ['security'] }));
   });
 
   it('uses title and description guards so same-content revisions receive new jobs', async () => {

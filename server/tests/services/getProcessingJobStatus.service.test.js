@@ -106,6 +106,7 @@ describe('processing job status service', () => {
 
     expect(result.health).toEqual({ status: 'degraded', workerRunning: true });
     expect(result.summary).toEqual({
+      stranded: 0,
       pending: 2,
       running: 1,
       retrying: 1,
@@ -167,6 +168,7 @@ describe('processing job status service', () => {
     expect(empty).toEqual({
       health: { status: 'healthy', workerRunning: true },
       summary: {
+        stranded: 0,
         pending: 0,
         running: 0,
         retrying: 0,

@@ -1,5 +1,6 @@
 import { col, fn, Op } from 'sequelize';
 import db from '../../models/index.js';
+import { countStrandedArticleAnalyses } from './strandedArticleRecovery.js';
 import { sanitizeProcessingFailureMessage } from '../observability/processingFailures.js';
 import {
   DEFAULT_CRAWL_WORKER_HEALTH_MAX_STALE_MS
@@ -128,7 +129,8 @@ export const getProcessingJobStatus = async ({
     todayRows,
     latencyRows,
     recentFailureRows,
-    workerHealth
+    workerHealth,
+    strandedCount
   ] = await Promise.all([
     ProcessingJob.findAll({
       attributes: [
@@ -196,7 +198,8 @@ export const getProcessingJobStatus = async ({
       limit: PROCESSING_JOB_STATUS_RECENT_FAILURE_LIMIT,
       raw: true
     }),
-    readWorkerHealth(workerHealthReader)
+    readWorkerHealth(workerHealthReader),
+    countStrandedArticleAnalyses({ userId: normalizedUserId })
   ]);
 
   const typesByName = new Map();
@@ -248,6 +251,7 @@ export const getProcessingJobStatus = async ({
     .map(type => type.oldestPendingAgeSeconds)
     .filter(age => age !== null);
   const summary = {
+    stranded: strandedCount,
     pending: types.reduce((sum, type) => sum + type.pending, 0),
     running: types.reduce((sum, type) => sum + type.running, 0),
     retrying: types.reduce((sum, type) => sum + type.retrying, 0),

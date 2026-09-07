@@ -12,8 +12,8 @@
     <span
       v-else-if="analysisStateLabel"
       class="analysis-state"
-      :role="analysisInProgress ? 'status' : null"
-      :aria-label="analysisInProgress ? 'Article analysis in progress' : 'Article analysis unavailable'"
+      role="status"
+      aria-label="Article analysis in progress"
     >{{ analysisStateLabel }}</span>
   </div>
 </template>
@@ -21,7 +21,6 @@
 import { defineAsyncComponent } from 'vue';
 import { formatTagName } from '../../utils/tags';
 import {
-  hasArticleAnalysisFailed,
   hasUsableArticleAnalysis,
   isArticleAnalysisInProgress
 } from '../../services/articleAnalysisPresentation.js';
@@ -54,8 +53,7 @@ export default {
       return isArticleAnalysisInProgress(this.aiAnalysisStatus);
     },
     analysisStateLabel() {
-      if (this.analysisInProgress) return 'Analyzing…';
-      return hasArticleAnalysisFailed(this.aiAnalysisStatus) ? 'Analysis unavailable' : '';
+      return this.analysisInProgress ? 'Analyzing…' : '';
     },
     // Hides the untouched ingestion defaults used when article scoring is disabled.
     hasQualityScores() {

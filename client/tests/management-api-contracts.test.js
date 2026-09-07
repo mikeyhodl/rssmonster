@@ -26,6 +26,7 @@ import {
 } from '../src/api/manager.js';
 import {
   clearCompletedProcessingJobs,
+  retryFailedProcessingJobs,
   clearProcessingFailures,
   fetchCrawlStatistics,
   fetchIslandsOverview,
@@ -265,9 +266,11 @@ describe('settings API contracts', () => {
   it('builds processing-job status and terminal cleanup requests', () => {
     fetchProcessingJobStatus();
     clearCompletedProcessingJobs();
+    retryFailedProcessingJobs();
 
     expect(get).toHaveBeenCalledWith('/setting/processing-jobs');
     expect(del).toHaveBeenCalledWith('/setting/processing-jobs');
+    expect(post).toHaveBeenCalledWith('/setting/processing-jobs/retry');
   });
 
   // Verifies official-source settings retain the complete source list.

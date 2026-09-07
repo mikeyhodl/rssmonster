@@ -1,5 +1,14 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 
+const mocked = vi.hoisted(() => ({ analyzeArticleContent: vi.fn() }));
+
+vi.mock('../../services/crawl/enrichment/analyzeArticleContent.js', () => ({
+  default: mocked.analyzeArticleContent,
+  isInferenceQueueFullError: () => false
+}));
+
+import { handleArticleEnrichmentJob } from '../../services/jobs/handlers/articleEnrichmentJobHandler.js';
+
 import db from '../../models/index.js';
 import saveArticle from '../../services/crawl/persistence/saveArticle.js';
 import updateArticle, {
@@ -68,6 +77,50 @@ describe('article enrichment transaction atomicity', () => {
       url: `https://example.com/${uniqueName('article-enrichment-feed')}.xml`,
       feedTags: []
     });
+  });
+
+  it.each(['rule', 'feed'])('scores new articles and revisions with overlapping %s tags', async tagType => {
+    const suffix = uniqueName(tagType);
+    const data = articleData(suffix, { categories: ['Provider', 'OpenAI'] });
+    const actions = { ...actionResult, tags: tagType === 'rule' ? ['OpenAI'] : [] };
+    await feed.update({ feedTags: tagType === 'feed' ? ['OpenAI'] : [] });
+    mocked.analyzeArticleContent.mockResolvedValue({ ...analysis, qualityScore: 91 });
+
+    const { article } = await saveArticle(feed, data, analysis, actions, {}, {
+      providerTags: data.categories,
+      actionResult: actions
+    });
+    const job = await ProcessingJob.findOne({ where: { articleId: article.id } });
+    await expect(handleArticleEnrichmentJob(job)).resolves.toMatchObject({ status: 'completed' });
+    await article.reload();
+    expect(article.aiAnalysisStatus).toBe('complete');
+    expect(article.qualityScore).toBe(91);
+
+    const revisedData = { ...data, title: 'Revised overlap article' };
+    const updatePlan = await updateArticle(feed, revisedData, { article });
+    await applyArticleUpdate({
+      updatePlan,
+      derivedValues: { aiAnalysisStatus: 'pending', aiAnalysisCompletedAt: null },
+      tagUpdates: {
+        providerTags: data.categories,
+        feedTags: feed.feedTags,
+        ruleTags: actions.tags,
+        inferredTags: []
+      },
+      articleEnrichment: { providerTags: data.categories, actionResult: actions },
+      userId: feed.userId
+    });
+    const jobs = await ProcessingJob.findAll({ where: { articleId: article.id } });
+    expect(jobs).toHaveLength(2);
+    const revisedJob = jobs.find(row => row.id !== job.id);
+    await expect(handleArticleEnrichmentJob(revisedJob)).resolves.toMatchObject({ status: 'completed' });
+    await article.reload();
+    expect(article.aiAnalysisStatus).toBe('complete');
+    expect(article.qualityScore).toBe(91);
+    expect(mocked.analyzeArticleContent).toHaveBeenLastCalledWith(
+      expect.objectContaining({ categories: ['provider'] }),
+      expect.any(Object)
+    );
   });
 
   it('rolls back a new article when its enrichment job cannot be inserted', async () => {
