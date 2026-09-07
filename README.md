@@ -2,9 +2,9 @@
 
 A modern, self-hosted RSS reader that turns information overload into organized, explainable reading.
 
-[![Release](https://img.shields.io/github/v/release/pietheinstrengholt/rssmonster?style=flat)](https://github.com/pietheinstrengholt/rssmonster/releases) [![CI](https://github.com/pietheinstrengholt/rssmonster/actions/workflows/ci.yml/badge.svg)](https://github.com/pietheinstrengholt/rssmonster/actions/workflows/ci.yml) [![Client coverage](https://codecov.io/gh/pietheinstrengholt/rssmonster/branch/master/graph/badge.svg?flag=client)](https://codecov.io/github/pietheinstrengholt/rssmonster/tree/master/client) [![Server coverage](https://codecov.io/gh/pietheinstrengholt/rssmonster/branch/master/graph/badge.svg?flag=server)](https://codecov.io/github/pietheinstrengholt/rssmonster/tree/master/server) [![Docker pulls](https://img.shields.io/docker/pulls/rssmonster/rssmonster.svg?style=flat)](https://hub.docker.com/r/rssmonster/rssmonster) [![GitHub stars](https://img.shields.io/github/stars/pietheinstrengholt/rssmonster?style=flat)](https://github.com/pietheinstrengholt/rssmonster/stargazers) [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg?style=flat)](https://opensource.org/licenses/MIT)
+[![Release](https://img.shields.io/github/v/release/pietheinstrengholt/rssmonster?style=flat)](https://github.com/pietheinstrengholt/rssmonster/releases) [![CI](https://github.com/pietheinstrengholt/rssmonster/actions/workflows/ci.yml/badge.svg)](https://github.com/pietheinstrengholt/rssmonster/actions/workflows/ci.yml) [![Docker pulls](https://img.shields.io/docker/pulls/rssmonster/rssmonster.svg?style=flat)](https://hub.docker.com/r/rssmonster/rssmonster) [![GitHub stars](https://img.shields.io/github/stars/pietheinstrengholt/rssmonster?style=flat)](https://github.com/pietheinstrengholt/rssmonster/stargazers) [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg?style=flat)](https://opensource.org/licenses/MIT)
 
-[Documentation](docs/index.md) · [Quick start](#docker-quick-start) · [Features](#main-capabilities) · [Choose a deployment](#choose-a-deployment)
+[Documentation](https://pietheinstrengholt.github.io/rssmonster/) · [Quick start](#docker-quick-start) · [Features](#main-capabilities) · [Choose a deployment](#choose-a-deployment)
 
 ![RSSMonster Reader Mode: navigation, article list, and selected article in a three-panel workspace](docs/assets/screenshot01.png)
 
@@ -36,8 +36,8 @@ what deserves attention and how different reports fit together.
 ## See RSSMonster in action
 
 The hero shows Reader Mode. These views show other ways to read and explore your
-library, including features available with inference enabled. Select a screenshot
-to inspect it at full resolution; see [reading modes](docs/usability.md) for the
+library, including features available with inference enabled. Click or tap a screenshot
+to view it at full resolution. See [reading modes](docs/usability.md) for the
 controls and layout differences.
 
 ### Scan or read in depth
@@ -144,17 +144,13 @@ the broader product, and the default profile deliberately runs without models.
 | **SQLite quick start** | Trying RSSMonster and lightweight personal reading | Web reader, scheduled crawling, search, subscriptions, and rule-based organization. No separate database service, inference service, or AI worker. |
 | **Comprehensive MySQL deployment** | Local intelligent processing, multiple active users, and higher write concurrency | MySQL 8.4, crawl and AI workers, Qwen embeddings and generation, and ModernBERT scoring for analysis, semantic organization, and recommendations. |
 
-The SQLite Compose profile disables inference-backed classification, embeddings,
-generated semantic labels, chat, feed rediscovery, and Smart Folder
-recommendations. Saved search-based Smart Folders remain useful without model
-recommendations. Use the comprehensive profile for the semantic and background
-analysis experience shown above.
-
-The comprehensive profile runs classification, embeddings, scoring, Smart Folder
-recommendations, and feed rediscovery locally **without an OpenAI API key**.
-Its optional assistant stays hidden until separately configured. First startup
-includes model downloads; follow the [MySQL deployment guide](docs/getting-started.md#comprehensive-mysql-deployment)
-for credentials, startup, and readiness checks.
+Saved search-based Smart Folders work in both profiles. Choose the comprehensive
+profile for local classification, embeddings, scoring, semantic labels, Smart
+Folder recommendations, and feed rediscovery **without an OpenAI API key**.
+These inference-backed features are disabled in the SQLite quick start; the
+optional OpenAI assistant requires separate configuration. For model downloads,
+credentials, startup, and readiness checks, follow the
+[MySQL deployment guide](docs/getting-started.md#comprehensive-mysql-deployment).
 
 Database choice and inference settings are separate configuration concerns; these
 are the two supplied deployment profiles. Read [database configuration](docs/configuration.md#database)
